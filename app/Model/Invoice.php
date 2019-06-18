@@ -6,26 +6,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
-    public function projects()
+    public function invoiceProjects()
     {
-        return $this->hasMany(Projects::class);
+        return $this->hasMany(InvoiceProject::class);
     }
 
-    public function customer()
+    public function invoiceCustomer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(InvoiceCustomer::class);
     }
 
-    public function vendor()
+    public function invoiceVendor()
     {
-        return $this->belongsTo(Vendor::class);
+        return $this->belongsTo(InvoiceVendor::class);
     }
 
     protected $fillable = [
         'customer_id',
         'vendor_id',
         'tanggal',
-        'number',
+        'nomor',
         'jumlah',
         'pajak',
         'jumlah_total'

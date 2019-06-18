@@ -15,13 +15,11 @@ class CreateInvoicesTable extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('customer_id');
-            $table->unsignedInteger('vendor_id');
             $table->date('tanggal');
-            $table->string('number');
-            $table->string('jumlah');
-            $table->string('pajak');
-            $table->string('jumlah_total');
+            $table->string('nomor');
+            $table->integer('jumlah')->nullable();
+            $table->integer('pajak')->nullable();
+            $table->integer('jumlah_total')->nullable();
             $table->timestamps();
         });
     }

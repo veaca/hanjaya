@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Project;
 
 class ProjectController extends Controller
 {
@@ -13,7 +14,9 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //
+        $projects = Project::all();
+
+        return view('project.index', compact('projects'));
     }
 
     /**
@@ -23,7 +26,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return view('project.create');
     }
 
     /**
@@ -34,7 +37,20 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'=>'required',
+            'info'=>'required',
+            'tarif'=>'required|integer',
+            'jumlah'=>'required|integer'
+        ]);
+        $project = new Project([
+            'name' => $request->get('name'),
+            'info' => $request->get('info'),
+            'tarif' => $request->get('tarif'),
+            'jumlah' => $request->get('jumlah')
+        ]);
+        $project->save();
+        return redirect('/project')->with('success', 'Project has been added');
     }
 
     /**
@@ -56,7 +72,9 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        //
+        $project = Project::find($id);
+
+        return view('project.edit', compact('project'));
     }
 
     /**
@@ -68,7 +86,20 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name'=>'required',
+            'info'=>'required',
+            'tarif'=>'required|integer',
+            'jumlah'=>'required|integer'
+        ]);
+        $project = Project::find($id);
+        $project->name = $request->get('name');
+        $project->info = $request->get('info');
+        $project->tarif = $request->get('tarif');
+        $project->jumlah = $request->get('jumlah');
+        $project->save();
+
+        return redirect('/project')->with('success', 'Project has been updated');
     }
 
     /**
@@ -79,6 +110,9 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $project = Project::find($id);
+        $project->delete();
+
+        return redirect('project')->with('success', 'Project has been removed successfully');
     }
 }

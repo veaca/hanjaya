@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateNotasTable extends Migration
+class CreateInvoiceProjectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateNotasTable extends Migration
      */
     public function up()
     {
-        Schema::create('notas', function (Blueprint $table) {
+        Schema::create('invoice_projects', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->date('tanggal');
-            $table->string('asal');
-            $table->string('tujuan');
-            $table->string('NOP');
+            $table->unsignedInteger('invoice_id');
+            $table->unsignedInteger('project_id');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateNotasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notas');
+        Schema::dropIfExists('invoice_projects');
     }
 }
