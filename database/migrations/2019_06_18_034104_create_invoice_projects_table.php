@@ -17,6 +17,7 @@ class CreateInvoiceProjectsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('invoice_id');
             $table->unsignedInteger('project_id');
+            $table->Integer('quantity');
             $table->timestamps();
         });
     }

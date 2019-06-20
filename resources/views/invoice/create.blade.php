@@ -37,6 +37,7 @@
           <div class="form-group">
               <label for="quantity">Invoice Project :</label>
               <input type="text" class="form-control" name="project_id"/>
+              <input type="text" class="form-control" placeholder="Kuantitas Proyek" name="quantity"/>
           </div>
           <button type="submit" class="btn btn-primary">Add</button>
       </form>

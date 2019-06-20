@@ -34,10 +34,6 @@
               <label for="price">Project Tarif :</label>
               <input type="text" class="form-control" name="tarif"/>
           </div>
-          <div class="form-group">
-              <label for="quantity">Project Jumlah :</label>
-              <input type="text" class="form-control" name="jumlah"/>
-          </div>
           <button type="submit" class="btn btn-primary">Add</button>
       </form>
   </div>

@@ -30,6 +30,16 @@ class InvoiceController extends Controller
         return view('invoice.create');
     }
 
+    public function getProjects($invoice){
+        $projects = InvoiceProject::select('projects.name', 'projects.info', 'projects.tarif as tarif', 'invoice_projects.quantity')
+        ->join('projects', function($join){
+            $join->on('invoice_projects.project_id', '=', 'projects.id');
+        })
+        ->where('invoice_id', $invoice->id)
+        ->get();
+
+        return $projects;
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -52,32 +62,42 @@ class InvoiceController extends Controller
         ]);
         $invoice->save();
 
+
         $invoiceCustomer = new InvoiceCustomer([
             'customer_id' => $request->get('customer_id'),
             'invoice_id' => $invoice->id
         ]);
         $invoiceCustomer->save();
-
-        $invoiceVendor = new InvoiceVendor([
-            'vendor_id' => $request->get('vendor_id'),
-            'invoice_id' => $invoice->id
-        ]);
-        $invoiceVendor->save();
        
-        //projects are >1
+        // projects are >1
         $invoiceProject = new InvoiceProject([
             'project_id' => $request->get('project_id'),
+            'quantity' => $request->get('quantity'),
             'invoice_id' => $invoice->id
         ]);
         $invoiceProject->save();
 
-        $projects = InvoiceProject::select('projects.name', 'projects.info', 'projects.tarif', 'projects.jumlah')
-        ->join('projects', function($join){
-            $join->on('invoice_projects.project_id', '=', 'projects.id');
-        })
-        ->where('invoice_id', $invoice->id)
-        ->get();
-        // echo $projects;
+        $projects = $this->getProjects($invoice);
+        // echo $projects->tarif;
+        $jumlah = 0;
+        foreach ($projects as $project) {
+            $jumlah = $project->tarif * $project->quantity;
+        }
+        $pajak = $jumlah / 10;
+        $jumlah_total = $jumlah + $pajak;
+
+
+        $updateInvoice = Invoice::find($invoice->id);
+        $updateInvoice->jumlah = $jumlah;
+        $updateInvoice->pajak = $pajak;
+        $updateInvoice->jumlah_total = $jumlah_total;
+        $updateInvoice->save();
+        // $invoiceProject = Invoice::find(1);
+        // $invoiceProject->jumlah = $jumlah;
+        // $invoiceProject->save();
+
+        
+        // echo $projects['']->tarif;
         return redirect('/invoice/create')->with('success', 'Invoice has been added');
     }
 

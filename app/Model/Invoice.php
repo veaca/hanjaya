@@ -16,9 +16,9 @@ class Invoice extends Model
         return $this->belongsTo(InvoiceCustomer::class);
     }
 
-    public function invoiceVendor()
+    public function invoiceNota()
     {
-        return $this->belongsTo(InvoiceVendor::class);
+        return $this->belongsTo(InvoiceNota::class);
     }
 
     protected $fillable = [

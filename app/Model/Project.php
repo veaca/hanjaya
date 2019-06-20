@@ -9,7 +9,6 @@ class Project extends Model
     protected $fillable = [
         'name',
         'info',
-        'tarif',
-        'jumlah'
+        'tarif'
     ];
 }

@@ -40,14 +40,12 @@ class ProjectController extends Controller
         $request->validate([
             'name'=>'required',
             'info'=>'required',
-            'tarif'=>'required|integer',
-            'jumlah'=>'required|integer'
+            'tarif'=>'required|integer'
         ]);
         $project = new Project([
             'name' => $request->get('name'),
             'info' => $request->get('info'),
-            'tarif' => $request->get('tarif'),
-            'jumlah' => $request->get('jumlah')
+            'tarif' => $request->get('tarif')
         ]);
         $project->save();
         return redirect('/project')->with('success', 'Project has been added');
@@ -89,14 +87,12 @@ class ProjectController extends Controller
         $request->validate([
             'name'=>'required',
             'info'=>'required',
-            'tarif'=>'required|integer',
-            'jumlah'=>'required|integer'
+            'tarif'=>'required|integer'
         ]);
         $project = Project::find($id);
         $project->name = $request->get('name');
         $project->info = $request->get('info');
         $project->tarif = $request->get('tarif');
-        $project->jumlah = $request->get('jumlah');
         $project->save();
 
         return redirect('/project')->with('success', 'Project has been updated');

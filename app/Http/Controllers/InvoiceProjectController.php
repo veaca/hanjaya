@@ -34,7 +34,13 @@ class InvoiceProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $invoiceProject = new InvoiceProject([
+        //     'project_id' => $request->get('project_id'),
+        //     'invoice_id' => $invoice->id,
+        //     'quantity' => $request->get('quantity')
+        // ]);
+        // $invoiceProject->save();
+
     }
 
     /**

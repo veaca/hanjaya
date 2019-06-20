@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class InvoiceCustomerController extends Controller
+class InvoiceNotaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,11 +34,7 @@ class InvoiceCustomerController extends Controller
      */
     public function store(Request $request)
     {
-        // $invoiceCustomer = new InvoiceCustomer([
-        //     'customer_id' => $request->get('customer_id'),
-        //     'invoice_id' => $invoice->id
-        // ]);
-        // $invoiceCustomer->save();
+        //
     }
 
     /**

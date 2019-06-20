@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInvoiceVendorsTable extends Migration
+class CreateBiayaLainsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateInvoiceVendorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('invoice_vendors', function (Blueprint $table) {
+        Schema::create('biaya_lains', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('invoice_id');
-            $table->unsignedInteger('vendor_id');
+            $table->Integer('gaji');
+            $table->Integer('bpjs');
+            $table->Integer('bank');
+            $table->Integer('listrik');
+            $table->Integer('pdam');
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateInvoiceVendorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invoice_vendors');
+        Schema::dropIfExists('biaya_lains');
     }
 }

@@ -19,7 +19,6 @@
           <td>Project Name</td>
           <td>Project Info</td>
           <td>Project Tarif</td>
-          <td>Project Jumlah</td>
           <td colspan="2">Action</td>
         </tr>
     </thead>
@@ -30,7 +29,6 @@
             <td>{{$project->name}}</td>
             <td>{{$project->info}}</td>
             <td>{{$project->tarif}}</td>
-            <td>{{$project->jumlah}}</td>
             <td><a href="{{ route('project.edit',$project->id)}}" class="btn btn-primary">Edit</a></td>
             <td>
                 <form action="{{ route('project.destroy', $project->id)}}" method="post">

@@ -6,17 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Nota extends Model
 {
-    public function vendor()
+    public function notaVendor()
     {
         return $this->belongsTo(NotaVendor::class);
     }
 
-    public function customer()
+    public function InvoiceNota()
     {
-        return $this->belongsTo(NotaCustomer::class);
+        return $this->belongsTo(InvoiceNota::class);
     }
 
-    public function notadetails()
+    public function notaNotaDetails()
     {
         return $this->hasMany(NotaNotaDetail::class);
     }
