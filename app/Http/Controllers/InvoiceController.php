@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Invoice;
 use App\InvoiceCustomer;
-use App\InvoiceVendor;
 use App\InvoiceProject;
 
 class InvoiceController extends Controller
@@ -17,7 +16,29 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        //
+        $invoices = Invoice::select('invoices.*', 'invoice_customers.customer_id as customer_id', 'projects.name as project_name', 'projects.info as project_info', 'projects.tarif as project_tarif', 'invoice_projects.quantity')
+        ->join('invoice_customers', function($join)
+        {
+            $join->on('invoices.id', '=', 'invoice_customers.invoice_id');
+        })
+        ->join('invoice_projects', function($join)
+        {
+            $join->on('invoices.id', '=', 'invoice_projects.invoice_id');
+        })
+        ->join('projects', function($join)
+        {
+            $join->on('invoice_projects.project_id', '=', 'projects.id');
+        })
+        ->get();
+
+        // $invoices = Invoice::select('invoices.*', 'invoice_projects.project_id')
+        // ->join('invoice_projects', function($join)
+        // {
+        //     $join->on('invoices.id', '=', 'invoice_projects.invoice_id');
+        // })
+        // ->get(); 
+        // $invoices = Invoice::all();
+        return view('invoice.index', compact('invoices'));
     }
 
     /**
@@ -54,7 +75,8 @@ class InvoiceController extends Controller
             'vendor_id'=>'required|integer',
 
             //projects are > 1
-            'project_id'=>'required|integer'
+            'project_id'=>'required|integer',
+            'quantity'=>'required|integer'
         ]);
         $invoice = new Invoice([
             'tanggal' => date("Y-m-d"),
@@ -98,7 +120,7 @@ class InvoiceController extends Controller
 
         
         // echo $projects['']->tarif;
-        return redirect('/invoice/create')->with('success', 'Invoice has been added');
+        return redirect('/invoice')->with('success', 'Invoice has been added');
     }
 
     /**
@@ -109,7 +131,7 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
@@ -120,7 +142,9 @@ class InvoiceController extends Controller
      */
     public function edit($id)
     {
-        
+        $invoice = Invoice::find($id);
+
+        return view('invoice.edit', compact('invoice'));
     }
 
     /**
@@ -132,7 +156,43 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nomor'=>'required',
+            'customer_id'=>'required|integer',
+
+            //projects are > 1
+            'project_id'=>'required|integer',
+            'quantity'=>'required|integer'
+        ]);
+
+        $invoice = Invoice::find($id);
+        $invoice->nomor = $request->get('nomor');
+        
+        $invoiceCustomerId =  InvoiceCustomer::select('id')
+        ->where('invoice_id', $invoice->id)
+        ->first();
+        $invoiceCustomerId->customer_id = $request->get('customer_id');
+        $invoiceCustomerId->save();
+        // $invoiceCustomer = InvoiceCustomer::update('invoice_customers set customer_id = ? where invoice_id = ?', [$request->customer_id, $id]);
+        // $invoiceCustomer = InvoiceCustomer::find($invoiceCustomerId);
+        
+        // $invoiceCustomer->customer_id = $request->get('customer_id');
+        // // echo $invoiceCustomer;
+        // $invoiceCustomer->save();
+        
+        // $invoice->customer_id = $request->get('customer_id');
+        
+        $invoiceProjectId = InvoiceProject::select('id')
+        ->where('invoice_id', $invoice->id)
+        ->get();
+        $invoiceProject = InvoiceProject::find($invoiceProjectId);
+        $invoiceProject->quantity = $request->get('quantity');
+        // ;
+        // $invoice->save();
+        // $invoiceCustomer->save();
+        // $invoiceProject->save();
+        return redirect('invoice')->with('success', 'Invoice has been updated');
+        
     }
 
     /**
@@ -145,5 +205,7 @@ class InvoiceController extends Controller
     {
         $invoice = Invoice::find($id);
         $invoice->delete();
+
+        return redirect('invoice')->with('success', 'Invoice has been successfully deleted');
     }
 }

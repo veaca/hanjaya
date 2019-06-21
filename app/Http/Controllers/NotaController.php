@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Nota;
 
 class NotaController extends Controller
 {
@@ -13,7 +14,9 @@ class NotaController extends Controller
      */
     public function index()
     {
-        //
+        $notas = Nota::all();
+
+        return view('nota.index', compact('notas'));
     }
 
     /**
@@ -23,7 +26,7 @@ class NotaController extends Controller
      */
     public function create()
     {
-        //
+        return view('nota.create');
     }
 
     /**
@@ -34,7 +37,19 @@ class NotaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'asal'=>'required',
+            'tujuan'=>'required',
+            'NOP'=>'required'
+        ]);
+        $nota = new Nota([
+            'tanggal' => date("Y-m-d"),
+            'asal' => $request->get('asal'),
+            'tujuan' => $request->get('tujuan'),
+            'NOP' => $request->get('NOP')
+        ]);
+        $nota->save();
+        return redirect('/nota')->with('success', 'Nota has been added');
     }
 
     /**
@@ -56,7 +71,9 @@ class NotaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $nota = Nota::find($id);
+
+        return view('nota.edit', compact('nota'));
     }
 
     /**
@@ -79,6 +96,9 @@ class NotaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $nota = Nota::find($id);
+        $nota->delete();
+
+        return redirect('nota')->with('success', 'Nota has been deleted successfully');
     }
 }
