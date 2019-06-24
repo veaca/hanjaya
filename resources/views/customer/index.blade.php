@@ -12,6 +12,7 @@
       {{ session()->get('success') }}  
     </div><br />
   @endif
+  <a href="{{route('customer.create')}}" type="button" class="btn btn-success">Add Customer</a>
   <table class="table table-striped">
     <thead>
         <tr>

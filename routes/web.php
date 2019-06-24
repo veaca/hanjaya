@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('index');
 });
 
+Route::get('/views', function () {
+    return view('views');
+});
+
 Route::resource('customer', 'CustomerController');
 Route::resource('invoice', 'InvoiceController');
 Route::resource('nota', 'NotaController');

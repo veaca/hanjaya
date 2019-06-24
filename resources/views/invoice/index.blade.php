@@ -12,6 +12,7 @@
       {{ session()->get('success') }}  
     </div><br />
   @endif
+  <a href="{{route('invoice.create')}}" type="button" class="btn btn-success">Add Invoice</a>
   <table class="table table-striped">
     <thead>
         <tr>
@@ -34,7 +35,6 @@
             <td>{{$invoice->nomor}}</td>
             <td>{{$invoice->customer_id}}</td>
             <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Project List</button></td>
-            
             <td>{{$invoice->jumlah}}</td>
             <td>{{$invoice->pajak}}</td>
             <td>{{$invoice->jumlah_total}}</td>
@@ -51,40 +51,38 @@
     </tbody>
   </table>
   <div id="myModal" class="modal fade" role="dialog">
-              <div class="modal-dialog">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Projects</h4>
-                  </div>
-                  <div class="modal-body">
-                    <table class="table table-striped">
-                      <thead>
-                        <tr>
-                          <td>Nama</td>
-                          <td>Info</td>
-                          <td>Tarif</td>
-                          <td>Kuantitas</td>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>{{$invoice->project_name}}</td>
-                          <td>{{$invoice->project_info}}</td>
-                          <td>{{$invoice->project_tarif}}</td>
-                          <td>{{$invoice->quantity}}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  </div>
-                </div>
-
-              </div>
-            </div>
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Projects</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <td>Nama</td>
+                <td>Info</td>
+                <td>Tarif</td>
+                <td>Kuantitas</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{$invoice->project_name}}</td>
+                <td>{{$invoice->project_info}}</td>
+                <td>{{$invoice->project_tarif}}</td>
+                <td>{{$invoice->quantity}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 <div>
 @endsection

@@ -12,6 +12,7 @@
       {{ session()->get('success') }}  
     </div><br />
   @endif
+  <a href="{{route('project.create')}}" type="button" class="btn btn-success">Add project</a>
   <table class="table table-striped">
     <thead>
         <tr>

@@ -12,6 +12,7 @@
       {{ session()->get('success') }}  
     </div><br />
   @endif
+  <a href="{{route('vendor.create')}}" type="button" class="btn btn-success">Add vendor</a>
   <table class="table table-striped">
     <thead>
         <tr>

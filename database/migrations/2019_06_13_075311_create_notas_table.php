@@ -19,6 +19,7 @@ class CreateNotasTable extends Migration
             $table->string('asal');
             $table->string('tujuan');
             $table->string('NOP');
+            $table->integer('jumlah_ongkos');
             $table->timestamps();
         });
     }

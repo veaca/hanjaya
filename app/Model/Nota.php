@@ -27,6 +27,7 @@ class Nota extends Model
         'tanggal',
         'asal',
         'tujuan',
-        'NOP'
+        'NOP',
+        'jumlah_ongkos'
     ];
 }
