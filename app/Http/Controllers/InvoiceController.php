@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Invoice;
 use App\InvoiceCustomer;
 use App\InvoiceProject;
+use App\Project;
+use App\Customer;
 
 class InvoiceController extends Controller
 {
@@ -16,7 +18,18 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::select('invoices.*', 'invoice_customers.customer_id as customer_id', 'projects.name as project_name', 'projects.info as project_info', 'projects.tarif as project_tarif', 'invoice_projects.quantity')
+        $invoices = Invoice::select('invoices.*', 'invoice_customers.customer_id as customer_id', 'customers.name as customer_name')
+        ->join('invoice_customers', function($join)
+        {
+            $join->on('invoices.id', '=', 'invoice_customers.invoice_id');
+        })
+        ->join('customers', function($join)
+        {
+            $join->on('invoice_customers.customer_id', '=', 'customers.id');
+        })
+        ->get();
+
+        $projects = Invoice::select('invoice_projects.invoice_id','projects.name as project_name', 'projects.info as project_info', 'projects.tarif as project_tarif', 'invoice_projects.quantity')
         ->join('invoice_customers', function($join)
         {
             $join->on('invoices.id', '=', 'invoice_customers.invoice_id');
@@ -30,15 +43,7 @@ class InvoiceController extends Controller
             $join->on('invoice_projects.project_id', '=', 'projects.id');
         })
         ->get();
-
-        // $invoices = Invoice::select('invoices.*', 'invoice_projects.project_id')
-        // ->join('invoice_projects', function($join)
-        // {
-        //     $join->on('invoices.id', '=', 'invoice_projects.invoice_id');
-        // })
-        // ->get(); 
-        // $invoices = Invoice::all();
-        return view('invoice.index', compact('invoices'));
+        return view('invoice.index', compact('invoices', 'projects'));
     }
 
     /**
@@ -48,7 +53,9 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        return view('invoice.create');
+        $customers = Customer::all();
+        $projects = Project::all();
+        return view('invoice.create', compact('customers', 'projects'));
     }
 
     public function getProjects($invoice){
@@ -58,7 +65,7 @@ class InvoiceController extends Controller
         })
         ->where('invoice_id', $invoice->id)
         ->get();
-
+        
         return $projects;
     }
     /**
@@ -69,60 +76,62 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'nomor'=>'required',
-            'customer_id'=>'required|integer',
-            'vendor_id'=>'required|integer',
-
-            //projects are > 1
-            'project_id'=>'required|integer',
-            'quantity'=>'required|integer'
-        ]);
         $invoice = new Invoice([
             'tanggal' => date("Y-m-d"),
-            'nomor' => $request->get('nomor')
+            'nomor' => $request->get('nomor'),
+            'jenis_pajak' => $request->get('jenis_pajak')
         ]);
         $invoice->save();
-
-
         $invoiceCustomer = new InvoiceCustomer([
             'customer_id' => $request->get('customer_id'),
             'invoice_id' => $invoice->id
         ]);
         $invoiceCustomer->save();
-       
-        // projects are >1
-        $invoiceProject = new InvoiceProject([
-            'project_id' => $request->get('project_id'),
-            'quantity' => $request->get('quantity'),
-            'invoice_id' => $invoice->id
-        ]);
-        $invoiceProject->save();
-
-        $projects = $this->getProjects($invoice);
-        // echo $projects->tarif;
-        $jumlah = 0;
-        foreach ($projects as $project) {
-            $jumlah = $project->tarif * $project->quantity;
+        $iterateProject = 0;
+        $iterateQuantity =0;
+        foreach ($request->get('project_id') as $project_id) 
+        {
+            $iterateQuantity =0;
+            foreach ($request->get('quantity') as $quantity) 
+           {
+                if ($project_id != NULL && $quantity!=NULL)
+                {
+                    if ($iterateProject == $iterateQuantity)
+                    {
+                        $invoiceProject = new InvoiceProject([
+                            'project_id' => $project_id,
+                            'quantity' => $quantity,
+                            'invoice_id' => $invoice->id
+                        ]);
+                        $invoiceProject->save();
+                    }
+                $iterateQuantity++;
+                }
+            }
+            $iterateProject++;
         }
-        $pajak = $jumlah / 10;
-        $jumlah_total = $jumlah + $pajak;
-
-
-        $updateInvoice = Invoice::find($invoice->id);
-        $updateInvoice->jumlah = $jumlah;
-        $updateInvoice->pajak = $pajak;
-        $updateInvoice->jumlah_total = $jumlah_total;
-        $updateInvoice->save();
-        // $invoiceProject = Invoice::find(1);
-        // $invoiceProject->jumlah = $jumlah;
-        // $invoiceProject->save();
-
-        
-        // echo $projects['']->tarif;
+ 
+        $updateJumlah = $this->updateJumlah($invoice);
         return redirect('/invoice')->with('success', 'Invoice has been added');
     }
 
+    public function updateJumlah($invoice)
+    {
+        $projects = $this->getProjects($invoice);
+        $jumlah = 0;
+        foreach ($projects as $project) {
+            $jumlah = $jumlah + ( $project->tarif * $project->quantity);
+        }
+        // $pajak = $jumlah / 10;
+        
+        $updateInvoice = Invoice::find($invoice->id);
+        $updateInvoice->jumlah = $jumlah;
+        $pajak = $updateInvoice->jenis_pajak * $jumlah /100;
+        $updateInvoice->pajak = $pajak;
+        $jumlah_total = $jumlah + $pajak;
+        $updateInvoice->jumlah_total = $jumlah_total;
+        $updateInvoice->save();
+    }
     /**
      * Display the specified resource.
      *
@@ -142,9 +151,37 @@ class InvoiceController extends Controller
      */
     public function edit($id)
     {
-        $invoice = Invoice::find($id);
+        $invoice = Invoice::select('invoices.*', 'invoice_customers.customer_id as customer_id', 'customers.name as customer_name')
+        ->join('invoice_customers', function($join)
+        {
+            $join->on('invoices.id', '=', 'invoice_customers.invoice_id');
+        })
+        ->join('customers', function($join)
+        {
+            $join->on('invoice_customers.customer_id', '=', 'customers.id');
+        })
+        ->where('invoices.id', $id)
+        ->first();
 
-        return view('invoice.edit', compact('invoice'));
+        $projects = Invoice::select('invoice_projects.invoice_id','projects.id as project_id','projects.name as project_name', 'projects.info as project_info', 'projects.tarif as project_tarif', 'invoice_projects.quantity')
+        ->join('invoice_customers', function($join)
+        {
+            $join->on('invoices.id', '=', 'invoice_customers.invoice_id');
+        })
+        ->join('invoice_projects', function($join)
+        {
+            $join->on('invoices.id', '=', 'invoice_projects.invoice_id');
+        })
+        ->join('projects', function($join)
+        {
+            $join->on('invoice_projects.project_id', '=', 'projects.id');
+        })
+        ->where('invoices.id', $id)
+        ->get();
+        
+        $customers = Customer::all();
+        $allProjects = Project::all();
+        return view('invoice.edit', compact('invoice', 'projects', 'allProjects', 'customers'));
     }
 
     /**
@@ -158,11 +195,7 @@ class InvoiceController extends Controller
     {
         $request->validate([
             'nomor'=>'required',
-            'customer_id'=>'required|integer',
-
-            //projects are > 1
-            'project_id'=>'required|integer',
-            'quantity'=>'required|integer'
+            'customer_id'=>'required|integer'
         ]);
 
         $invoice = Invoice::find($id);
@@ -173,26 +206,37 @@ class InvoiceController extends Controller
         ->first();
         $invoiceCustomerId->customer_id = $request->get('customer_id');
         $invoiceCustomerId->save();
-        // $invoiceCustomer = InvoiceCustomer::update('invoice_customers set customer_id = ? where invoice_id = ?', [$request->customer_id, $id]);
-        // $invoiceCustomer = InvoiceCustomer::find($invoiceCustomerId);
-        
-        // $invoiceCustomer->customer_id = $request->get('customer_id');
-        // // echo $invoiceCustomer;
-        // $invoiceCustomer->save();
-        
-        // $invoice->customer_id = $request->get('customer_id');
-        
-        $invoiceProjectId = InvoiceProject::select('id')
-        ->where('invoice_id', $invoice->id)
+
+        $invoiceProjects = InvoiceProject::select('id')
+        ->where('invoice_id', $id)
         ->get();
-        $invoiceProject = InvoiceProject::find($invoiceProjectId);
-        $invoiceProject->quantity = $request->get('quantity');
-        // ;
-        // $invoice->save();
-        // $invoiceCustomer->save();
-        // $invoiceProject->save();
+
+        $iterateProject = 0;
+        $iterateQuantity =0;
+        $iterateId=0;
+        foreach ($invoiceProjects as $invoiceProjectId) {
+            $iterateProject = 0;
+            foreach ($request->get('project_id') as $project_id) 
+            {
+                $iterateQuantity =0;
+                foreach ($request->get('quantity') as $quantity)
+                {
+                    if ($iterateProject == $iterateQuantity && $iterateProject==$iterateId )
+                    {
+                        $invoiceProject = InvoiceProject::find($invoiceProjectId->id);
+                        $invoiceProject->project_id = $project_id;
+                        $invoiceProject->quantity = $quantity;
+                        $invoiceProject->save();
+                    }
+                    $iterateQuantity++;
+                }
+                $iterateProject++;
+            }
+            $iterateId++;
+        }
+        $updateJumlah = $this->updateJumlah($invoice);
+
         return redirect('invoice')->with('success', 'Invoice has been updated');
-        
     }
 
     /**

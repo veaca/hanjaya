@@ -17,7 +17,7 @@
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="/adminlte/css/skins/_all-skins.min.css">
-
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -36,7 +36,7 @@
     <!-- Logo -->
     <a href="#" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>Hanjaya</b></span>
+      <span class="logo-mini"><b></b></span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg"><b>Hanjaya</b></span>
     </a>
@@ -89,6 +89,9 @@
             <li><a href="/project"><i class="fa fa-circle-o"></i> Project</a></li>
             <li><a href="/invoice"><i class="fa fa-circle-o"></i> Invoice</a></li>
             <li><a href="/nota"><i class="fa fa-circle-o"></i> Nota</a></li>
+            <li><a href="/biaya"><i class="fa fa-circle-o"></i> Biaya</a></li>
+            <li><a href="/invoicenota"><i class="fa fa-circle-o"></i> Laporan Pengiriman</a></li>
+            <li><a href="/laporan"><i class="fa fa-circle-o"></i> Laporan</a></li>
           </ul>
         </li>
       </ul>
@@ -135,9 +138,6 @@
             </div>
         </div>
         <!-- /.box-body -->
-        <div class="box-footer">
-          Footer
-        </div>
         <!-- /.box-footer-->
       </div>
       <!-- /.box -->

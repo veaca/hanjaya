@@ -15,9 +15,11 @@ class CreateLaporansTable extends Migration
     {
         Schema::create('laporans', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('biaya_lain_id');
-            $table->unsignedInteger('invoice_nota_id');
-            $table->Integer('modal');
+            $table->string('bulan');
+            $table->string('tahun');
+            $table->integer('laporan_biaya_bulanan');
+            $table->integer('laporan_invoice');
+            $table->integer('laporan_nota');
             $table->Integer('laporan_total');
             $table->timestamps();
         });

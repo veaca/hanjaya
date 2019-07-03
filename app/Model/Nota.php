@@ -28,6 +28,10 @@ class Nota extends Model
         'asal',
         'tujuan',
         'NOP',
-        'jumlah_ongkos'
+        'jumlah_ongkos',
+        'jenis_tambahan',
+        'jumlah_tambahan',
+        'potongan_pph',
+        'jumlah_dibayar'
     ];
 }

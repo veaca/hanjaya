@@ -27,6 +27,7 @@ class Invoice extends Model
         'tanggal',
         'nomor',
         'jumlah',
+        'jenis_pajak',
         'pajak',
         'jumlah_total'
     ];

@@ -20,6 +20,7 @@ class CreateNotaDetailsTable extends Migration
             $table->integer('collies');
             $table->integer('kg');
             $table->integer('ongkos');
+            $table->integer('jumlah_ongkos');
             $table->timestamps();
         });
     }

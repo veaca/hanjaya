@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\InvoiceNota;
+use App\Invoice;
+use App\Nota;
 
 class InvoiceNotaController extends Controller
 {
@@ -13,7 +16,16 @@ class InvoiceNotaController extends Controller
      */
     public function index()
     {
-        //
+        $invoiceNotas = InvoiceNota::select("invoice_notas.*", "invoices.id as invoice_id", "invoices.nomor as invoice_nomor", "notas.id as nota_id", "notas.NOP as nota_nop")
+        ->join('invoices', function($join){
+            $join->on('invoice_notas.invoice_id', '=', 'invoices.id');
+        })
+        ->join('notas', function($join){
+            $join->on('invoice_notas.nota_id', '=', 'notas.id');
+        })
+        ->get();
+        // echo $invoiceNotas;
+        return view('invoicenota.index', compact('invoiceNotas'));
     }
 
     /**
@@ -23,7 +35,9 @@ class InvoiceNotaController extends Controller
      */
     public function create()
     {
-        //
+        $invoices = Invoice::all();
+        $notas = Nota::all();
+        return view('invoicenota.create', compact('invoices', 'notas'));
     }
 
     /**
@@ -34,7 +48,18 @@ class InvoiceNotaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         $request->validate([
+            'invoice_id'=>'required|integer',
+            'nota_id'=>'required|integer'
+        ]);
+        
+        $InvoiceNota = new InvoiceNota([
+            'invoice_id' => $request->get('invoice_id'),
+            'nota_id' => $request->get('nota_id')
+        ]);
+
+        $InvoiceNota->save();
+        return redirect('invoicenota');
     }
 
     /**
@@ -79,6 +104,9 @@ class InvoiceNotaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $invoiceNota = InvoiceNota::find($id);
+        $invoiceNota->delete();
+
+        return redirect('invoicenota')->with('success', 'Invoice Nota has been deleted');
     }
 }

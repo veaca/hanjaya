@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Project;
+use App\Invoice;
+use App\InvoiceProject;
 
 class ProjectController extends Controller
 {
@@ -75,6 +77,16 @@ class ProjectController extends Controller
         return view('project.edit', compact('project'));
     }
 
+    public function getProjects($invoiceId){
+        $projects = InvoiceProject::select('projects.name', 'projects.info', 'projects.tarif as tarif', 'invoice_projects.quantity')
+        ->join('projects', function($join){
+            $join->on('invoice_projects.project_id', '=', 'projects.id');
+        })
+        ->where('invoice_id', $invoiceId)
+        ->get();
+        
+        return $projects;
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -94,6 +106,34 @@ class ProjectController extends Controller
         $project->info = $request->get('info');
         $project->tarif = $request->get('tarif');
         $project->save();
+
+        $invoiceIds = Project::select('invoice_projects.invoice_id as invoice_id')
+        ->join('invoice_projects', function($join){
+            $join->on('invoice_projects.project_id', '=', 'projects.id');
+        })
+        ->get();
+        
+        foreach ($invoiceIds as $invoiceId) {
+            // echo $invoiceId;
+            $invoice = Invoice::select('*')
+            ->where('id', $invoiceId->invoice_id)
+            ->first();
+            $projects = $this->getProjects($invoice->id);
+            $jumlah = 0;
+            foreach ($projects as $project) {
+                $jumlah = $jumlah + ( $project->tarif * $project->quantity);
+            }
+            $pajak = $jumlah / 10;
+            $jumlah_total = $jumlah + $pajak;
+
+            $updateInvoice = Invoice::select('*')
+            ->where('id', $invoiceId->invoice_id)
+            ->first();
+            $updateInvoice->jumlah = $jumlah;
+            $updateInvoice->pajak = $pajak;
+            $updateInvoice->jumlah_total = $jumlah_total;
+            $updateInvoice->save();
+        }
 
         return redirect('/project')->with('success', 'Project has been updated');
     }

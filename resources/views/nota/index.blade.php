@@ -12,6 +12,7 @@
       {{ session()->get('success') }}  
     </div><br />
   @endif
+  
   <a href="{{route('nota.create')}}" type="button" class="btn btn-success">Add nota</a>
   <table class="table table-striped">
     <thead>
@@ -23,8 +24,10 @@
           <td>Nota Tujuan</td>
           <td>NOP</td>
           <td>Surat Jalan</td>
-          <td>Jumlah Ongkos</td>
-          <td colspan="2">Action</td>
+          <td colspan="2">Tambahan</td>
+          <td>PPh</td>
+          <td>Jumlah Dibayar</td>
+          <td colspan="4">Action</td>
         </tr>
     </thead>
     <tbody>
@@ -37,7 +40,12 @@
             <td>{{$nota->tujuan}}</td>
             <td>{{$nota->NOP}}</td>
             <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Surat Jalan</button></td>
-            <td>{{$nota->jumlah_ongkos}}</td>
+            <td>{{$nota->jenis_tambahan}}</td>
+            <td>{{$nota->jumlah_tambahan}}</td>
+            <td>{{$nota->potongan_pph}}</td>
+            <td>{{$nota->jumlah_dibayar}}</td>
+            <td><a href="{{ route('printinvoice.show', $nota->id)}}" type="button" class="btn btn-warning">View</a></td>
+            <td><a href="{{ URL::to('exportNota', $nota->id)}}" type="button" class="btn btn-info">Download</a></td>
             <td><a href="{{ route('nota.edit',$nota->id)}}" class="btn btn-primary">Edit</a></td>
             <td>
                 <form action="{{ route('nota.destroy', $nota->id)}}" method="post">
@@ -71,13 +79,15 @@
               </tr>
             </thead>
             <tbody>
+            @foreach ($notaDetails as $notaDetail)
               <tr>
-                <td>{{$nota->date}}</td>
-                <td>{{$nota->nopol}}</td>
-                <td>{{$nota->collies}}</td>
-                <td>{{$nota->kg}}</td>
-                <td>{{$nota->ongkos}}</td>
+                <td>{{$notaDetail->date}}</td>
+                <td>{{$notaDetail->nopol}}</td>
+                <td>{{$notaDetail->collies}}</td>
+                <td>{{$notaDetail->kg}}</td>
+                <td>{{$notaDetail->ongkos}}</td>
               </tr>
+              @endforeach
             </tbody>
           </table>
         </div>

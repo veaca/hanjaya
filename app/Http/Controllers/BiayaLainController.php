@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\BiayaLain;
 
 class BiayaLainController extends Controller
 {
@@ -13,7 +14,9 @@ class BiayaLainController extends Controller
      */
     public function index()
     {
-        //
+        $biayas = BiayaLain::all();
+
+        return view('biaya.index', compact('biayas'));
     }
 
     /**
@@ -23,7 +26,7 @@ class BiayaLainController extends Controller
      */
     public function create()
     {
-        //
+        return view('biaya.create');
     }
 
     /**
@@ -34,7 +37,26 @@ class BiayaLainController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request -> validate([
+            'bulan'=>'required',
+            'tahun'=>'required',
+            'gaji'=>'required|integer',
+            'bpjs'=>'required|integer',
+            'bank'=>'required|integer',
+            'listrik'=>'required|integer',
+            'pdam'=>'required|integer'
+        ]);
+        $biaya = new BiayaLain([
+            'bulan'=>$request->get('bulan'),
+            'tahun'=>$request->get('tahun'),
+            'gaji'=>$request->get('gaji'),
+            'bpjs'=>$request->get('bpjs'),
+            'bank'=>$request->get('bank'),
+            'listrik'=>$request->get('listrik'),
+            'pdam'=>$request->get('pdam')
+        ]);
+        $biaya->save();
+        return redirect('/biaya')->with('success', 'Biaya has been added');
     }
 
     /**
@@ -56,7 +78,9 @@ class BiayaLainController extends Controller
      */
     public function edit($id)
     {
-        //
+        $biaya = BiayaLain::find($id);
+
+        return view('biaya.edit', compact('biaya'));
     }
 
     /**
@@ -68,7 +92,25 @@ class BiayaLainController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request -> validate([
+            'bulan'=>'required',
+            'gaji'=>'required|integer',
+            'bpjs'=>'required|integer',
+            'bank'=>'required|integer',
+            'listrik'=>'required|integer',
+            'pdam'=>'required|integer'
+        ]);
+
+        $biaya = BiayaLain::find($id);
+        $biaya->bulan = $request->get('bulan');
+        $biaya->gaji=$request->get('gaji');
+        $biaya->bpjs=$request->get('bpjs');
+        $biaya->bank=$request->get('bank');
+        $biaya->listrik=$request->get('listrik');
+        $biaya->pdam=$request->get('pdam');
+        $biaya->save();
+
+        return redirect('/biaya')->with('success', 'Biaya has been updated');
     }
 
     /**
@@ -79,6 +121,9 @@ class BiayaLainController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $biaya = BiayaLain::find($id);
+        $biaya->delete();
+
+        return redirect('/biaya')->with('success', 'Biaya has been successfully deleted');
     }
 }

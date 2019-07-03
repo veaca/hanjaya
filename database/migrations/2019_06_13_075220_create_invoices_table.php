@@ -18,6 +18,7 @@ class CreateInvoicesTable extends Migration
             $table->date('tanggal');
             $table->string('nomor');
             $table->integer('jumlah')->nullable();
+            $table->integer('jenis_pajak');
             $table->integer('pajak')->nullable();
             $table->integer('jumlah_total')->nullable();
             $table->timestamps();

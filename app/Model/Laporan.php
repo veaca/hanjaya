@@ -15,9 +15,11 @@ class Laporan extends Model
     }
 
     protected $fillable = [
-        'biaya_lain_id',
-        'invoice_nota_id',
-        'modal',
+        'bulan',
+        'tahun',
+        'laporan_biaya_bulanan',
+        'laporan_invoice',
+        'laporan_nota',
         'laporan_total'
     ];
 }

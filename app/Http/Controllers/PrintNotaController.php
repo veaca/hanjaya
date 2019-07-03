@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class NotaDetailController extends Controller
+class PrintNotaController extends Controller
 {
     /**
      * Display a listing of the resource.

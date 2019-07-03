@@ -15,6 +15,8 @@ class CreateBiayaLainsTable extends Migration
     {
         Schema::create('biaya_lains', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('bulan');
+            $table->string('tahun');
             $table->Integer('gaji');
             $table->Integer('bpjs');
             $table->Integer('bank');

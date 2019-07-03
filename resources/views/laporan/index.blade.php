@@ -1,0 +1,54 @@
+@extends('layout')
+
+@section('content')
+<style>
+  .uper {
+    margin-top: 40px;
+  }
+</style>
+<div class="uper">
+  @if(session()->get('success'))
+    <div class="alert alert-success">
+      {{ session()->get('success') }}  
+    </div><br />
+  @endif
+  <a href="{{route('laporan.create')}}" type="button" class="btn btn-success">Add Laporan</a>
+  <td><a href="{{ URL::to('periodeLaporan')}}" type="button" class="btn btn-info">Download Receipt</a></td>
+  <table class="table table-striped">
+    <thead>
+        <tr>
+          <td>ID</td>
+          <td>Bulan</td>
+          <td>Tahun</td>
+          <td>Total Biaya Lain</td>
+          <td>Total Invoice</td>
+          <td>Total Nota</td>
+          <td>Total Bulan Ini</td>
+          <td colspan="4">Action</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($laporans as $laporan)
+        <tr>
+            <td>{{$laporan->id}}</td>
+            <td>{{$laporan->bulan}}</td>
+            <td>{{$laporan->tahun}}</td>
+            <td>{{$laporan->laporan_biaya_bulanan}}</td>
+            <td>{{$laporan->laporan_invoice}}</td>
+            <td>{{$laporan->laporan_nota}}</td>
+            <td>{{$laporan->laporan_total}}</td>
+            <td><a href="{{ route('laporan.edit',$laporan->id)}}" class="btn btn-primary">Update</a></td>
+            <td>
+                <form action="{{ route('laporan.destroy', $laporan->id)}}" method="post">
+                  @csrf
+                  @method('DELETE')
+                  <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+            </td>
+            
+        </tr>
+        @endforeach
+    </tbody>
+  </table>
+<div>
+@endsection
