@@ -76,11 +76,49 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
+        $month = date('m');
+        if ($month == '01') $noMonth = 'E';
+        else if ($month == '02') $noMonth = 'F';
+        else if ($month == '03') $noMonth = 'G';
+        else if ($month == '04') $noMonth = 'H';
+        else if ($month == '05') $noMonth = 'I';
+        else if ($month == '06') $noMonth = 'J';
+        else if ($month == '07') $noMonth = 'K';
+        else if ($month == '08') $noMonth = 'L';
+        else if ($month == '09') $noMonth = 'M';
+        else if ($month == '10') $noMonth = 'N';
+        else if ($month == '11') $noMonth = 'O';
+        else if ($month == '12') $noMonth = 'P';
+        $nomor;
+        $year = date('y');
+        $noYear = $year;
+        $noMonthYear = $noMonth.$noYear;
+        $cekNomor = Invoice::select("nomor")
+        ->whereMonth('created_at', $month)
+        ->orderBy('id', 'DESC')
+        ->first();
+        if ($cekNomor == NULL)
+        {
+            $nomor = $noMonthYear.'-01';
+        }
+        else if ($noMonthYear == substr($cekNomor->nomor, 0, 3))
+        {
+            $noLastNomor = substr($cekNomor->nomor, -2);
+            $noLastNomor++;
+            if ($noLastNomor<10)
+            {
+                $noLastNomor = '0'.$noLastNomor;
+            }
+            $nomor = $noMonthYear.'-'.$noLastNomor;
+        }
+        
+
         $invoice = new Invoice([
             'tanggal' => date("Y-m-d"),
-            'nomor' => $request->get('nomor'),
+            'nomor' => $nomor,
             'jenis_pajak' => $request->get('jenis_pajak')
         ]);
+
         $invoice->save();
         $invoiceCustomer = new InvoiceCustomer([
             'customer_id' => $request->get('customer_id'),

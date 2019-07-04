@@ -53,7 +53,7 @@ class LaporanController extends Controller
         ->where('bulan', $request->get('bulan'))
         ->where('tahun', $request->get('tahun'))
         ->first();
-        $totalBiayaLain = $biayaLain->gaji + $biayaLain->bpjs + $biayaLain->bank + $biayaLain->listrik + $biayaLain->pdam;
+        $totalBiayaLain = $biayaLain->gaji + $biayaLain->bpjs + $biayaLain->bank + $biayaLain->listrik + $biayaLain->pdam + $biayaLain->biaya_lain;
         // echo $totalBiayaLain;
 
         $invoices = Invoice::select('invoices.jumlah_total')
@@ -118,7 +118,7 @@ class LaporanController extends Controller
         ->where('bulan', $laporan->bulan)
         ->where('tahun', $laporan->tahun)
         ->first();
-        $totalBiayaLain = $biayaLain->gaji + $biayaLain->bpjs + $biayaLain->bank + $biayaLain->listrik + $biayaLain->pdam;
+        $totalBiayaLain = $biayaLain->gaji + $biayaLain->bpjs + $biayaLain->bank + $biayaLain->listrik + $biayaLain->pdam + $biayaLain->biaya_lain;
         // echo $totalBiayaLain;
 
         $invoices = Invoice::select('invoices.jumlah_total')

@@ -47,6 +47,10 @@
           <label for="quantity">Biaya PDAM:</label>
           <input type="text" class="form-control" name="pdam" value={{ $biaya->pdam }} />
         </div>
+        <div class="form-group">
+          <label for="quantity">Biaya Lain:</label>
+          <input type="text" class="form-control" name="biaya_lain" value={{ $biaya->biaya_lain }} />
+        </div>
         <button type="submit" class="btn btn-primary">Update</button>
       </form>
   </div>

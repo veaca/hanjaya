@@ -1,26 +1,28 @@
 @extends('layout')
-
+@section('page_title')
+    {{ "Project" }}
+@endsection
 @section('content')
 <style>
   .uper {
     margin-top: 40px;
   }
 </style>
-<div class="uper">
+<div >
   @if(session()->get('success'))
     <div class="alert alert-success">
       {{ session()->get('success') }}  
     </div><br />
   @endif
   <a href="{{route('project.create')}}" type="button" class="btn btn-success">Add project</a>
-  <table class="table table-striped">
+  <table id="tabledata" class="table table-striped table-bordered">
     <thead>
         <tr>
-          <td>ID</td>
-          <td>Project Name</td>
-          <td>Project Info</td>
-          <td>Project Tarif</td>
-          <td colspan="2">Action</td>
+          <th>ID</th>
+          <th>Project Name</th>
+          <th>Project Info</th>
+          <th>Project Tarif</th>
+          <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -30,8 +32,7 @@
             <td>{{$project->name}}</td>
             <td>{{$project->info}}</td>
             <td>{{$project->tarif}}</td>
-            <td><a href="{{ route('project.edit',$project->id)}}" class="btn btn-primary">Edit</a></td>
-            <td>
+            <td><a href="{{ route('project.edit',$project->id)}}" class="btn btn-primary">Edit</a>
                 <form action="{{ route('project.destroy', $project->id)}}" method="post">
                   @csrf
                   @method('DELETE')

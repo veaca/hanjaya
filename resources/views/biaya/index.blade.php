@@ -1,29 +1,32 @@
 @extends('layout')
-
+@section('page_title')
+    {{ "Biaya Lain" }}
+@endsection
 @section('content')
 <style>
   .uper {
     margin-top: 40px;
   }
 </style>
-<div class="uper">
+<div >
   @if(session()->get('success'))
     <div class="alert alert-success">
       {{ session()->get('success') }}  
     </div><br />
   @endif
   <a href="{{route('biaya.create')}}" type="button" class="btn btn-success">Add Biaya</a>
-  <table class="table table-striped">
+  <table id="tabledata" class="table table-striped">
     <thead>
         <tr>
-          <td>ID</td>
-          <td>Biaya Bulan</td>
-          <td>Biaya Gaji</td>
-          <td>Biaya BPJS</td>
-          <td>Biaya Bank</td>
-          <td>Biaya Listrik</td>
-          <td>Biaya PDAM</td>
-          <td colspan="2">Action</td>
+          <th>ID</th>
+          <th>Biaya Bulan</th>
+          <th>Biaya Gaji</th>
+          <th>Biaya BPJS</th>
+          <th>Biaya Bank</th>
+          <th>Biaya Listrik</th>
+          <th>Biaya PDAM</th>
+          <th>Biaya Lain</th>
+          <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -36,8 +39,9 @@
             <td>{{$biaya->bank}}</td>
             <td>{{$biaya->listrik}}</td>
             <td>{{$biaya->pdam}}</td>
-            <td><a href="{{ route('biaya.edit',$biaya->id)}}" class="btn btn-primary">Edit</a></td>
-            <td>
+            <td>{{$biaya->biaya_lain}}</td>
+            <td><a href="{{ route('biaya.edit',$biaya->id)}}" class="btn btn-primary">Edit</a>
+            
                 <form action="{{ route('biaya.destroy', $biaya->id)}}" method="post">
                   @csrf
                   @method('DELETE')

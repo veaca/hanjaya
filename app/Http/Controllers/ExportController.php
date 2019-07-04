@@ -63,13 +63,8 @@ class ExportController extends Controller
         ->get();
 
         $pdf = PDF::loadview('print.nota', compact('nota', 'vendor', 'notaDetails'));
-        // echo $nota;
-        // echo $notaDetails;
-
-        // echo $pdf;
-        return $pdf->download('nota');
-        // return $pdf->stream();
-        // return view('print.nota', compact('nota', 'vendor', 'notaDetails'));
+        $name = "nota".$nota->NOP;
+        return $pdf->download($name);
     }
 
     public function periodeLaporan()
@@ -79,9 +74,6 @@ class ExportController extends Controller
 
     public function exportLaporan(Request $request)
     {
-        // echo $request->get('awal');
-        // echo $request->get('akhir');
-        // echo $request->get('tahun');
         $tanggalAwal = "01";
         $tanggalAkhir = "31";
         $awalPeriode = $request->get('tahun')."-".$request->get('awal')."-".$tanggalAwal;

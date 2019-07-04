@@ -1,12 +1,14 @@
 @extends('layout')
-
+@section('page_title')
+    {{ "Laporan" }}
+@endsection
 @section('content')
 <style>
   .uper {
     margin-top: 40px;
   }
 </style>
-<div class="uper">
+<div>
   @if(session()->get('success'))
     <div class="alert alert-success">
       {{ session()->get('success') }}  
@@ -14,17 +16,17 @@
   @endif
   <a href="{{route('laporan.create')}}" type="button" class="btn btn-success">Add Laporan</a>
   <td><a href="{{ URL::to('periodeLaporan')}}" type="button" class="btn btn-info">Download Receipt</a></td>
-  <table class="table table-striped">
+  <table id="tabledata" class="table table-striped">
     <thead>
         <tr>
-          <td>ID</td>
-          <td>Bulan</td>
-          <td>Tahun</td>
-          <td>Total Biaya Lain</td>
-          <td>Total Invoice</td>
-          <td>Total Nota</td>
-          <td>Total Bulan Ini</td>
-          <td colspan="4">Action</td>
+          <th>ID</th>
+          <th>Bulan</th>
+          <th>Tahun</th>
+          <th>Total Biaya Lain</th>
+          <th>Total Invoice</th>
+          <th>Total Nota</th>
+          <th>Total Bulan Ini</th>
+          <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -37,8 +39,7 @@
             <td>{{$laporan->laporan_invoice}}</td>
             <td>{{$laporan->laporan_nota}}</td>
             <td>{{$laporan->laporan_total}}</td>
-            <td><a href="{{ route('laporan.edit',$laporan->id)}}" class="btn btn-primary">Update</a></td>
-            <td>
+            <td><a href="{{ route('laporan.edit',$laporan->id)}}" class="btn btn-primary">Update</a>
                 <form action="{{ route('laporan.destroy', $laporan->id)}}" method="post">
                   @csrf
                   @method('DELETE')

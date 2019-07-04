@@ -74,6 +74,10 @@
               <label for="quantity">Biaya PDAM :</label>
               <input type="text" class="form-control" name="pdam"/>
           </div>
+           <div class="form-group">
+              <label for="quantity">Biaya Lain :</label>
+              <input type="text" class="form-control" name="biaya_lain"/>
+          </div>
           <button type="submit" class="btn btn-primary">Add</button>
       </form>
   </div>

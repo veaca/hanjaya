@@ -44,7 +44,8 @@ class BiayaLainController extends Controller
             'bpjs'=>'required|integer',
             'bank'=>'required|integer',
             'listrik'=>'required|integer',
-            'pdam'=>'required|integer'
+            'pdam'=>'required|integer',
+            'biaya_lain'=>'required|integer'
         ]);
         $biaya = new BiayaLain([
             'bulan'=>$request->get('bulan'),
@@ -53,7 +54,8 @@ class BiayaLainController extends Controller
             'bpjs'=>$request->get('bpjs'),
             'bank'=>$request->get('bank'),
             'listrik'=>$request->get('listrik'),
-            'pdam'=>$request->get('pdam')
+            'pdam'=>$request->get('pdam'),
+            'biaya_lain'=>$request->get('biaya_lain')
         ]);
         $biaya->save();
         return redirect('/biaya')->with('success', 'Biaya has been added');
@@ -98,7 +100,8 @@ class BiayaLainController extends Controller
             'bpjs'=>'required|integer',
             'bank'=>'required|integer',
             'listrik'=>'required|integer',
-            'pdam'=>'required|integer'
+            'pdam'=>'required|integer',
+            'biaya_lain'=>'required|integer'
         ]);
 
         $biaya = BiayaLain::find($id);
@@ -108,6 +111,7 @@ class BiayaLainController extends Controller
         $biaya->bank=$request->get('bank');
         $biaya->listrik=$request->get('listrik');
         $biaya->pdam=$request->get('pdam');
+        $biaya->biaya_lain=$request->get('biaya_lain');
         $biaya->save();
 
         return redirect('/biaya')->with('success', 'Biaya has been updated');

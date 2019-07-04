@@ -32,15 +32,7 @@
     					{{$customer->phone}}
     				</address>
     			</div>
-    			<div class="col-xs-6 text-right">
-    				<address>
-        			<strong>Shipped To:</strong><br>
-    					Jane Smith<br>
-    					1234 Main<br>
-    					Apt. 4B<br>
-    					Springfield, ST 54321
-    				</address>
-    			</div>
+    			
     		</div>
     		<div class="row">
     			<div class="col-xs-6">

@@ -23,10 +23,7 @@
       <form method="post" id="data" action="{{ route('invoice.store') }}">
           <div class="form-group">
               @csrf
-              <label for="price">Invoice Nomor :</label>
-              <input type="text" class="form-control" name="nomor"/>
-          </div>
-          <div class="form-group">
+             
               <label for="price">Invoice Customer :</label>
               <div class="dropdown show">
                 <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -15,7 +15,8 @@ class BiayaLain extends Model
         'bpjs',
         'bank',
         'listrik',
-        'pdam'
+        'pdam',
+        'biaya_lain'
     ];
 
     public function laporan(){

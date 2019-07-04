@@ -1,12 +1,14 @@
 @extends('layout')
-
+@section('page_title')
+    {{ "Nota" }}
+@endsection
 @section('content')
 <style>
   .uper {
     margin-top: 40px;
   }
 </style>
-<div class="uper">
+<div>
   @if(session()->get('success'))
     <div class="alert alert-success">
       {{ session()->get('success') }}  
@@ -14,20 +16,18 @@
   @endif
   
   <a href="{{route('nota.create')}}" type="button" class="btn btn-success">Add nota</a>
-  <table class="table table-striped">
+  <table id="tabledata" class="table table-striped table-border">
     <thead>
         <tr>
-          <td>ID</td>
-          <td>Vendor</td>
-          <td>Nota Tanggal</td>
-          <td>Nota Asal</td>
-          <td>Nota Tujuan</td>
-          <td>NOP</td>
-          <td>Surat Jalan</td>
-          <td colspan="2">Tambahan</td>
-          <td>PPh</td>
-          <td>Jumlah Dibayar</td>
-          <td colspan="4">Action</td>
+          <th>ID</th>
+          <th>Vendor</th>
+          <th>Nota Tanggal</th>
+          <th>Nota Asal</th>
+          <th>Nota Tujuan</th>
+          <th>NOP</th>
+          <th>Surat Jalan</th>
+          <th>Jumlah Dibayar</th>
+          <th >Action</th>
         </tr>
     </thead>
     <tbody>
@@ -40,14 +40,10 @@
             <td>{{$nota->tujuan}}</td>
             <td>{{$nota->NOP}}</td>
             <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Surat Jalan</button></td>
-            <td>{{$nota->jenis_tambahan}}</td>
-            <td>{{$nota->jumlah_tambahan}}</td>
-            <td>{{$nota->potongan_pph}}</td>
             <td>{{$nota->jumlah_dibayar}}</td>
-            <td><a href="{{ route('printinvoice.show', $nota->id)}}" type="button" class="btn btn-warning">View</a></td>
-            <td><a href="{{ URL::to('exportNota', $nota->id)}}" type="button" class="btn btn-info">Download</a></td>
-            <td><a href="{{ route('nota.edit',$nota->id)}}" class="btn btn-primary">Edit</a></td>
-            <td>
+            <td><a href="{{ route('printinvoice.show', $nota->id)}}" type="button" class="btn btn-warning">View</a>
+            <a href="{{ URL::to('exportNota', $nota->id)}}" type="button" class="btn btn-info">Download</a>
+            <a href="{{ route('nota.edit', $nota->id)}}" type="button" class="btn btn-primary">Edit</a>
                 <form action="{{ route('nota.destroy', $nota->id)}}" method="post">
                   @csrf
                   @method('DELETE')

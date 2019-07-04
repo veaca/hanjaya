@@ -22,6 +22,7 @@ class CreateBiayaLainsTable extends Migration
             $table->Integer('bank');
             $table->Integer('listrik');
             $table->Integer('pdam');
+            $table->Integer('biaya_lain');
             $table->timestamps();
         });
     }
