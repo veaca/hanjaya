@@ -34,7 +34,7 @@ class NotaController extends Controller
             $join->on('nota_nota_details.nota_detail_id', '=', 'nota_details.id');
         })
         ->get();
-        echo $notas;
+        // echo $notas;
         return view('nota.index', compact('notas', 'notaDetails'));
     }
 
@@ -63,6 +63,12 @@ class NotaController extends Controller
             'asal'=>'required',
             'tujuan'=>'required',
             'NOP'=>'required',
+            'jenis_tambahan'=>'required',
+            'jumlah_tambahan'=>'required',
+            'nopol.*'=>'required|string',
+            'collies.*'=>'required|integer',
+            'kg.*'=>'required|integer',
+            'ongkos.*'=>'required|integer'
         ]);
         $iterateNotaId = 0;
         $notaIds = [];
@@ -197,8 +203,8 @@ class NotaController extends Controller
         })
         ->where('notas.id', $id)
         ->get();
-        echo $nota;
-        echo $notaDetails;
+        // echo $nota;
+        // echo $notaDetails;
         // echo $notas;
         // return view('nota.index', compact('notas'));
         return view('nota.edit', compact('nota', 'notaDetails', 'vendors' ));

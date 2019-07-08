@@ -35,3 +35,5 @@ Route::get('/exportInvoice/{id}', 'ExportController@exportInvoice');
 Route::get('/exportNota/{id}', 'ExportController@exportNota');
 Route::get('/periodeLaporan', 'ExportController@periodeLaporan');
 Route::post('/exportLaporan', 'ExportController@exportLaporan');
+Route::get('/viewInvoice/{id}', 'ExportController@viewInvoice');
+Route::get('/viewNota/{id}', 'ExportController@viewNota');

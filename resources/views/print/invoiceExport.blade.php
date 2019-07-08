@@ -1,16 +1,14 @@
-@extends('layout2')
-
-@section('page_title')
-    {{ "Invoice" }}
-@endsection
-@section('button')
-    <a type="button" class="btn btn-info" href="{{URL::to('exportInvoice', $invoice->id)}}">Download</a>
-@endsection
-@section('content')
-	<center>
-		<h4>Invoice</h4><br> 		
-	</center>
-    <br>
+<!DOCTYPE html>
+<html>
+    <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        td, th {
+            text-align : center;
+        }
+    </style>
+    </head>
+    <body>
 <style>
 
     .table-bordered, .bord {
@@ -32,6 +30,9 @@
   clear: both;
 }
 </style>
+<center>
+		<h4>Invoice</h4><br> 		
+	</center>
     <div>
         <table>
             <tbody>
@@ -39,14 +40,14 @@
                     <td style="text-align:left;">Nomor</td>
                     <td></td>
                     <td>:</td>
-                    <td> </td>
+                    <td></td>
                     <td style="text-align:left;">{{$invoice->nomor}}</td>
                 </tr>
                 <tr>
                     <td style="text-align:left;">Tanggal</td>
-                    <td> </td>
+                    <td></td>
                     <td>:</td>
-                    <td> </td>
+                    <td></td>
                     <td style="text-align:left;" >{{$invoice->created_at->format('d-m-Y')}}</td>
                 </tr>
                 <tr>
@@ -57,8 +58,8 @@
                     <td style="text-align:left;">{{$customer->name}}</td>
                 </tr>
                 <tr>
-                <td></td>
-                <td></td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td style="text-align:left;">{{$customer->address}}</td>
@@ -130,4 +131,5 @@
         </td>
     </table>		
 	
-@endsection
+    </body>
+</html>

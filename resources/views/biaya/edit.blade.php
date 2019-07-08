@@ -25,31 +25,31 @@
         @csrf
         <div class="form-group">
           <label for="name">Biaya Bulan:</label>
-          <input type="text" class="form-control" name="bulan" value={{ $biaya->bulan }} />
+          <input type="text" class="form-control" name="bulan" value="{{ $biaya->bulan }}" />
         </div>
         <div class="form-group">
           <label for="price">Biaya Gaji :</label>
-          <input type="text" class="form-control" name="gaji" value={{ $biaya->gaji }} />
+          <input type="text" class="form-control" name="gaji" value="{{ $biaya->gaji }}" />
         </div>
         <div class="form-group">
           <label for="quantity">Biaya BPJS:</label>
-          <input type="text" class="form-control" name="bpjs" value={{ $biaya->bpjs }} />
+          <input type="text" class="form-control" name="bpjs" value="{{ $biaya->bpjs }}" />
         </div>
         <div class="form-group">
           <label for="quantity">Biaya Bank:</label>
-          <input type="text" class="form-control" name="bank" value={{ $biaya->bank }} />
+          <input type="text" class="form-control" name="bank" value="{{ $biaya->bank }}" />
         </div>
         <div class="form-group">
           <label for="quantity">Biaya Listrik:</label>
-          <input type="text" class="form-control" name="listrik" value={{ $biaya->listrik }} />
+          <input type="text" class="form-control" name="listrik" value="{{ $biaya->listrik }}" />
         </div>
         <div class="form-group">
           <label for="quantity">Biaya PDAM:</label>
-          <input type="text" class="form-control" name="pdam" value={{ $biaya->pdam }} />
+          <input type="text" class="form-control" name="pdam" value="{{ $biaya->pdam }}" />
         </div>
         <div class="form-group">
           <label for="quantity">Biaya Lain:</label>
-          <input type="text" class="form-control" name="biaya_lain" value={{ $biaya->biaya_lain }} />
+          <input type="text" class="form-control" name="biaya_lain" value="{{ $biaya->biaya_lain }}" />
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
       </form>

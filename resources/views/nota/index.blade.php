@@ -16,38 +16,40 @@
   @endif
   
   <a href="{{route('nota.create')}}" type="button" class="btn btn-success">Add nota</a>
-  <table id="tabledata" class="table table-striped table-border">
+  <br>
+  <table id="tabledata" class="table table-striped table-bordered">
     <thead>
         <tr>
-          <th>ID</th>
+          <th>No.</th>
           <th>Vendor</th>
-          <th>Nota Tanggal</th>
-          <th>Nota Asal</th>
-          <th>Nota Tujuan</th>
+          <th>Tanggal Dibuat</th>
+          <th>Asal</th>
+          <th>Tujuan</th>
           <th>NOP</th>
-          <th>Surat Jalan</th>
           <th>Jumlah Dibayar</th>
-          <th >Action</th>
+          <th>View</th>
+          <th>Edit</th>
+          <th>Delete</th>
         </tr>
     </thead>
     <tbody>
+    @php $i=1 @endphp
         @foreach($notas as $nota)
         <tr>
-            <td>{{$nota->id}}</td>
+            <td>{{$i++}}</td>
             <td>{{$nota->vendor_name}}</td>
             <td>{{$nota->tanggal}}</td>
             <td>{{$nota->asal}}</td>
             <td>{{$nota->tujuan}}</td>
             <td>{{$nota->NOP}}</td>
-            <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Surat Jalan</button></td>
             <td>{{$nota->jumlah_dibayar}}</td>
-            <td><a href="{{ route('printinvoice.show', $nota->id)}}" type="button" class="btn btn-warning">View</a>
-            <a href="{{ URL::to('exportNota', $nota->id)}}" type="button" class="btn btn-info">Download</a>
-            <a href="{{ route('nota.edit', $nota->id)}}" type="button" class="btn btn-primary">Edit</a>
+            <td><a href="{{ URL::to('viewNota', $nota->id)}}" type="button" class="btn btn-warning">View</a></td>
+            <td><a href="{{ route('nota.edit', $nota->id)}}" type="button" class="btn btn-primary">Edit</a></td>
+            <td>
                 <form action="{{ route('nota.destroy', $nota->id)}}" method="post">
                   @csrf
                   @method('DELETE')
-                  <button class="btn btn-danger" type="submit">Delete</button>
+                  <button onclick="return confirm('Are you sure?')" class="btn btn-danger" type="submit">Delete</button>
                 </form>
             </td>
         </tr>

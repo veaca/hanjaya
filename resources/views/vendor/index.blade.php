@@ -18,27 +18,31 @@
   <table id="tabledata" class="table table-striped table-bordered">
     <thead>
         <tr>
-          <td>ID</td>
-          <td>Vendor Name</td>
-          <td>Vendor Address</td>
-          <td>Vendor Phone</td>
-          <td>Action</td>
+          <th>No.</th>
+          <th>Nama</th>
+          <th>Alamat</th>
+          <th>Telephone</th>
+          <th>Edit</th>
+          <th>Delete</th>
         </tr>
     </thead>
     <tbody>
+    @php $i=1 @endphp
         @foreach($vendors as $vendor)
         <tr>
-            <td>{{$vendor->id}}</td>
+            <td>{{$i++}}</td>
             <td>{{$vendor->name}}</td>
             <td>{{$vendor->address}}</td>
             <td>{{$vendor->phone}}</td>
-            <td><a href="{{ route('vendor.edit',$vendor->id)}}" class="btn btn-primary">Edit</a>
-                <form action="{{ route('vendor.destroy', $vendor->id)}}" method="post">
+            <td><a href="{{ route('vendor.edit',$vendor->id)}}" class="btn btn-primary">Edit</a></td>
+            <td>
+              <form action="{{ route('vendor.destroy', $vendor->id)}}" method="post">
                   @csrf
                   @method('DELETE')
-                  <button class="btn btn-danger" type="submit">Delete</button>
+                  <button onclick="return confirm('Are you sure?')" class="btn btn-danger" type="submit">Delete</button>
                 </form>
-            </td>
+            </td>    
+            
         </tr>
         @endforeach
     </tbody>

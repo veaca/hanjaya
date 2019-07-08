@@ -15,35 +15,31 @@
     </div><br />
   @endif
   <a href="{{route('invoicenota.create')}}" type="button" class="btn btn-success">Add  invoicenota</a>
-  <table id="tabledata" class="table table-striped">
+  <table id="tabledata" class="table table-striped table-bordered">
     <thead>
         <tr>
-          <th>ID</th>
-          <th>Invoice Id</th>
+          <th>No.</th>
           <th>Invoice Nomor</th>
-          <th>Nota Id</th>
-          <th>Nota Nomor</th>
-          <th>Action</th>
+          <th>Nota NOP</th>
+          <th>Edit</th>
+          <th>Delete</th>
         </tr>
     </thead>
     <tbody>
+    @php $i=1 @endphp
         @foreach($invoiceNotas as $invoiceNota)
         <tr>
-            <td>{{$invoiceNota->id}}</td>
-            <td>{{$invoiceNota->invoice_id}}</td>
+            <td>{{$i++}}</td>
             <td>{{$invoiceNota->invoice_nomor}}</td>
-            <td>{{$invoiceNota->nota_id}}</td>
             <td>{{$invoiceNota->nota_nop}}</td>
-            <td><a href="{{ route('invoicenota.edit',$invoiceNota->id)}}" class="btn btn-primary">Edit</a>
+            <td><a href="{{ route('invoicenota.edit',$invoiceNota->id)}}" class="btn btn-primary">Edit</a></td>
+            <td>
         
                 <form action="{{ route('invoicenota.destroy', $invoiceNota->id)}}" method="post">
                   @csrf
                   @method('DELETE')
-                  <button class="btn btn-danger" type="submit">Delete</button>
+                  <button onclick="return confirm('Are you sure?')" class="btn btn-danger" type="submit">Delete</button>
                 </form>
-        
-          <a href="{{ route('print.show', $invoiceNota->id)}}" type="button" class="btn btn-warning">View Receipt</a>
-           <a href="{{ route('print.edit', $invoiceNota->id)}}" type="button" class="btn btn-info">Download Receipt</a></td>
         </tr>
         @endforeach
     </tbody>

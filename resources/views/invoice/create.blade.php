@@ -6,7 +6,7 @@
     margin-top: 40px;
   }
 </style>
-<div class="card uper">
+<div class="card">
   <div class="card-header">
     Add Invoice
   </div>
@@ -21,46 +21,50 @@
       </div><br />
     @endif
       <form method="post" id="data" action="{{ route('invoice.store') }}">
-          <div class="form-group">
+      <label for="price">Invoice Customer :</label>    
+        <div class="form-group">
               @csrf
-             
-              <label for="price">Invoice Customer :</label>
-              <div class="dropdown show">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Choose Customer
-                </a>
-                <select name='customer_id' >
+                <label for="customer">Pilih Customer</label>
+                <select class="form-control" name='customer_id' >
                 @foreach ($customers as $customer)
                   <option class="dropdown-item" value="{{$customer->id}}" >{{$customer->name}}</option>
                 @endforeach
                 </select>
-              </div>
           </div>
           <div class="form-group">
             <label for="jenis_pajak">Persen Pajak</label>
-            <input type="text" class="form-control" name=jenis_pajak>
+            <input type="text" class="form-control" name="jenis_pajak">
           </div>
           <label for="quantity">Invoice Projects :</label><br>
-              
               <div class="form-group" name="project_info" id="isi">
-                <select id="projectId" name='project_id[0]'>
-                  @foreach ($projects as $project)
-                    <option class="dropdown-item" value="{{$project->id}}" >{{$project->name}}</option>
-                  @endforeach
-                  </select>
-                <input id="kuantitas" type="text" placeholder="Kuantitas Proyek" name="quantity[0]"/>
-                <br>
-             <button type="submit" class="btn btn-primary">Add</button>
-          </div>
-      </form>
-       <button type="button" id="btnAddForm" onclick="CloneForm('isi')">Add another Project</button>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <select class="form-control" id="projectId" name='project_id[0]'>
+                      @foreach ($projects as $project)
+                        <option class="dropdown-item" value="{{$project->id}}" >{{$project->name}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                  <div class="col-sm-4">
+                  <input class="form-control" id="kuantitas" type="text" placeholder="Kuantitas Proyek" name="quantity[0]"/>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-default" id="btnAddForm" onclick="CloneForm('isi')">+</button>
        <br>
+       <br>
+             <button type="submit" class="btn btn-primary">Add</button>
+             <br>
+          
+      </form>
+       
       
   </div>
 </div>
 
 <script>
   var count=1;
+  var counter= 3;
   function CloneForm(formName) 
   {
     var project = document.getElementById('projectId');
@@ -70,11 +74,42 @@
     var cloneQuantity = quantity.cloneNode(true);
     cloneProject.name = "project_id[" + count +"]";
     cloneQuantity.name = "quantity[" + count +"]"; 
-    linebreak = document.createElement("br");
-    document.getElementById('isi').appendChild(cloneProject);
-    document.getElementById('isi').appendChild(cloneQuantity);
-    document.getElementById('isi').appendChild(linebreak);
+    var linebreak = document.createElement("br");
+    var colSm4 = document.createElement('div');
+    colSm4.className = "col-sm-4";
+    colSm4.appendChild(cloneProject);
+    var colSm8 = document.createElement('div');
+    colSm8.className ="col-sm-4";
+    colSm8.appendChild(cloneQuantity);
+    var row = document.createElement('div');
+    row.className = "row";
+    row.appendChild(colSm4);
+    row.appendChild(colSm8)
+    document.getElementById('isi').appendChild(row);
+    console.log(count);
+    // document.getElementById('isi').appendChild(cloneProject);
+    // document.getElementById('isi').appendChild(cloneQuantity);
+    // document.getElementById('isi').appendChild(linebreak);
     count +=1;
+  }
+
+  function removeForm(id)
+  {
+    counter = counter+count;
+    console.log(counter);
+    if (counter>=3)
+    {
+      if (counter >= 3)
+      {
+        counter -=1;
+      var div = document.getElementById(id);
+      div.removeChild(div.childNodes[counter]);
+    // console.log(div.childNodes);
+      }
+    
+    
+    }
+    
   }
 </script>
 @endsection

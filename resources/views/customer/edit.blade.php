@@ -25,15 +25,15 @@
         @csrf
         <div class="form-group">
           <label for="name">Customer Name:</label>
-          <input type="text" class="form-control" name="name" value={{ $customer->name }} />
+          <input type="text" class="form-control" name="name" value="{{ $customer->name }}"  />
         </div>
         <div class="form-group">
           <label for="price">Customer Address :</label>
-          <input type="text" class="form-control" name="address" value={{ $customer->address }} />
+          <input type="text" class="form-control" name="address" value="{{ $customer->address }}" />
         </div>
         <div class="form-group">
           <label for="quantity">Customer Phone:</label>
-          <input type="text" class="form-control" name="phone" value={{ $customer->phone }} />
+          <input type="text" class="form-control" name="phone" value="{{ $customer->phone }}" /> 
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
       </form>

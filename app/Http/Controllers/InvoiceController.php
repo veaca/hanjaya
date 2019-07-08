@@ -19,21 +19,19 @@ class InvoiceController extends Controller
     public function index()
     {
         $invoices = Invoice::select('invoices.*', 'invoice_customers.customer_id as customer_id', 'customers.name as customer_name')
-        ->join('invoice_customers', function($join)
+        ->leftjoin('invoice_customers', function($join)
         {
             $join->on('invoices.id', '=', 'invoice_customers.invoice_id');
         })
-        ->join('customers', function($join)
+        ->leftjoin('customers', function($join)
         {
             $join->on('invoice_customers.customer_id', '=', 'customers.id');
         })
+        ->orderBy('nomor','ASC')
         ->get();
 
         $projects = Invoice::select('invoice_projects.invoice_id','projects.name as project_name', 'projects.info as project_info', 'projects.tarif as project_tarif', 'invoice_projects.quantity')
-        ->join('invoice_customers', function($join)
-        {
-            $join->on('invoices.id', '=', 'invoice_customers.invoice_id');
-        })
+
         ->join('invoice_projects', function($join)
         {
             $join->on('invoices.id', '=', 'invoice_projects.invoice_id');
@@ -43,6 +41,8 @@ class InvoiceController extends Controller
             $join->on('invoice_projects.project_id', '=', 'projects.id');
         })
         ->get();
+        echo $invoices;
+        // echo $projects;
         return view('invoice.index', compact('invoices', 'projects'));
     }
 
@@ -76,6 +76,12 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'customer_id'=>'required',
+            'jenis_pajak'=>'required|integer',
+            'project_id.*'=>'required',
+            'quantity.*'=>'required'
+        ]);
         $month = date('m');
         if ($month == '01') $noMonth = 'E';
         else if ($month == '02') $noMonth = 'F';
@@ -97,13 +103,17 @@ class InvoiceController extends Controller
         ->whereMonth('created_at', $month)
         ->orderBy('id', 'DESC')
         ->first();
+        // echo $cekNomor;
         if ($cekNomor == NULL)
         {
             $nomor = $noMonthYear.'-01';
         }
         else if ($noMonthYear == substr($cekNomor->nomor, 0, 3))
         {
-            $noLastNomor = substr($cekNomor->nomor, -2);
+            
+            $temp = explode('-', $cekNomor)[1];
+            $noLastNomor = explode("\"", $temp)[0];
+            echo $noLastNomor;
             $noLastNomor++;
             if ($noLastNomor<10)
             {
@@ -219,6 +229,10 @@ class InvoiceController extends Controller
         
         $customers = Customer::all();
         $allProjects = Project::all();
+        // echo $invoice;
+        // echo $projects;
+        // echo $allProjects;
+        // echo $customers;
         return view('invoice.edit', compact('invoice', 'projects', 'allProjects', 'customers'));
     }
 
@@ -232,7 +246,6 @@ class InvoiceController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nomor'=>'required',
             'customer_id'=>'required|integer'
         ]);
 

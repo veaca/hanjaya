@@ -15,7 +15,7 @@
     </div><br />
   @endif
   <a href="{{route('biaya.create')}}" type="button" class="btn btn-success">Add Biaya</a>
-  <table id="tabledata" class="table table-striped">
+  <table id="tabledata" class="table table-striped table-bordered">
     <thead>
         <tr>
           <th>ID</th>
@@ -26,7 +26,8 @@
           <th>Biaya Listrik</th>
           <th>Biaya PDAM</th>
           <th>Biaya Lain</th>
-          <th>Action</th>
+          <th>Edit</th>
+          <th>Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -40,12 +41,13 @@
             <td>{{$biaya->listrik}}</td>
             <td>{{$biaya->pdam}}</td>
             <td>{{$biaya->biaya_lain}}</td>
-            <td><a href="{{ route('biaya.edit',$biaya->id)}}" class="btn btn-primary">Edit</a>
+            <td><a href="{{ route('biaya.edit',$biaya->id)}}" class="btn btn-primary">Edit</a></td>
+            <td>
             
                 <form action="{{ route('biaya.destroy', $biaya->id)}}" method="post">
                   @csrf
                   @method('DELETE')
-                  <button class="btn btn-danger" type="submit">Delete</button>
+                  <button onclick="return confirm('Are you sure?')" class="btn btn-danger" type="submit">Delete</button>
                 </form>
             </td>
         </tr>

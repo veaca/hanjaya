@@ -53,18 +53,26 @@ class LaporanController extends Controller
         ->where('bulan', $request->get('bulan'))
         ->where('tahun', $request->get('tahun'))
         ->first();
-        $totalBiayaLain = $biayaLain->gaji + $biayaLain->bpjs + $biayaLain->bank + $biayaLain->listrik + $biayaLain->pdam + $biayaLain->biaya_lain;
+        if ($biayaLain == NULL) $totalBiayaLain=0;
+        else
+        {
+            $totalBiayaLain = $biayaLain->gaji + $biayaLain->bpjs + $biayaLain->bank + $biayaLain->listrik + $biayaLain->pdam + $biayaLain->biaya_lain;
         // echo $totalBiayaLain;
-
+        }
         $invoices = Invoice::select('invoices.jumlah_total')
         ->whereMonth('invoices.created_at', $request->get('bulan'))
         ->whereYear('invoices.created_at', $request->get('tahun'))
         ->get();
-        
         $totalInvoice =0;
-        foreach ($invoices as $invoice) {
-            $totalInvoice = $totalInvoice + $invoice->jumlah_total;
+        if ($invoices==NULL) {
+            $totalInvoice =0;
         }
+        else {
+            foreach ($invoices as $invoice) {
+                $totalInvoice = $totalInvoice + $invoice->jumlah_total;
+            }
+        }
+        
         // echo $invoice;
 
         $notas = Nota::select('notas.jumlah_dibayar as jumlah_dibayar')
@@ -73,10 +81,18 @@ class LaporanController extends Controller
         ->get();
 
         $totalNota = 0;
-        foreach ($notas as $nota) {
-            $totalNota = $totalNota + $nota->jumlah_dibayar;
+        if ($notas != NULL)
+        {
+            foreach ($notas as $nota) {
+                $totalNota = $totalNota + $nota->jumlah_dibayar;
+            }
+            $laporanTotal = $totalInvoice - $totalNota - $totalBiayaLain;
         }
-        $laporanTotal = $totalInvoice - $totalNota - $totalBiayaLain;
+        else 
+        {
+            $laporanTotal=0;
+        }
+        
 
 
         // echo $invoice;
@@ -118,18 +134,23 @@ class LaporanController extends Controller
         ->where('bulan', $laporan->bulan)
         ->where('tahun', $laporan->tahun)
         ->first();
+        if ($biayaLain==NULL) $totalBiayaLain=0;
+        else{
         $totalBiayaLain = $biayaLain->gaji + $biayaLain->bpjs + $biayaLain->bank + $biayaLain->listrik + $biayaLain->pdam + $biayaLain->biaya_lain;
         // echo $totalBiayaLain;
-
+        }
         $invoices = Invoice::select('invoices.jumlah_total')
         ->whereMonth('invoices.created_at', $laporan->bulan)
         ->whereYear('invoices.created_at', $laporan->tahun)
         ->get();
-        
         $totalInvoice =0;
-        foreach ($invoices as $invoice) {
-            $totalInvoice = $totalInvoice + $invoice->jumlah_total;
+        if ($invoices==NULL) $totalInvoice =0;
+        else {
+            foreach ($invoices as $invoice) {
+                $totalInvoice = $totalInvoice + $invoice->jumlah_total;
+            }
         }
+        
         // echo $invoice;
 
         $notas = Nota::select('notas.jumlah_dibayar as jumlah_dibayar')
@@ -138,9 +159,13 @@ class LaporanController extends Controller
         ->get();
 
         $totalNota = 0;
-        foreach ($notas as $nota) {
-            $totalNota = $totalNota + $nota->jumlah_dibayar;
+        if ($notas != NULL)
+        {
+            foreach ($notas as $nota) {
+                $totalNota = $totalNota + $nota->jumlah_dibayar;
+            }
         }
+        
         $laporanTotal = $totalInvoice - $totalNota - $totalBiayaLain;
         $laporan->laporan_biaya_bulanan = $totalBiayaLain;
         $laporan->laporan_invoice = $totalInvoice;

@@ -14,15 +14,16 @@
       {{ session()->get('success') }}  
     </div><br />
   @endif
-  <a href="{{route('customer.create')}}" type="button" class="btn btn-success">Add Customer</a>
+  <a href="{{route('customer.create')}}" type="button" class="btn btn-success m-5">Add Customer</a>
   <table id="tabledata" class="table table-striped table-bordered">
     <thead>
         <tr>
           <th>ID</th>
-          <th>Customer Name</th>
-          <th>Customer Address</th>
-          <th>Customer Phone</th>
-          <th>Action</th>
+          <th>Nama</th>
+          <th>Alamat</th>
+          <th>Telephone</th>
+          <th>Edit</th>
+          <th>Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -32,13 +33,13 @@
             <td>{{$customer->name}}</td>
             <td>{{$customer->address}}</td>
             <td>{{$customer->phone}}</td>
-            <td><a href="{{ route('customer.edit',$customer->id)}}" class="btn btn-primary">Edit</a>
-            
-                <form action="{{ route('customer.destroy', $customer->id)}}" method="post">
-                  @csrf
-                  @method('DELETE')
-                  <button class="btn btn-danger" type="submit">Delete</button>
-                </form>
+            <td><a href="{{ route('customer.edit',$customer->id)}}" class="btn btn-primary">Edit</a></td>
+            <td>
+              <form action="{{ route('customer.destroy', $customer->id)}}" method="post">
+                @csrf
+                @method('DELETE')
+                <button onclick="return confirm('Are you sure?')" class="btn btn-danger" type="submit">Delete</button>
+              </form>
             </td>
         </tr>
         @endforeach

@@ -18,27 +18,31 @@
   <table id="tabledata" class="table table-striped table-bordered">
     <thead>
         <tr>
-          <th>ID</th>
-          <th>Project Name</th>
-          <th>Project Info</th>
-          <th>Project Tarif</th>
-          <th>Action</th>
+          <th>No</th>
+          <th>Nama</th>
+          <th>Info / Keterangan</th>
+          <th>Tarif</th>
+          <th>Edit</th>
+          <th>Delete</th>
         </tr>
     </thead>
     <tbody>
+    @php $i=1 @endphp
         @foreach($projects as $project)
         <tr>
-            <td>{{$project->id}}</td>
+            <td>{{$i++}}</td>
             <td>{{$project->name}}</td>
             <td>{{$project->info}}</td>
             <td>{{$project->tarif}}</td>
-            <td><a href="{{ route('project.edit',$project->id)}}" class="btn btn-primary">Edit</a>
-                <form action="{{ route('project.destroy', $project->id)}}" method="post">
+            <td><a href="{{ route('project.edit',$project->id)}}" class="btn btn-primary">Edit</a></td>
+            <td>
+              <form action="{{ route('project.destroy', $project->id)}}" method="post">
                   @csrf
                   @method('DELETE')
-                  <button class="btn btn-danger" type="submit">Delete</button>
+                  <button onclick="return confirm('Are you sure?')" class="btn btn-danger" type="submit">Delete</button>
                 </form>
-            </td>
+            </td>    
+            
         </tr>
         @endforeach
     </tbody>

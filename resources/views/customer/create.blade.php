@@ -6,7 +6,7 @@
     margin-top: 40px;
   }
 </style>
-<div class="card uper">
+<div class="card">
   <div class="card-header">
     Add Customer
   </div>

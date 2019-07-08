@@ -16,7 +16,7 @@
   @endif
   <a href="{{route('laporan.create')}}" type="button" class="btn btn-success">Add Laporan</a>
   <td><a href="{{ URL::to('periodeLaporan')}}" type="button" class="btn btn-info">Download Receipt</a></td>
-  <table id="tabledata" class="table table-striped">
+  <table id="tabledata" class="table table-striped table-bordered">
     <thead>
         <tr>
           <th>ID</th>
@@ -26,7 +26,8 @@
           <th>Total Invoice</th>
           <th>Total Nota</th>
           <th>Total Bulan Ini</th>
-          <th>Action</th>
+          <th>Update</th>
+          <th>Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -39,11 +40,12 @@
             <td>{{$laporan->laporan_invoice}}</td>
             <td>{{$laporan->laporan_nota}}</td>
             <td>{{$laporan->laporan_total}}</td>
-            <td><a href="{{ route('laporan.edit',$laporan->id)}}" class="btn btn-primary">Update</a>
+            <td><a href="{{ route('laporan.edit',$laporan->id)}}" class="btn btn-primary">Update</a></td>
+            <td>
                 <form action="{{ route('laporan.destroy', $laporan->id)}}" method="post">
                   @csrf
                   @method('DELETE')
-                  <button class="btn btn-danger" type="submit">Delete</button>
+                  <button onclick="return confirm('Are you sure?')" class="btn btn-danger" type="submit">Delete</button>
                 </form>
             </td>
             
