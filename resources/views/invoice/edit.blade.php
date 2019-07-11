@@ -24,9 +24,9 @@
       <form  method="post" action="{{ route('invoice.update', $invoice->id) }}">
         @method('PATCH')
         @csrf
-        <label for="price">Invoice :</label>
+        <label for="price">Invoice </label>
           <div class="form-group">
-                <label for="customer">Pilih Customer</label>
+                <label for="customer">Pilih Customer :</label>
                 <select class="form-control" name='customer_id' >
                 @foreach ($customers as $customer)
                   @if ($invoice->customer_id == $customer->id)
@@ -37,6 +37,14 @@
                 @endforeach
                 </select>
           </div>
+          
+          <label for="pajak">Persen Pajak :</label>
+          <div class="form-group">
+              
+              <input type="text" class="form-control" name="jenis_pajak" value="{{ $invoice->jenis_pajak }}" />
+
+          </div>
+          
           <div class="form-group" >
             <label for="quantity">Invoice Project :</label>
             <div class="form-group" id="isi">

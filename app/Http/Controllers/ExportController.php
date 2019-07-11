@@ -42,7 +42,7 @@ class ExportController extends Controller
         $name = "invoice_".$invoice->nomor.".pdf";
         return $pdf->download($name);
         // return $pdf->stream();
-        // return view('print.index2', compact('projects', 'customer', 'invoice'));
+        // return view('print.invoiceExport', compact('projects', 'customer', 'invoice'));
     }
 
     public function exportNota($id)

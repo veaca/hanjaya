@@ -96,7 +96,9 @@
     var cloneProject = project.cloneNode(true);
     var cloneQuantity = quantity.cloneNode(true);
     cloneProject.name = "project_id[" + count +"]";
+    cloneProject.value ="";
     cloneQuantity.name = "quantity[" + count +"]"; 
+    cloneQuantity.value = "";
     var linebreak = document.createElement("br");
     var colSm4 = document.createElement('div');
     colSm4.className = "col-sm-4";

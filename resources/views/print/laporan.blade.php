@@ -11,7 +11,7 @@
     <body>
         <center>
         <br>
-<img src="/images/logo.jpeg" alt="logo" width="200px" height="100px">
+<img src="/images/logo.jpeg" alt="logo" width="100px" height="50px">
 <br>
 <br>
             <h4> <strong>Laporan Keuangan</strong> </h4>
@@ -49,15 +49,15 @@
                 <tr>
                     <td>{{$i++}}</td>
                     <td>{{$laporan->bulan}}</td>
-                    <td>{{$laporan->laporan_invoice}}</td>
-                    <td>{{$laporan->laporan_nota}}</td>
-                    <td>{{$laporan->laporan_biaya_bulanan}}</td>
-                    <td>{{$laporan->laporan_total}}</td>
+                    <td>Rp. {{$laporan->laporan_invoice}},00</td>
+                    <td>Rp. {{$laporan->laporan_nota}},00</td>
+                    <td>Rp. {{$laporan->laporan_biaya_bulanan}},00</td>
+                    <td>Rp. {{$laporan->laporan_total}},00</td>
                 </tr>
                 @endforeach
                 <tr>
                     <td colspan="5">Jumlah Akhir</td>
-                    <td>{{$total}}</td>
+                    <td>Rp. {{$total}},00</td>
                 </tr>
                 
             </tbody>

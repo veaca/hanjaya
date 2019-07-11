@@ -17,10 +17,10 @@ class CreateLaporansTable extends Migration
             $table->bigIncrements('id');
             $table->string('bulan');
             $table->string('tahun');
-            $table->integer('laporan_biaya_bulanan');
-            $table->integer('laporan_invoice');
-            $table->integer('laporan_nota');
-            $table->Integer('laporan_total');
+            $table->bigInteger('laporan_biaya_bulanan');
+            $table->bigInteger('laporan_invoice');
+            $table->bigInteger('laporan_nota');
+            $table->bigInteger('laporan_total');
             $table->timestamps();
         });
     }

@@ -3,6 +3,9 @@
     <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
+    table {
+        padding:0px 0px 0px 0px;
+    }
         td, th {
             text-align : center;
         }
@@ -14,6 +17,7 @@
     .table-bordered, .bord {
         text-align : center;
         border: black solid 1px !important;
+        padding:0px 0px 0px 0px;
     }
     /* Create three equal columns that floats next to each other */
 .column {
@@ -30,13 +34,14 @@
   clear: both;
 }
 </style>
-<center>
-<br>
-<img src="<?php echo $_SERVER["DOCUMENT_ROOT"].'/images/logo.jpeg';?>" alt="logo" width="200px" height="100px">
-<br>
-<br>
-		<h4><strong>Invoice</strong></h4><br> 		
-	</center>
+<div align="center">
+<img src="<?php echo $_SERVER["DOCUMENT_ROOT"].'/images/logo.jpeg';?>" alt="logo" width="150px" height="75px">
+</div>
+<div align="center">
+<h4><strong>INVOICE</strong></h4> 	
+</div>
+			
+
     <div>
         <table>
             <tbody>
@@ -79,16 +84,15 @@
         </table>
     </div>
     <br>
-    <br>
     <div>
-        <table class='table table-bordered' style="border-collapse: collapse;">
-            <thead class="bord">
+        <table cellspacing="0" cellpadding="0" width="100%">
+            <thead>
                 <tr class="bord">
-                    <th class="bord">No</th>
-                    <th class="bord">Item</th>
-                    <th class="bord">Price</th>
-                    <th class="bord">Quantity</th>
-                    <th class="bord">Total</th>
+                    <th style="width:7%;" class="bord">No</th>
+                    <th style="width:36%;" class="bord">Item</th>
+                    <th style="width:25%;" class="bord">Price</th>
+                    <th style="width:12%;" class="bord">Quantity</th>
+                    <th style="width:25%;" class="bord">Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -96,30 +100,33 @@
                 @foreach($projects as $project)
                 <tr class="bord">
                     <td class="bord">{{ $i++ }}</td>
-                    <td class="bord">{{$project->name}}. {{$project->info}}</td>
-                    <td class="bord">Rp. {{$project->tarif}}</td>
+                    <td class="bord" style="word-break:break-all; word-wrap:break-word;">{{$project->name}}. {{$project->info}}</td>
+                    <td class="bord">Rp. {{$project->tarif}},00</td>
                     <td class="bord">{{$project->quantity}}</td>
-                    <td class="bord" align="center">Rp. {{$project->tarif * $project->quantity}}</td>
+                    <td class="bord" align="center">Rp. {{$project->tarif * $project->quantity}},00</td>
                 </tr>
                 @endforeach
                 <tr class="bord">
                     <td class="bord" colspan="4" align="center"><strong>Jumlah</strong></td>
-                    <td class="bord">Rp {{$invoice->jumlah}}</td>
+                    <td class="bord">Rp. {{$invoice->jumlah}},00</td>
                 </tr>
                 <tr class="bord">
                     <td class="bord" colspan="4" align="center"><strong>Pajak </strong>{{$invoice->jenis_pajak}}%</td>
-                    <td class="bord" >Rp {{$invoice->pajak}}</td>
+                    <td class="bord" >Rp. {{$invoice->pajak}},00</td>
                 </tr>
                 <tr class="bord">
                     <td class="bord" colspan="4" align="center"><strong>Total</strong></td>
-                    <td class="bord" >Rp {{$invoice->jumlah_total}}</td>
+                    <td class="bord" >Rp. {{$invoice->jumlah_total}},00</td>
                 </tr>
             </tbody>
         </table>
  
     </div>	
-    <table class='table table-bordered bord' >
-        <td class="bord" style="text-align:left;">
+    <br>
+    <div>
+    
+    <table class="bord" width="100%" >
+        <td style="text-align:left;">
         Pembayaran melalui transfer ke rekening kami : <br>
         Bank : Mandiri cabang Sampit <br>
         Nama : PT. HANJAYA KARYA LININUSA <br>
@@ -135,5 +142,6 @@
         </td>
     </table>		
 	
+    </div>
     </body>
 </html>

@@ -19,11 +19,11 @@ class CreateNotasTable extends Migration
             $table->string('asal');
             $table->string('tujuan');
             $table->string('NOP');
-            $table->integer('jumlah_ongkos');
+            $table->bigInteger('jumlah_ongkos');
             $table->string('jenis_tambahan');
-            $table->integer('jumlah_tambahan');
-            $table->integer('potongan_pph');
-            $table->integer('jumlah_dibayar');
+            $table->bigInteger('jumlah_tambahan');
+            $table->bigInteger('potongan_pph');
+            $table->bigInteger('jumlah_dibayar');
             $table->timestamps();
         });
     }

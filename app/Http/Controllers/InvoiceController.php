@@ -80,7 +80,7 @@ class InvoiceController extends Controller
             'customer_id'=>'required',
             'jenis_pajak'=>'required|integer|max:1000',
             'project_id.*'=>'required',
-            'quantity.*'=>'required|max:10'
+            'quantity.*'=>'required|integer|max:10000'
         ]);
         $month = date('m');
         if ($month == '01') $noMonth = 'E';
@@ -282,13 +282,46 @@ class InvoiceController extends Controller
     {
         $request->validate([
             'customer_id'=>'required',
-            'jenis_pajak'=>'required|integer|max:10',
+            'jenis_pajak'=>'required|integer|max:1000',
             'project_id.*'=>'required',
-            'quantity.*'=>'required|max:10'
+            'quantity.*'=>'required|integer|max:10000'
         ]);
 
         $invoice = Invoice::find($id);
-        $invoice->nomor = $request->get('nomor');
+        
+
+        $iterateProject = 0;
+        $iterateQuantity =0;
+        
+        $jumlah = 0;
+        foreach ($request->get('project_id') as $project_id) 
+        {
+            $iterateQuantity =0;
+            foreach ($request->get('quantity') as $quantity) 
+           {
+                if ($project_id != NULL && $quantity!=NULL)
+                {
+                    if ($iterateProject == $iterateQuantity)
+                    {
+                        $harga = Project::select('tarif')
+                        ->where('id', $project_id)
+                        ->first();
+                        $jumlah = $jumlah + ( $harga->tarif * $quantity);
+
+                    }
+                $iterateQuantity++;
+                }
+            }
+            $iterateProject++;
+        }
+        $pajak = $request->get('jenis_pajak') * $jumlah /100;
+        $jumlah_total = $jumlah + $pajak;
+
+        $invoice->jumlah = $jumlah;
+        $invoice->jenis_pajak = $request->get('jenis_pajak');
+        $invoice->pajak = $pajak;
+        $invoice->jumlah_total = $jumlah_total;
+        $invoice->save();
         
         $invoiceCustomerId =  InvoiceCustomer::select('id')
         ->where('invoice_id', $invoice->id)

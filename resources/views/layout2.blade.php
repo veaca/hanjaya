@@ -41,4 +41,6 @@
   @else 
       @include ('user')
   @endif
+
+  
 </html>

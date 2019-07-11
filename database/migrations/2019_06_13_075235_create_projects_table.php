@@ -17,7 +17,7 @@ class CreateProjectsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('info');
-            $table->integer('tarif');
+            $table->bigInteger('tarif');
             $table->timestamps();
         });
     }

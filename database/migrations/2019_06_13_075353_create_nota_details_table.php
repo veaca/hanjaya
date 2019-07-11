@@ -17,10 +17,10 @@ class CreateNotaDetailsTable extends Migration
             $table->bigIncrements('id');
             $table->date('date');
             $table->string('nopol');
-            $table->integer('collies');
-            $table->integer('kg');
-            $table->integer('ongkos');
-            $table->integer('jumlah_ongkos');
+            $table->bigInteger('collies');
+            $table->bigInteger('kg');
+            $table->bigInteger('ongkos');
+            $table->bigInteger('jumlah_ongkos');
             $table->timestamps();
         });
     }

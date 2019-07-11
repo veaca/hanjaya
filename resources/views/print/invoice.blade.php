@@ -31,13 +31,13 @@
 </style>
 	<center>
     <br>
-<img src="/images/logo.jpeg" alt="logo" width="200px" height="100px">
+<img src="/images/logo.jpeg" alt="logo" width="100px" height="50px">
 <br>
 <br>
 		<h4> <strong>Invoice</strong>  </h4><br> 		
 	</center>
     <div>
-        <table>
+        <table id="tabledata">
             <tbody>
                 <tr>
                     <td style="text-align:left;">Nomor</td>
@@ -96,22 +96,22 @@
                 <tr class="bord">
                     <td class="bord">{{ $i++ }}</td>
                     <td class="bord">{{$project->name}}. {{$project->info}}</td>
-                    <td class="bord">Rp {{$project->tarif}}</td>
+                    <td class="bord">Rp. {{$project->tarif}},00</td>
                     <td class="bord">{{$project->quantity}}</td>
-                    <td class="bord" align="center">Rp {{$project->tarif * $project->quantity}}</td>
+                    <td class="bord" align="center">Rp. {{$project->tarif * $project->quantity}},00</td>
                 </tr>
                 @endforeach
                 <tr class="bord">
                     <td class="bord" colspan="4" align="center"><strong>Jumlah</strong></td>
-                    <td class="bord">Rp {{$invoice->jumlah}}</td>
+                    <td class="bord">Rp. {{$invoice->jumlah}},00</td>
                 </tr>
                 <tr class="bord">
                     <td class="bord" colspan="4" align="center"><strong>Pajak </strong>{{$invoice->jenis_pajak}}%</td>
-                    <td class="bord" >Rp {{$invoice->pajak}}</td>
+                    <td class="bord" >Rp. {{$invoice->pajak}},00</td>
                 </tr>
                 <tr class="bord">
                     <td class="bord" colspan="4" align="center"><strong>Total</strong></td>
-                    <td class="bord" >Rp {{$invoice->jumlah_total}}</td>
+                    <td class="bord" >Rp. {{$invoice->jumlah_total}},00</td>
                 </tr>
             </tbody>
         </table>
@@ -134,4 +134,11 @@
         </td>
     </table>		
 	
+<script>
+var table = $('#tabledata').dataTable( {
+  columnDefs: [
+    { width: 30%, targets: 1 }
+  ]
+} );
+</script>
 @endsection

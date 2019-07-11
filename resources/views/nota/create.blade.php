@@ -88,7 +88,8 @@
               </div>
             </div>
           </div>
-          <button type="button" id="btnAddForm" onclick="CloneForm('isi')">Add another Project</button>
+          <button class="btn btn-default" type="button" id="btnAddForm" onclick="CloneForm('isi')">+</button>
+          <br>
           <br>
           <button type="submit" class="btn btn-primary">Add</button>
       </form>
@@ -122,9 +123,13 @@
     var cloneOngkos = ongkos.cloneNode(true);
     // var cloneQuantity = quantity.cloneNode(true);
     cloneNopol.name = "nopol[" + count +"]";
+    cloneNopol.value = "";
     cloneCollies.name = "collies[" + count +"]"; 
+    cloneCollies.value = "";
     cloneKg.name = "kg[" + count +"]"; 
+    cloneKg.value = "";
     cloneOngkos.name = "ongkos[" + count +"]"; 
+    cloneOngkos.value = "";
     linebreak = document.createElement("br");
     colNopol.appendChild(cloneNopol);
     colCollies.appendChild(cloneCollies);
@@ -135,12 +140,6 @@
     row.appendChild(colKg);
     row.appendChild(colOngkos);
     document.getElementById('rowIni').appendChild(row);
-    // document.getElementById('isi').appendChild(cloneNopol);
-    // document.getElementById('isi').appendChild(cloneCollies);
-    // document.getElementById('isi').appendChild(cloneKg);
-    // document.getElementById('isi').appendChild(cloneOngkos);
-    // document.getElementById('isi').appendChild(linebreak);
-    // document.getElementById('data').appendChild(linebreak);
     count +=1;
   }
 </script>

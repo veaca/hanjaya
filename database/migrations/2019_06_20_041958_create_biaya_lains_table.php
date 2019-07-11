@@ -17,12 +17,12 @@ class CreateBiayaLainsTable extends Migration
             $table->bigIncrements('id');
             $table->string('bulan');
             $table->string('tahun');
-            $table->Integer('gaji');
-            $table->Integer('bpjs');
-            $table->Integer('bank');
-            $table->Integer('listrik');
-            $table->Integer('pdam');
-            $table->Integer('biaya_lain');
+            $table->bigInteger('gaji');
+            $table->bigInteger('bpjs');
+            $table->bigInteger('bank');
+            $table->bigInteger('listrik');
+            $table->bigInteger('pdam');
+            $table->bigInteger('biaya_lain');
             $table->timestamps();
         });
     }

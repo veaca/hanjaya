@@ -29,7 +29,7 @@
 
 <center>
 <br>
-<img src="/images/logo.jpeg" alt="logo" width="200px" height="100px">
+<img src="/images/logo.jpeg" alt="logo" width="100px" height="50px">
 <br>
 <br>
 <h4> <strong>NOTA PEMBAYARAN BIAYA TRUCKING</strong> </h4>
@@ -54,8 +54,6 @@
         <br>
     </div>
 </div>
-<br>
-<br>
 <br>
 <br>
 <div>
@@ -89,8 +87,8 @@
                 <td>{{$notaDetail->nopol}}</td>
                 <td>{{$notaDetail->collies}}</td>
                 <td>{{$notaDetail->kg}}</td>
-                <td>{{$notaDetail->ongkos}}</td>
-                <td>{{$notaDetail->jumlah_ongkos}}</td>
+                <td>Rp. {{$notaDetail->ongkos}},00</td>
+                <td>Rp. {{$notaDetail->jumlah_ongkos}},00</td>
             </tr>
             @endforeach
             <tr>
@@ -98,22 +96,22 @@
                 <td>{{$totCollies}}</td>
                 <td>{{$totKg}}</td>
                 <td>-</td>
-                <td>{{$nota->jumlah_ongkos}}</td>
+                <td>Rp. {{$nota->jumlah_ongkos}},00</td>
             </tr>
             <tr>
                 <td colspan="5">Tambahan / Potongan</td>
                 <td>{{$nota->jenis_tambahan}}</td>
-                <td>{{$nota->jumlah_tambahan}}</td>
+                <td>Rp. {{$nota->jumlah_tambahan}},00</td>
             </tr>
             <tr>
                 <td colspan="5">Potongan PPh</td>
                 <td>2.00%</td>
-                <td>{{$nota->potongan_pph}}</td>
+                <td>Rp. {{$nota->potongan_pph}},00</td>
             </tr>
             <tr>
                 <td colspan="5">Jumlah Dibayar</td>
                 <td></td>
-                <td>{{$nota->jumlah_dibayar}}</td>
+                <td>Rp. {{$nota->jumlah_dibayar}},00</td>
             </tr>
         </tbody>
     </table>

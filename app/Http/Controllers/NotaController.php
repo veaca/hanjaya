@@ -64,11 +64,11 @@ class NotaController extends Controller
             'tujuan'=>'required|max:50',
             'NOP'=>'required|max:50',
             'jenis_tambahan'=>'required|max:50',
-            'jumlah_tambahan'=>'required|integer|max:1000000000000',
+            'jumlah_tambahan'=>'required|integer|max:100000000',
             'nopol.*'=>'required|max:10',
-            'collies.*'=>'required|integer|max:1000000000000',
-            'kg.*'=>'required|integer|max:1000000000000',
-            'ongkos.*'=>'required|integer|max:1000000000000'
+            'collies.*'=>'required|integer|max:100000000',
+            'kg.*'=>'required|integer|max:100000000',
+            'ongkos.*'=>'required|integer|max:100000000'
         ]);
         $iterateNotaId = 0;
         $notaIds = [];
@@ -220,10 +220,16 @@ class NotaController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'vendor_id'=>'required',
-            'asal'=>'required',
-            'tujuan'=>'required',
-            'NOP'=>'required',
+            'vendor'=>'required',
+            'asal'=>'required|max:50',
+            'tujuan'=>'required|max:50',
+            'NOP'=>'required|max:50',
+            'jenis_tambahan'=>'required|max:50',
+            'jumlah_tambahan'=>'required|integer|max:100000000',
+            'nopol.*'=>'required|max:10',
+            'collies.*'=>'required|integer|max:100000000',
+            'kg.*'=>'required|integer|max:100000000',
+            'ongkos.*'=>'required|integer|max:100000000'
         ]);
         $jumlahOngkos =0;
         
