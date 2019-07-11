@@ -1,5 +1,7 @@
 @extends('layout')
-
+@section('page_title')
+    {{ "Edit Invoice" }}
+@endsection
 @section('content')
 <style>
   .uper {
@@ -22,7 +24,7 @@
       <form  method="post" action="{{ route('invoice.update', $invoice->id) }}">
         @method('PATCH')
         @csrf
-        <label for="price">Invoice Customer :</label>
+        <label for="price">Invoice :</label>
           <div class="form-group">
                 <label for="customer">Pilih Customer</label>
                 <select class="form-control" name='customer_id' >

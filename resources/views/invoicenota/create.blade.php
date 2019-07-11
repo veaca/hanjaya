@@ -1,5 +1,7 @@
 @extends('layout')
-
+@section('page_title')
+    {{ "Add Gabungan Invoice dan Nota" }}
+@endsection
 @section('content')
 <style>
   .uper {
@@ -17,7 +19,6 @@
         </ul>
       </div><br />
     @endif
-    <label for="">Tambah Laporan</label>
       <form method="post" action="{{ route('invoicenota.store') }}">
           <div class="form-group">
               @csrf

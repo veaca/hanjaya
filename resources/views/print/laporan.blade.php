@@ -10,7 +10,11 @@
     </head>
     <body>
         <center>
-            <h4>Laporan Keuangan</h4>
+        <br>
+<img src="/images/logo.jpeg" alt="logo" width="200px" height="100px">
+<br>
+<br>
+            <h4> <strong>Laporan Keuangan</strong> </h4>
         </center>
         <div>
             <table>

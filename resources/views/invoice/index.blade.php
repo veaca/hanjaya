@@ -19,7 +19,7 @@
   <table id="tabledata" class="table table-bordered">
     <thead>
         <tr>
-          <th>ID</th>
+          <th>No</th>
           <th>Tanggal</th>
           <th>Nomor</th>
           <th>Customer</th>

@@ -1,5 +1,7 @@
 @extends('layout')
-
+@section('page_title')
+    {{ "Edit Laporan" }}
+@endsection
 @section('content')
 <style>
   .uper {
@@ -7,9 +9,6 @@
   }
 </style>
 <div class="card uper">
-  <div class="card-header">
-    Edit laporan
-  </div>
   <div class="card-body">
     @if ($errors->any())
       <div class="alert alert-danger">

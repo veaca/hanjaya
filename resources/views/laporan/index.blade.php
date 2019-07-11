@@ -14,26 +14,27 @@
       {{ session()->get('success') }}  
     </div><br />
   @endif
-  <a href="{{route('laporan.create')}}" type="button" class="btn btn-success">Add Laporan</a>
-  <td><a href="{{ URL::to('periodeLaporan')}}" type="button" class="btn btn-info">Download Receipt</a></td>
+  <a href="{{route('laporan.create')}}" type="button" class="btn btn-success">Create Laporan</a>
+  <td><a href="{{ URL::to('periodeLaporan')}}" type="button" class="btn btn-info">View Receipt</a></td>
   <table id="tabledata" class="table table-striped table-bordered">
     <thead>
         <tr>
-          <th>ID</th>
+          <th>No</th>
           <th>Bulan</th>
           <th>Tahun</th>
           <th>Total Biaya Lain</th>
-          <th>Total Invoice</th>
-          <th>Total Nota</th>
+          <th>Piutang</th>
+          <th>Hutang</th>
           <th>Total Bulan Ini</th>
           <th>Update</th>
           <th>Delete</th>
         </tr>
     </thead>
     <tbody>
+      @php $i=1 @endphp
         @foreach($laporans as $laporan)
         <tr>
-            <td>{{$laporan->id}}</td>
+            <td>{{$i++}}</td>
             <td>{{$laporan->bulan}}</td>
             <td>{{$laporan->tahun}}</td>
             <td>{{$laporan->laporan_biaya_bulanan}}</td>

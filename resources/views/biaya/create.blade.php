@@ -1,5 +1,7 @@
 @extends('layout')
-
+@section('page_title')
+    {{ "Add Biaya" }}
+@endsection
 @section('content')
 <style>
   .uper {
@@ -7,9 +9,6 @@
   }
 </style>
 <div class="card">
-  <div class="card-header">
-    Add Biaya
-  </div>
   <div class="card-body">
     @if ($errors->any())
       <div class="alert alert-danger">
@@ -21,7 +20,7 @@
       </div><br />
     @endif
       <form method="post" action="{{ route('biaya.store') }}">
-      <label >Biaya Bulan :</label>        
+      <label >Bulan :</label>        
       @csrf
               
               <div class="form-group">

@@ -1,5 +1,7 @@
 @extends('layout')
-
+@section('page_title')
+    {{ "Add Invoice" }}
+@endsection
 @section('content')
 <style>
   .uper {
@@ -7,9 +9,6 @@
   }
 </style>
 <div class="card">
-  <div class="card-header">
-    Add Invoice
-  </div>
   <div class="card-body">
     @if ($errors->any())
       <div class="alert alert-danger">
@@ -29,6 +28,30 @@
                 @foreach ($customers as $customer)
                   <option class="dropdown-item" value="{{$customer->id}}" >{{$customer->name}}</option>
                 @endforeach
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
+                  <option value="">1</option>
                 </select>
           </div>
           <div class="form-group">

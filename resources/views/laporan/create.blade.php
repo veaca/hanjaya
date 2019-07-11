@@ -1,5 +1,7 @@
 @extends('layout')
-
+@section('page_title')
+    {{ "Create Laporan" }}
+@endsection
 @section('content')
 <style>
   .uper {

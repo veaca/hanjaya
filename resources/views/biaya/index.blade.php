@@ -18,8 +18,9 @@
   <table id="tabledata" class="table table-striped table-bordered">
     <thead>
         <tr>
-          <th>ID</th>
-          <th>Biaya Bulan</th>
+          <th>No</th>
+          <th>Bulan</th>
+          <th>Tahun</th>
           <th>Biaya Gaji</th>
           <th>Biaya BPJS</th>
           <th>Biaya Bank</th>
@@ -31,10 +32,12 @@
         </tr>
     </thead>
     <tbody>
+      @php $i=1 @endphp
         @foreach($biayas as $biaya)
         <tr>
-            <td>{{$biaya->id}}</td>
+            <td>{{$i++}}</td>
             <td>{{$biaya->bulan}}</td>
+            <td>{{$biaya->tahun}}</td>
             <td>{{$biaya->gaji}}</td>
             <td>{{$biaya->bpjs}}</td>
             <td>{{$biaya->bank}}</td>

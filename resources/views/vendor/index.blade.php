@@ -18,7 +18,7 @@
   <table id="tabledata" class="table table-striped table-bordered">
     <thead>
         <tr>
-          <th>No.</th>
+          <th>No</th>
           <th>Nama</th>
           <th>Alamat</th>
           <th>Telephone</th>

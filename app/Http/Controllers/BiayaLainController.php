@@ -40,12 +40,12 @@ class BiayaLainController extends Controller
         $request -> validate([
             'bulan'=>'required',
             'tahun'=>'required',
-            'gaji'=>'required|integer',
-            'bpjs'=>'required|integer',
-            'bank'=>'required|integer',
-            'listrik'=>'required|integer',
-            'pdam'=>'required|integer',
-            'biaya_lain'=>'required|integer'
+            'gaji'=>'required|integer|max:1000000000000',
+            'bpjs'=>'required|integer|max:1000000000000',
+            'bank'=>'required|integer|max:1000000000000',
+            'listrik'=>'required|integer|max:1000000000000',
+            'pdam'=>'required|integer|max:1000000000000',
+            'biaya_lain'=>'required|integer|max:1000000000000'
         ]);
         $biaya = new BiayaLain([
             'bulan'=>$request->get('bulan'),
@@ -96,16 +96,18 @@ class BiayaLainController extends Controller
     {
         $request -> validate([
             'bulan'=>'required',
-            'gaji'=>'required|integer',
-            'bpjs'=>'required|integer',
-            'bank'=>'required|integer',
-            'listrik'=>'required|integer',
-            'pdam'=>'required|integer',
-            'biaya_lain'=>'required|integer'
+            'tahun'=>'required',
+            'gaji'=>'required|integer|max:1000000000000',
+            'bpjs'=>'required|integer|max:1000000000000',
+            'bank'=>'required|integer|max:1000000000000',
+            'listrik'=>'required|integer|max:1000000000000',
+            'pdam'=>'required|integer|max:1000000000000',
+            'biaya_lain'=>'required|integer|max:1000000000000'
         ]);
 
         $biaya = BiayaLain::find($id);
         $biaya->bulan = $request->get('bulan');
+        $biaya->tahun = $request->get('tahun');
         $biaya->gaji=$request->get('gaji');
         $biaya->bpjs=$request->get('bpjs');
         $biaya->bank=$request->get('bank');

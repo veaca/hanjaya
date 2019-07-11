@@ -10,7 +10,11 @@
     </head>
     <body>
         <center>
-            <h4>Laporan Keuangan</h4>
+        <br>
+<img src="<?php echo $_SERVER["DOCUMENT_ROOT"].'/images/logo.jpeg';?>" alt="logo" width="200px" height="100px">
+<br>
+<br>
+            <h4><strong>Laporan Keuangan</strong></h4>
         </center>
         <div>
             <table>
@@ -29,17 +33,19 @@
                 <tr>
                     <th>No.</th>
                     <th>Bulan</th>
-                    <th>Pemasukan (Invoice)</th>
-                    <th>Pengeluaran (Nota Pembayaran)</th>
+                    <th>Piutang</th>
+                    <th>Hutang</th>
                     <th>Pengeluaran (Biaya Operasional)</th>
                     <th>Hasil Akhir</th>
                 </tr>
             </thead>
             <tbody>
-                @php $i=1 @endphp
-                @foreach ($laporans as $laporan)
-                @php
-                $total =0; 
+                @php $i=1 $totCollies=0 $totKg=0 $totOngkos=0 @endphp
+            @foreach ($notaDetails as $notaDetail)
+            @php $j=1 
+            $totCollies = $totCollies + $notaDetail->collies
+            $totKg = $totKg + $notaDetail->kg
+                
                 $total = $total+$laporan->laporan_total 
                 @endphp
                 <tr>

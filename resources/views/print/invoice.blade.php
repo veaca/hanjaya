@@ -7,10 +7,7 @@
     <a type="button" class="btn btn-info" href="{{URL::to('exportInvoice', $invoice->id)}}">Download</a>
 @endsection
 @section('content')
-	<center>
-		<h4>Invoice</h4><br> 		
-	</center>
-    <br>
+
 <style>
 
     .table-bordered, .bord {
@@ -32,6 +29,13 @@
   clear: both;
 }
 </style>
+	<center>
+    <br>
+<img src="/images/logo.jpeg" alt="logo" width="200px" height="100px">
+<br>
+<br>
+		<h4> <strong>Invoice</strong>  </h4><br> 		
+	</center>
     <div>
         <table>
             <tbody>

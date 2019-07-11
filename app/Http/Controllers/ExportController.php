@@ -79,8 +79,8 @@ class ExportController extends Controller
         $tanggalAkhir = "31";
         $awalPeriode = $request->get('tahun')."-".$request->get('awal')."-".$tanggalAwal;
         $akhirPeriode = $request->get('tahun')."-".$request->get('akhir')."-".$tanggalAkhir;
-        echo $awalPeriode;
-        echo $akhirPeriode;
+        // echo $awalPeriode;
+        // echo $akhirPeriode;
         $awalBulan = $request->get('awal');
         $akhirBulan = $request->get('akhir');
         $tahun = $request->get('tahun');
@@ -88,10 +88,37 @@ class ExportController extends Controller
         ->whereBetween('created_at', [$awalPeriode , $akhirPeriode])
         ->get();
         // echo $laporans;
+        // $pdf = PDF::loadview('print.laporanExport', compact('laporans', 'awalBulan', 'akhirBulan', 'tahun'));
+        // $name = "laporan_bulanan.pdf";
+        // return $pdf->download($name);
+        if ($laporans == NULL )
+        {
+            return view('laporan.periode')->with('failed', 'Belum ada data bulan tersebut');
+        }
+        return view('laporan.periodeView', compact('laporans', 'awalBulan', 'akhirBulan', 'tahun'));
+    }
+
+    public function downloadLaporan($awal, $akhir, $tahun)
+    {
+        // echo $awal;
+        // echo $akhir;
+        // echo $tahun;
+        $tanggalAwal = "01";
+        $tanggalAkhir = "31";
+        $awalPeriode = $tahun."-".$awal."-".$tanggalAwal;
+        $akhirPeriode = $tahun."-".$akhir."-".$tanggalAkhir;
+        // echo $awalPeriode;
+        // echo $akhirPeriode;
+        $awalBulan = $awal;
+        $akhirBulan = $akhir;
+        $tahun = $tahun;
+        $laporans = Laporan::select('*')
+        ->whereBetween('created_at', [$awalPeriode , $akhirPeriode])
+        ->get();
+        // echo $laporans;
         $pdf = PDF::loadview('print.laporanExport', compact('laporans', 'awalBulan', 'akhirBulan', 'tahun'));
         $name = "laporan_bulanan.pdf";
         return $pdf->download($name);
-        // return view('print.laporan', compact('laporans', 'awalBulan', 'akhirBulan', 'tahun'));
     }
 
     public function viewInvoice($id)

@@ -1,5 +1,7 @@
 @extends('layout')
-
+@section('page_title')
+    {{ "Add Customer" }}
+@endsection
 @section('content')
 <style>
   .uper {
@@ -7,9 +9,6 @@
   }
 </style>
 <div class="card">
-  <div class="card-header">
-    Add Customer
-  </div>
   <div class="card-body">
     @if ($errors->any())
       <div class="alert alert-danger">

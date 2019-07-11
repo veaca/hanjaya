@@ -1,15 +1,14 @@
 @extends('layout')
-
+@section('page_title')
+    {{ "Edit Project" }}
+@endsection
 @section('content')
 <style>
   .uper {
     margin-top: 40px;
   }
 </style>
-<div class="card uper">
-  <div class="card-header">
-    Edit project
-  </div>
+<div class="card">
   <div class="card-body">
     @if ($errors->any())
       <div class="alert alert-danger">

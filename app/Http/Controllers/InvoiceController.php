@@ -41,7 +41,7 @@ class InvoiceController extends Controller
             $join->on('invoice_projects.project_id', '=', 'projects.id');
         })
         ->get();
-        echo $invoices;
+        // echo $invoices;
         // echo $projects;
         return view('invoice.index', compact('invoices', 'projects'));
     }
@@ -78,9 +78,9 @@ class InvoiceController extends Controller
     {
         $request->validate([
             'customer_id'=>'required',
-            'jenis_pajak'=>'required|integer',
+            'jenis_pajak'=>'required|integer|max:1000',
             'project_id.*'=>'required',
-            'quantity.*'=>'required'
+            'quantity.*'=>'required|max:10'
         ]);
         $month = date('m');
         if ($month == '01') $noMonth = 'E';
@@ -122,19 +122,49 @@ class InvoiceController extends Controller
             $nomor = $noMonthYear.'-'.$noLastNomor;
         }
         
+        $iterateProject = 0;
+        $iterateQuantity =0;
+        
+        $jumlah = 0;
+        foreach ($request->get('project_id') as $project_id) 
+        {
+            $iterateQuantity =0;
+            foreach ($request->get('quantity') as $quantity) 
+           {
+                if ($project_id != NULL && $quantity!=NULL)
+                {
+                    if ($iterateProject == $iterateQuantity)
+                    {
+                        $harga = Project::select('tarif')
+                        ->where('id', $project_id)
+                        ->first();
+                        $jumlah = $jumlah + ( $harga->tarif * $quantity);
 
+                    }
+                $iterateQuantity++;
+                }
+            }
+            $iterateProject++;
+        }
+        
+        $pajak = $request->get('jenis_pajak') * $jumlah /100;
+        $jumlah_total = $jumlah + $pajak;
         $invoice = new Invoice([
             'tanggal' => date("Y-m-d"),
             'nomor' => $nomor,
-            'jenis_pajak' => $request->get('jenis_pajak')
+            'jumlah'=> $jumlah,
+            'jenis_pajak' => $request->get('jenis_pajak'),
+            'pajak'=> $pajak,
+            'jumlah_total'=> $jumlah_total
         ]);
-
         $invoice->save();
+        
         $invoiceCustomer = new InvoiceCustomer([
             'customer_id' => $request->get('customer_id'),
             'invoice_id' => $invoice->id
         ]);
         $invoiceCustomer->save();
+        
         $iterateProject = 0;
         $iterateQuantity =0;
         foreach ($request->get('project_id') as $project_id) 
@@ -158,8 +188,13 @@ class InvoiceController extends Controller
             }
             $iterateProject++;
         }
+        // $projects = $this->getProjects($invoice);
+        
+        
+        
+
  
-        $updateJumlah = $this->updateJumlah($invoice);
+        // $updateJumlah = $this->updateJumlah($invoice);
         return redirect('/invoice')->with('success', 'Invoice has been added');
     }
 
@@ -246,7 +281,10 @@ class InvoiceController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'customer_id'=>'required|integer'
+            'customer_id'=>'required',
+            'jenis_pajak'=>'required|integer|max:10',
+            'project_id.*'=>'required',
+            'quantity.*'=>'required|max:10'
         ]);
 
         $invoice = Invoice::find($id);

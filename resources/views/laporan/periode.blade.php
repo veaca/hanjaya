@@ -1,5 +1,7 @@
 @extends('layout')
-
+@section('page_title')
+    {{ "Laporan" }}
+@endsection
 @section('content')
 <form method="post" action="{{ URL::to('exportLaporan') }}">
     <div>
@@ -50,7 +52,7 @@
         <option value="2031">2031</option>
     </select>
     </div>
-    <button type="submit" class="btn btn-primary">Add</button>
+    <button type="submit" class="btn btn-primary">Create</button>
 </form>
 
 @endsection

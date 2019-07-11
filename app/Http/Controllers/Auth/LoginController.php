@@ -20,12 +20,20 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
+    // protected function authenticated(Request $request, $user)
+    // {
+    // // if ( $user->role == 'admin' ) {// do your margic here
+    // //     return redirect()->route('customer');
+    // // }
+    //     echo $user;
+    // // return redirect('/home');
+    // }
     /**
      * Where to redirect users after login.
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/customer';
 
     /**
      * Create a new controller instance.
@@ -35,5 +43,9 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+    public function showLoginForm()
+    {
+        return view('views');
     }
 }

@@ -18,7 +18,7 @@
   <table id="tabledata" class="table table-striped table-bordered">
     <thead>
         <tr>
-          <th>ID</th>
+          <th>No</th>
           <th>Nama</th>
           <th>Alamat</th>
           <th>Telephone</th>
@@ -27,9 +27,10 @@
         </tr>
     </thead>
     <tbody>
+      @php $i=1 @endphp
         @foreach($customers as $customer)
         <tr>
-            <td>{{$customer->id}}</td>
+            <td>{{$i++}}</td>
             <td>{{$customer->name}}</td>
             <td>{{$customer->address}}</td>
             <td>{{$customer->phone}}</td>

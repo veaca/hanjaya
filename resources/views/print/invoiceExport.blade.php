@@ -31,7 +31,11 @@
 }
 </style>
 <center>
-		<h4>Invoice</h4><br> 		
+<br>
+<img src="<?php echo $_SERVER["DOCUMENT_ROOT"].'/images/logo.jpeg';?>" alt="logo" width="200px" height="100px">
+<br>
+<br>
+		<h4><strong>Invoice</strong></h4><br> 		
 	</center>
     <div>
         <table>
@@ -48,7 +52,7 @@
                     <td></td>
                     <td>:</td>
                     <td></td>
-                    <td style="text-align:left;" >{{$invoice->created_at->format('d-m-Y')}}</td>
+                    <td style="text-align:left;" >{{$invoice->created_at->format('j F Y')}}</td>
                 </tr>
                 <tr>
                     <td style="text-align:left;">Kepada</td>
@@ -84,7 +88,7 @@
                     <th class="bord">Item</th>
                     <th class="bord">Price</th>
                     <th class="bord">Quantity</th>
-                    <th class="bord">Totals</th>
+                    <th class="bord">Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -93,9 +97,9 @@
                 <tr class="bord">
                     <td class="bord">{{ $i++ }}</td>
                     <td class="bord">{{$project->name}}. {{$project->info}}</td>
-                    <td class="bord">Rp {{$project->tarif}}</td>
+                    <td class="bord">Rp. {{$project->tarif}}</td>
                     <td class="bord">{{$project->quantity}}</td>
-                    <td class="bord" align="center">Rp {{$project->tarif * $project->quantity}}</td>
+                    <td class="bord" align="center">Rp. {{$project->tarif * $project->quantity}}</td>
                 </tr>
                 @endforeach
                 <tr class="bord">

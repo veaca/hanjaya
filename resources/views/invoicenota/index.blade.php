@@ -14,11 +14,11 @@
       {{ session()->get('success') }}  
     </div><br />
   @endif
-  <a href="{{route('invoicenota.create')}}" type="button" class="btn btn-success">Add  invoicenota</a>
+  <a href="{{route('invoicenota.create')}}" type="button" class="btn btn-success">Add Invoice Nota</a>
   <table id="tabledata" class="table table-striped table-bordered">
     <thead>
         <tr>
-          <th>No.</th>
+          <th>No</th>
           <th>Invoice Nomor</th>
           <th>Nota NOP</th>
           <th>Edit</th>

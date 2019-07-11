@@ -60,15 +60,15 @@ class NotaController extends Controller
     {
         $request->validate([
             'vendor'=>'required',
-            'asal'=>'required',
-            'tujuan'=>'required',
-            'NOP'=>'required',
-            'jenis_tambahan'=>'required',
-            'jumlah_tambahan'=>'required',
-            'nopol.*'=>'required|string',
-            'collies.*'=>'required|integer',
-            'kg.*'=>'required|integer',
-            'ongkos.*'=>'required|integer'
+            'asal'=>'required|max:50',
+            'tujuan'=>'required|max:50',
+            'NOP'=>'required|max:50',
+            'jenis_tambahan'=>'required|max:50',
+            'jumlah_tambahan'=>'required|integer|max:1000000000000',
+            'nopol.*'=>'required|max:10',
+            'collies.*'=>'required|integer|max:1000000000000',
+            'kg.*'=>'required|integer|max:1000000000000',
+            'ongkos.*'=>'required|integer|max:1000000000000'
         ]);
         $iterateNotaId = 0;
         $notaIds = [];
@@ -226,29 +226,37 @@ class NotaController extends Controller
             'NOP'=>'required',
         ]);
         $jumlahOngkos =0;
-        $nota = Nota::find($id);
-        $nota->asal = $request->get('asal');
-        $nota->tujuan = $request->get('tujuan');
-        $nota->NOP = $request->get('NOP');
-        $nota->jenis_tambahan = $request->get('jenis_tambahan');
-        $nota->jumlah_tambahan = $request->get('jumlah_tambahan');
+        
 
         $notaVendor = NotaVendor::select('id')
-        ->where('nota_id', $nota->id)
+        ->where('nota_id', $id)
         ->first();
 
         $notaVendor->vendor_id = $request->get('vendor_id');
         $notaVendor->save();
 
         $notaNotaDetails = NotaNotaDetail::select('nota_detail_id')
-        ->where('nota_id', $nota->id)
+        ->where('nota_id', $id)
         ->get()->count();
-
+        
+        $notaIds = NotaNotaDetail::select('nota_detail_id')
+        ->where('nota_id', $id)
+        ->get();
+        
+        $notaArr = [];
+        $l=0;
+        foreach ($notaIds as $nota) {
+            $notaArr[$l] = $nota->nota_detail_id;
+            $l++;
+        }
+        // echo $notaIds;
+        // echo $notaNotaDetails;
         $jumlahOngkosNota =0;
+        // echo $notaArr[2];
         for ($i = 0 ; $i<$notaNotaDetails ; $i++)
         {
             $notaDetail = NotaDetail::select('*')
-            ->where('id', $request->id[$i])
+            ->where('id', $notaArr[$i])
             ->first();
             $notaDetail->nopol = $request->nopol[$i];
             $notaDetail->collies = $request->collies[$i];
@@ -266,6 +274,14 @@ class NotaController extends Controller
             $notaDetail->save();
             // echo $notaDetail;
         }
+        // echo $jumlahOngkosNota;
+        $nota = Nota::find($id);
+        // echo $nota;
+        $nota->asal = $request->get('asal');
+        $nota->tujuan = $request->get('tujuan');
+        $nota->NOP = $request->get('NOP');
+        $nota->jenis_tambahan = $request->get('jenis_tambahan');
+        $nota->jumlah_tambahan = $request->get('jumlah_tambahan');
         $nota->jumlah_ongkos = $jumlahOngkosNota;
         $total=0;
         if ($request->get('jenis_tambahan') == "Penambahan"){

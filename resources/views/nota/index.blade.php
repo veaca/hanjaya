@@ -20,10 +20,10 @@
   <table id="tabledata" class="table table-striped table-bordered">
     <thead>
         <tr>
-          <th>No.</th>
+          <th>No</th>
           <th>Vendor</th>
           <th>Tanggal Dibuat</th>
-          <th>Asal</th>
+          <th >Asal</th>
           <th>Tujuan</th>
           <th>NOP</th>
           <th>Jumlah Dibayar</th>

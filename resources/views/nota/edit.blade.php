@@ -1,5 +1,7 @@
 @extends('layout')
-
+@section('page_title')
+    {{ "Edit Nota" }}
+@endsection
 @section('content')
 <style>
   .uper {
@@ -7,9 +9,6 @@
   }
 </style>
 <div class="card">
-  <div class="card-header">
-    Edit nota
-  </div>
   <div class="card-body">
     @if ($errors->any())
       <div class="alert alert-danger">
@@ -77,7 +76,7 @@
                 <label for="quantity">Kg :</label>
               </div>
               <div class="col-sm-3">
-                <label for="quantity">Ongkos:</label>
+                <label for="quantity">Ongkos :</label>
               </div>
             </div>   
              <script>var count=0;</script>

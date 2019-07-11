@@ -28,12 +28,16 @@
 </style>
 
 <center>
-<h4>NOTA PEMBAYARAN BIAYA TRUCKING</h4>
+<br>
+<img src="/images/logo.jpeg" alt="logo" width="200px" height="100px">
+<br>
+<br>
+<h4> <strong>NOTA PEMBAYARAN BIAYA TRUCKING</strong> </h4>
 </center>
 
-<div>
+<div class="row">
     <div class="column" style="text-align:left;">
-        Tanggal: {{$nota->tanggal}}<br>
+        Tanggal: {{$nota->created_at->format('n/d/Y')}}<br>
         Asal: {{$nota->asal}}<br>
         Tujuan: {{$nota->tujuan}}<br>
     </div>
@@ -59,13 +63,12 @@
         <thead>
             <tr>
                 <th rowspan="2">No.</th>
-                <th colspan="3">Surat Jalan</th>
+                <th colspan="2">Surat Jalan</th>
                 <th colspan="2">Jumlah Barang</th>
                 <th rowspan="2">Ongkos</th>
                 <th rowspan="2">Jumlah Ongkos</th>
             </tr>
             <tr>
-                <th>No.</th>
                 <th>Tgl.</th>
                 <th>Nopol</th>
                 <th>Collies</th>
@@ -74,12 +77,15 @@
         </thead>
         <tbody>
             @php $i=1 @endphp
+            @php $totCollies=0 @endphp
+            @php $totKg=0 @endphp
             @foreach ($notaDetails as $notaDetail)
-            @php $j=1 @endphp
+            @php $j=1  @endphp
+            @php $totCollies = $totCollies + $notaDetail->collies @endphp
+            @php $totKg = $totKg + $notaDetail->kg @endphp
             <tr>
                 <td>{{$i++}}</td>
-                <td>{{$j++}}</td>
-                <td>{{$notaDetail->date}}</td>
+                <td>{{$notaDetail->created_at->format('n/d/Y')}}</td>
                 <td>{{$notaDetail->nopol}}</td>
                 <td>{{$notaDetail->collies}}</td>
                 <td>{{$notaDetail->kg}}</td>
@@ -88,21 +94,24 @@
             </tr>
             @endforeach
             <tr>
-                <td colspan="7">Jumlah</td>
+                <td colspan="3">Jumlah</td>
+                <td>{{$totCollies}}</td>
+                <td>{{$totKg}}</td>
+                <td>-</td>
                 <td>{{$nota->jumlah_ongkos}}</td>
             </tr>
             <tr>
-                <td colspan="6">Tambahan / Potongan</td>
+                <td colspan="5">Tambahan / Potongan</td>
                 <td>{{$nota->jenis_tambahan}}</td>
                 <td>{{$nota->jumlah_tambahan}}</td>
             </tr>
             <tr>
-                <td colspan="6">Potongan PPh</td>
+                <td colspan="5">Potongan PPh</td>
                 <td>2.00%</td>
                 <td>{{$nota->potongan_pph}}</td>
             </tr>
             <tr>
-                <td colspan="6">Jumlah Dibayar</td>
+                <td colspan="5">Jumlah Dibayar</td>
                 <td></td>
                 <td>{{$nota->jumlah_dibayar}}</td>
             </tr>

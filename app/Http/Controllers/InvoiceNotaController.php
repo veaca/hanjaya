@@ -81,7 +81,11 @@ class InvoiceNotaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $invoiceNota = InvoiceNota::find($id);
+        $invoices = Invoice::all();
+        $notas = Nota::all();
+
+        return view('invoicenota.edit', compact('invoiceNota', 'invoices', 'notas'));
     }
 
     /**
@@ -93,7 +97,12 @@ class InvoiceNotaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $invoiceNota = InvoiceNota::find($id);
+        $invoiceNota->invoice_id = $request->get('invoice_id');
+        $invoiceNota->nota_id = $request->get('nota_id');
+        $invoiceNota->save();
+
+        return redirect('invoicenota')->with('success', 'Invoice dan Nota has been updated');
     }
 
     /**
