@@ -28,30 +28,6 @@
                 @foreach ($customers as $customer)
                   <option class="dropdown-item" value="{{$customer->id}}" >{{$customer->name}}</option>
                 @endforeach
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
-                  <option value="">1</option>
                 </select>
           </div>
           <div class="form-group">

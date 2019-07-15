@@ -78,9 +78,9 @@ class InvoiceController extends Controller
     {
         $request->validate([
             'customer_id'=>'required',
-            'jenis_pajak'=>'required|integer|max:1000',
+            'jenis_pajak'=>'required|numeric|max:100',
             'project_id.*'=>'required',
-            'quantity.*'=>'required|integer|max:10000'
+            'quantity.*'=>'required|numeric|max:10000000000'
         ]);
         $month = date('m');
         if ($month == '01') $noMonth = 'E';
@@ -282,9 +282,9 @@ class InvoiceController extends Controller
     {
         $request->validate([
             'customer_id'=>'required',
-            'jenis_pajak'=>'required|integer|max:1000',
+            'jenis_pajak'=>'required|integer|max:100',
             'project_id.*'=>'required',
-            'quantity.*'=>'required|integer|max:10000'
+            'quantity.*'=>'required|integer|max:10000000000'
         ]);
 
         $invoice = Invoice::find($id);

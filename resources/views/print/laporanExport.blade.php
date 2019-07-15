@@ -51,15 +51,15 @@
                <tr>
                     <td>{{$i++}}</td>
                     <td>{{$laporan->bulan}}</td>
-                    <td>Rp. {{$laporan->laporan_invoice}},00</td>
-                    <td>Rp. {{$laporan->laporan_nota}},00</td>
-                    <td>Rp. {{$laporan->laporan_biaya_bulanan}},00</td>
-                    <td>Rp. {{$laporan->laporan_total}},00</td>
+                    <td>Rp. {{number_format($laporan->laporan_invoice,2,",",".")}}</td>
+                    <td>Rp. {{number_format($laporan->laporan_nota,2,",",".")}}</td>
+                    <td>Rp. {{number_format($laporan->laporan_biaya_bulanan,2,",",".")}}</td>
+                    <td>Rp. {{number_format($laporan->laporan_total,2,",",".")}}</td>
                 </tr>
                 @endforeach
                 <tr>
                     <td colspan="5">Jumlah Akhir</td>
-                    <td>Rp. {{$total}},00</td>
+                    <td>Rp. {{number_format($total,2,",",".")}}</td>
                 </tr>
                 
             </tbody>

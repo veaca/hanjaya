@@ -37,7 +37,7 @@
 
 <div class="row">
     <div class="column" style="text-align:left;">
-        Tanggal: {{$nota->created_at->format('n/d/Y')}}<br>
+        Tanggal: {{ \Carbon\Carbon::parse($nota->created_at)->formatLocalized('%d %B %Y')}}<br>
         Asal: {{$nota->asal}}<br>
         Tujuan: {{$nota->tujuan}}<br>
     </div>
@@ -83,35 +83,35 @@
             @php $totKg = $totKg + $notaDetail->kg @endphp
             <tr>
                 <td>{{$i++}}</td>
-                <td>{{$notaDetail->created_at->format('n/d/Y')}}</td>
+                <td>{{ \Carbon\Carbon::parse($notaDetail->created_at)->formatLocalized('%d %B %Y')}}</td>
                 <td>{{$notaDetail->nopol}}</td>
-                <td>{{$notaDetail->collies}}</td>
-                <td>{{$notaDetail->kg}}</td>
-                <td>Rp. {{$notaDetail->ongkos}},00</td>
-                <td>Rp. {{$notaDetail->jumlah_ongkos}},00</td>
+                <td>{{number_format($notaDetail->collies,0,".",".")}}</td>
+                <td>{{number_format($notaDetail->kg,0,".",".")}}</td>
+                <td>Rp. {{number_format($notaDetail->ongkos,2,",",".")}}</td>
+                <td>Rp. {{number_format($notaDetail->jumlah_ongkos,2,",",".")}}</td>
             </tr>
             @endforeach
-            <tr>
+           <tr>
                 <td colspan="3">Jumlah</td>
-                <td>{{$totCollies}}</td>
-                <td>{{$totKg}}</td>
+                <td>{{number_format($totCollies,0,".",".")}}</td>
+                <td>{{number_format($totKg,0,".",".")}}</td>
                 <td>-</td>
-                <td>Rp. {{$nota->jumlah_ongkos}},00</td>
+                <td>Rp. {{number_format($nota->jumlah_ongkos,2,",",".")}}</td>
             </tr>
             <tr>
                 <td colspan="5">Tambahan / Potongan</td>
                 <td>{{$nota->jenis_tambahan}}</td>
-                <td>Rp. {{$nota->jumlah_tambahan}},00</td>
+                <td>Rp. {{number_format($nota->jumlah_tambahan,2,",",".")}}</td>
             </tr>
             <tr>
                 <td colspan="5">Potongan PPh</td>
-                <td>2.00%</td>
-                <td>Rp. {{$nota->potongan_pph}},00</td>
+                <td>2%</td>
+                <td>Rp. {{number_format($nota->potongan_pph,2,",",".")}}</td>
             </tr>
             <tr>
                 <td colspan="5">Jumlah Dibayar</td>
                 <td></td>
-                <td>Rp. {{$nota->jumlah_dibayar}},00</td>
+                <td>Rp. {{number_format($nota->jumlah_dibayar,2,",",".")}}</td>
             </tr>
         </tbody>
     </table>

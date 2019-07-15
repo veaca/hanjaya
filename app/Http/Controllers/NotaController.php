@@ -64,11 +64,11 @@ class NotaController extends Controller
             'tujuan'=>'required|max:50',
             'NOP'=>'required|max:50',
             'jenis_tambahan'=>'required|max:50',
-            'jumlah_tambahan'=>'required|integer|max:100000000',
+            'jumlah_tambahan'=>'required|numeric|max:1000000000',
             'nopol.*'=>'required|max:10',
-            'collies.*'=>'required|integer|max:100000000',
-            'kg.*'=>'required|integer|max:100000000',
-            'ongkos.*'=>'required|integer|max:100000000'
+            'collies.*'=>'required|numeric|max:10000',
+            'kg.*'=>'required|numeric|max:10000',
+            'ongkos.*'=>'required|numeric|max:10000000000'
         ]);
         $iterateNotaId = 0;
         $notaIds = [];
@@ -225,11 +225,11 @@ class NotaController extends Controller
             'tujuan'=>'required|max:50',
             'NOP'=>'required|max:50',
             'jenis_tambahan'=>'required|max:50',
-            'jumlah_tambahan'=>'required|integer|max:100000000',
+            'jumlah_tambahan'=>'required|numeric|max:1000000000',
             'nopol.*'=>'required|max:10',
-            'collies.*'=>'required|integer|max:100000000',
-            'kg.*'=>'required|integer|max:100000000',
-            'ongkos.*'=>'required|integer|max:100000000'
+            'collies.*'=>'required|numeric|max:10000',
+            'kg.*'=>'required|numeric|max:10000',
+            'ongkos.*'=>'required|numeric|max:10000000000'
         ]);
         $jumlahOngkos =0;
         

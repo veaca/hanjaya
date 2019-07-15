@@ -12,6 +12,7 @@
     </style>
     </head>
     <body>
+    <?php  \Carbon\Carbon::setLocale('id');?>
 <style>
 
     .table-bordered, .bord {
@@ -57,7 +58,7 @@
                     <td></td>
                     <td>:</td>
                     <td></td>
-                    <td style="text-align:left;" >{{$invoice->created_at->format('j F Y')}}</td>
+                    <td style="text-align:left;" >{{ \Carbon\Carbon::parse($invoice->created_at)->formatLocalized('%d %B %Y')}}</td>
                 </tr>
                 <tr>
                     <td style="text-align:left;">Kepada</td>
@@ -89,10 +90,10 @@
             <thead>
                 <tr class="bord">
                     <th style="width:7%;" class="bord">No</th>
-                    <th style="width:36%;" class="bord">Item</th>
+                    <th style="width:28%;" class="bord">Item</th>
                     <th style="width:25%;" class="bord">Price</th>
-                    <th style="width:12%;" class="bord">Quantity</th>
-                    <th style="width:25%;" class="bord">Total</th>
+                    <th style="width:15%;" class="bord">Quantity</th>
+                    <th style="width:30%;" class="bord">Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -101,22 +102,22 @@
                 <tr class="bord">
                     <td class="bord">{{ $i++ }}</td>
                     <td class="bord" style="word-break:break-all; word-wrap:break-word;">{{$project->name}}. {{$project->info}}</td>
-                    <td class="bord">Rp. {{$project->tarif}},00</td>
-                    <td class="bord">{{$project->quantity}}</td>
-                    <td class="bord" align="center">Rp. {{$project->tarif * $project->quantity}},00</td>
+                    <td class="bord">Rp. {{number_format($project->tarif,2,",",".")}}</td>
+                    <td class="bord">{{number_format($project->quantity,0,".",".")}}</td>
+                    <td class="bord" align="center">Rp. {{number_format($project->tarif * $project->quantity,2,",",".")}}</td>
                 </tr>
                 @endforeach
                 <tr class="bord">
                     <td class="bord" colspan="4" align="center"><strong>Jumlah</strong></td>
-                    <td class="bord">Rp. {{$invoice->jumlah}},00</td>
+                    <td class="bord">Rp. {{number_format($invoice->jumlah,2,",",".")}}</td>
                 </tr>
                 <tr class="bord">
                     <td class="bord" colspan="4" align="center"><strong>Pajak </strong>{{$invoice->jenis_pajak}}%</td>
-                    <td class="bord" >Rp. {{$invoice->pajak}},00</td>
+                    <td class="bord" >Rp. {{number_format($invoice->pajak,2,",",".")}}</td>
                 </tr>
                 <tr class="bord">
                     <td class="bord" colspan="4" align="center"><strong>Total</strong></td>
-                    <td class="bord" >Rp. {{$invoice->jumlah_total}},00</td>
+                    <td class="bord" >Rp. {{number_format($invoice->jumlah_total,2,",",".")}}</td>
                 </tr>
             </tbody>
         </table>
@@ -130,7 +131,7 @@
         Pembayaran melalui transfer ke rekening kami : <br>
         Bank : Mandiri cabang Sampit <br>
         Nama : PT. HANJAYA KARYA LININUSA <br>
-        Acc. No : 159-00-0198847-5 <br>
+        Acc. No : 159-0198847-5 <br>
         </td>
         <td class="bord" align="center">
         PT. Hanjaya Karya Lininusa
