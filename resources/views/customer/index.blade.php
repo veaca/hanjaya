@@ -15,13 +15,15 @@
     </div><br />
   @endif
   <a href="{{route('customer.create')}}" type="button" class="btn btn-success m-5">Add Customer</a>
-  <table id="tabledata" class="table table-striped table-bordered">
+  <table id="customer" class="table table-striped table-bordered">
     <thead>
         <tr>
           <th>No</th>
           <th>Nama</th>
           <th>Alamat</th>
           <th>Telephone</th>
+          <th>NPWP</th>
+          <th>PPN</th>
           <th>Edit</th>
           <th>Delete</th>
         </tr>
@@ -34,6 +36,8 @@
             <td>{{$customer->name}}</td>
             <td>{{$customer->address}}</td>
             <td>{{$customer->phone}}</td>
+            <td>{{$customer->npwp}}</td>
+            <td>{{$customer->ppn}}</td>
             <td><a href="{{ route('customer.edit',$customer->id)}}" class="btn btn-primary">Edit</a></td>
             <td>
               <form action="{{ route('customer.destroy', $customer->id)}}" method="post">

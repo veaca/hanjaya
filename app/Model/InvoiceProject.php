@@ -12,7 +12,6 @@ class InvoiceProject extends Model
 
     protected $fillable = [
         'invoice_id',
-        'project_id',
-        'quantity'
+        'project_id'
     ];
 }

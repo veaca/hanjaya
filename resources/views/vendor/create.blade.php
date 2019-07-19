@@ -33,6 +33,20 @@
               <label for="quantity">Vendor Phone :</label>
               <input type="text" class="form-control" name="phone"/>
           </div>
+          <div class="form-group">
+            <label for="npwp">NPWP :</label>
+            <input type="text" class="form-control" name="npwp">
+          </div>
+          <div class="form-group">
+            <label for="PPN">PPH :</label>
+            <select class="form-control" name="pph">
+              <option value="0">0%</option>
+              <option value="0.5">0,5%</option>
+              <option value="1">1%</option>
+              <option value="2">2%</option>
+              <option value="4">4%</option>
+            </select>
+          </div>
           <button type="submit" class="btn btn-primary">Add</button>
       </form>
   </div>

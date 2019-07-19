@@ -56,7 +56,7 @@ class LaporanController extends Controller
         if ($biayaLain == NULL) $totalBiayaLain=0;
         else
         {
-            $totalBiayaLain = $biayaLain->gaji + $biayaLain->bpjs + $biayaLain->bank + $biayaLain->listrik + $biayaLain->pdam + $biayaLain->biaya_lain;
+            $totalBiayaLain = $biayaLain->gaji + $biayaLain->bpjs + $biayaLain->bank + $biayaLain->listrik + $biayaLain->pdam + $biayaLain->atk + $biayaLain->biaya_lain;
         // echo $totalBiayaLain;
         }
         $invoices = Invoice::select('invoices.jumlah_total')

@@ -56,7 +56,6 @@
             <li><a href="/invoice"><i class="fa fa-circle-o"></i> Invoice</a></li>
             <li><a href="/nota"><i class="fa fa-circle-o"></i> Nota</a></li>
             <li><a href="/biaya"><i class="fa fa-circle-o"></i> Biaya</a></li>
-            <li><a href="/invoicenota"><i class="fa fa-circle-o"></i> Gabung Invoice Nota</a></li>
             <li><a href="/laporan"><i class="fa fa-circle-o"></i> Laporan</a></li>
             <li><a href="/management"><i class="fa fa-circle-o"></i> Pengaturan User</a></li>
 
@@ -127,16 +126,5 @@
   })
 </script>
 <script>
-  $(function () {
-    $('#tabledata').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
-  })
 </script>
 </body>

@@ -15,7 +15,7 @@
     </div><br />
   @endif
   <a href="{{route('invoicenota.create')}}" type="button" class="btn btn-success">Add Invoice Nota</a>
-  <table id="tabledata" class="table table-striped table-bordered">
+  <table id="invonota" class="table table-striped table-bordered">
     <thead>
         <tr>
           <th>No</th>

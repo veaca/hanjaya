@@ -15,7 +15,7 @@
     </div><br />
   @endif
   <a href="{{route('biaya.create')}}" type="button" class="btn btn-success">Add Biaya</a>
-  <table id="tabledata" class="table table-striped table-bordered">
+  <table id="biaya" class="table table-striped table-bordered">
     <thead>
         <tr>
           <th>No</th>
@@ -26,6 +26,7 @@
           <th>Biaya Bank</th>
           <th>Biaya Listrik</th>
           <th>Biaya PDAM</th>
+          <th>Biaya ATK</th>
           <th>Biaya Lain</th>
           <th>Edit</th>
           <th>Delete</th>
@@ -43,6 +44,7 @@
             <td>{{$biaya->bank}}</td>
             <td>{{$biaya->listrik}}</td>
             <td>{{$biaya->pdam}}</td>
+            <td>{{$biaya->atk}}</td>
             <td>{{$biaya->biaya_lain}}</td>
             <td><a href="{{ route('biaya.edit',$biaya->id)}}" class="btn btn-primary">Edit</a></td>
             <td>
@@ -58,4 +60,7 @@
     </tbody>
   </table>
 <div>
+<script>
+
+</script>
 @endsection

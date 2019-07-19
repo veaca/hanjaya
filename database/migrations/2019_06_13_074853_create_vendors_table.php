@@ -18,6 +18,8 @@ class CreateVendorsTable extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('phone');
+            $table->string('npwp');
+            $table->float('pph');
             $table->timestamps();
         });
     }

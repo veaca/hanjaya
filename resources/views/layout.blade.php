@@ -50,9 +50,153 @@
   @endif
 
 <script>
- var table = $('#tabledata').DataTable( {       
+ var biaya = $('#biaya').DataTable( {       
         scrollX:        true,
-        autoWidth : false
+        autoWidth : false,
+        "aoColumns": [
+      {"bSearchable": true}, 
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": false}, 
+      {"bSearchable": false}
+    ] 
+    } );
+
+var customer = $('#customer').DataTable( {       
+        scrollX:        true,
+        autoWidth : false,
+        "aoColumns": [
+      {"bSearchable": true}, 
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true}, 
+      {"bSearchable": true}, 
+      {"bSearchable": false}, 
+      {"bSearchable": false}
+    ] 
+    } );
+
+    var vendor = $('#vendor').DataTable( {       
+        scrollX:        true,
+        autoWidth : false,
+        "aoColumns": [
+      {"bSearchable": true}, 
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true}, 
+      {"bSearchable": true}, 
+      {"bSearchable": false}, 
+      {"bSearchable": false}
+    ] 
+    } );
+
+     var project = $('#project').DataTable( {       
+        scrollX:        true,
+        autoWidth : false,
+        "aoColumns": [
+      {"bSearchable": true}, 
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true}, 
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true}, 
+      {"bSearchable": true},
+      {"bSearchable": false}, 
+      {"bSearchable": false}
+    ] 
+    } );
+
+     var invoice = $('#invoice').DataTable( {       
+        scrollX:        true,
+        autoWidth : false,
+        "aoColumns": [
+      {"bSearchable": true}, 
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true}, 
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": false}, 
+      {"bSearchable": false},
+      {"bSearchable": false}
+    ] 
+    } );
+
+     var nota = $('#nota').DataTable( {       
+        scrollX:        true,
+        autoWidth : false,
+        "aoColumns": [
+      {"bSearchable": true}, 
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": false},
+      {"bSearchable": false}, 
+      {"bSearchable": false}
+    ] 
+    } );
+    var invonota = $('#invonota').DataTable( {       
+        scrollX:        true,
+        autoWidth : false,
+        "aoColumns": [
+      {"bSearchable": true}, 
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": false}, 
+      {"bSearchable": false}
+    ] 
+    } );
+
+    var laporan = $('#laporan').DataTable( {       
+        scrollX:        true,
+        autoWidth : false,
+        "aoColumns": [
+      {"bSearchable": true}, 
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": false}, 
+      {"bSearchable": false}
+    ] 
+    } );
+
+    var user = $('#user').DataTable( {       
+        scrollX:        true,
+        autoWidth : false,
+        "aoColumns": [
+      {"bSearchable": true}, 
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": true},
+      {"bSearchable": false}, 
+      {"bSearchable": false}
+    ] 
     } );
 </script>
 

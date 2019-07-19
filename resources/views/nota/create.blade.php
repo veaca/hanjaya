@@ -20,27 +20,29 @@
       </div><br />
     @endif
       <form method="post" action="{{ route('nota.store') }}" id="isi">
+         @csrf
           <div class="form-group">
-              @csrf
+            <label for="quantity">Projects :</label><br>
+              <div class="form-group" name="project_info" id="isi">
+                <div class="row">
+                  <div class="col-sm-4">
+                    <select class="form-control" id="projectId" name='project_id'>
+                      @foreach ($projects as $project)
+                        <option class="dropdown-item" value="{{$project->id}}" >{{$project->nop}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+              </div>
+            <div class="form-group">
               <label for="price">Vendor :</label>
-              <select class="form-control" name='vendor' >
+              <select class="form-control" name='vendor_id' >
                 @foreach ($vendors as $vendor)
                   <option class="dropdown-item" value="{{$vendor->id}}">{{$vendor->name}}</option>
                 @endforeach
                 </select>
           </div>
-          <div class="form-group">
-              <label for="quantity">Asal Pengiriman :</label>
-              <input class="form-control" type="text"   name="asal"/>
-          </div>
-          <div class="form-group">
-              <label for="quantity">Tujuan Pengiriman :</label>
-              <input class="form-control" type="text"   name="tujuan"/>
-          </div>
-          <div class="form-group">
-              <label for="quantity">Nomor Nota / NOP :</label>
-              <input class="form-control" type="text"   name="NOP"/>
-          </div>
+          
           <div class="form-group">
             <div class="row">
               <div class="col-sm-3">
@@ -62,35 +64,14 @@
             <div class="row">
               <div class="col-sm-3">
                 <label for="quantity">Nopol :</label>
-              </div>
-              <div class="col-sm-3">
-                <label for="quantity">Collies :</label>
+                <input type="text" class="form-control" name="nopol">
               </div>
               <div class="col-sm-3">
                 <label for="quantity">Kg :</label>
-              </div>
-              <div class="col-sm-3">
-                <label for="quantity">Ongkos :</label>
+                <input type="text" class="form-control" name="kg">
               </div>
             </div>   
-            <div class="row">
-              <div class="col-sm-3">
-                <input class="form-control" id="nopolId" type="text"   name="nopol[0]"/>
-              </div>
-              <div class="col-sm-3">
-                <input class="form-control" id="colliesId" type="text"   name="collies[0]"/>
-              </div>
-              <div class="col-sm-3">
-                <input class="form-control" id="kgId" type="text"   name="kg[0]"/>
-              </div>
-              <div class="col-sm-3">
-                <input class="form-control" id="ongkosId" type="text"   name="ongkos[0]"/>
-              </div>
-            </div>
           </div>
-          <button class="btn btn-default" type="button" id="btnAddForm" onclick="CloneForm('isi')">+</button>
-          <br>
-          <br>
           <button type="submit" class="btn btn-primary">Add</button>
       </form>
   </div>

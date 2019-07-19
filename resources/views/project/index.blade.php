@@ -15,13 +15,19 @@
     </div><br />
   @endif
   <a href="{{route('project.create')}}" type="button" class="btn btn-success">Add project</a>
-  <table id="tabledata" class="table table-striped table-bordered">
+  <table id="project" class="table table-striped table-bordered">
     <thead>
         <tr>
           <th>No</th>
-          <th>Nama</th>
-          <th>Info / Keterangan</th>
-          <th>Tarif</th>
+          <th>NOP</th>
+          <th>Customer</th>
+          <th>SPK</th>
+          <th>Asal</th>
+          <th>Tujuan</th>
+          <th>Tarif Project</th>
+          <th>Kuantitas</th>
+          <th>Tarif Vendor</th>
+          <th>Nilai Project</th>
           <th>Edit</th>
           <th>Delete</th>
         </tr>
@@ -31,9 +37,15 @@
         @foreach($projects as $project)
         <tr>
             <td>{{$i++}}</td>
+            <td>{{$project->nop}}</td>
             <td>{{$project->name}}</td>
-            <td>{{$project->info}}</td>
+            <td>{{$project->spk}}</td>
+            <td>{{$project->asal}}</td>
+            <td>{{$project->tujuan}}</td>
             <td>{{$project->tarif}}</td>
+            <td>{{$project->qty}}</td>
+            <td>{{$project->tarif_vendor}}</td>
+            <td>{{$project->nilai_project}}</td>
             <td><a href="{{ route('project.edit',$project->id)}}" class="btn btn-primary">Edit</a></td>
             <td>
               <form action="{{ route('project.destroy', $project->id)}}" method="post">

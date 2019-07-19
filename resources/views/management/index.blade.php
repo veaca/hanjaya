@@ -15,7 +15,7 @@
     </div><br />
   @endif
   <a href="{{route('management.create')}}" type="button" class="btn btn-success m-5">Add User</a>
-  <table id="tabledata" class="table table-striped table-bordered">
+  <table id="user" class="table table-striped table-bordered">
     <thead>
         <tr>
           <th>No</th>

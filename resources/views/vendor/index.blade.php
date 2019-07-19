@@ -15,13 +15,15 @@
     </div><br />
   @endif
   <a href="{{route('vendor.create')}}" type="button" class="btn btn-success">Add vendor</a>
-  <table id="tabledata" class="table table-striped table-bordered">
+  <table id="vendor" class="table table-striped table-bordered">
     <thead>
         <tr>
           <th>No</th>
           <th>Nama</th>
           <th>Alamat</th>
           <th>Telephone</th>
+          <th>NPWP</th>
+          <th>PPh</th>
           <th>Edit</th>
           <th>Delete</th>
         </tr>
@@ -34,6 +36,8 @@
             <td>{{$vendor->name}}</td>
             <td>{{$vendor->address}}</td>
             <td>{{$vendor->phone}}</td>
+            <td>{{$vendor->npwp}}</td>
+            <td>{{$vendor->pph}}</td>
             <td><a href="{{ route('vendor.edit',$vendor->id)}}" class="btn btn-primary">Edit</a></td>
             <td>
               <form action="{{ route('vendor.destroy', $vendor->id)}}" method="post">

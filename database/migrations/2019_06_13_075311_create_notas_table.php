@@ -16,14 +16,14 @@ class CreateNotasTable extends Migration
         Schema::create('notas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->date('tanggal');
-            $table->string('asal');
-            $table->string('tujuan');
-            $table->string('NOP');
-            $table->bigInteger('jumlah_ongkos');
+            $table->unsignedInteger('vendor_id');
+            $table->unsignedInteger('project_id');
             $table->string('jenis_tambahan');
             $table->bigInteger('jumlah_tambahan');
-            $table->bigInteger('potongan_pph');
-            $table->bigInteger('jumlah_dibayar');
+            $table->string('nopol');
+            $table->bigInteger('kg');
+            $table->bigInteger('jumlah_pph');
+            $table->bigInteger('ongkos_nota');
             $table->timestamps();
         });
     }

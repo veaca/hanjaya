@@ -34,6 +34,40 @@
           <label for="quantity">Vendor Phone:</label>
           <input type="text" class="form-control" name="phone" value="{{ $vendor->phone }}" />
         </div>
+        <div class="form-group">
+            <label for="npwp">NPWP :</label>
+            <input type="text" class="form-control" name="npwp" value="{{$vendor->npwp}}">
+          </div>
+          <div class="form-group">
+            <label for="PPN">PPH :</label>
+            <select class="form-control" name="pph">
+            @if ($vendor->pph == "0")
+              <option value="0" selected>0%</option>
+              @else
+              <option value="0">0%</option>
+            @endif
+            @if ($vendor->pph == "0.5")
+              <option value="0.5" selected>0,5%</option>
+              @else
+              <option value="0.5">0.5%</option>
+            @endif
+            @if ($vendor->pph == "0")
+              <option value="1" selected>1%</option>
+              @else
+              <option value="1">1%</option>
+            @endif
+            @if ($vendor->pph == "0")
+              <option value="2" selected>2%</option>
+              @else
+              <option value="2">2%</option>
+            @endif
+            @if ($vendor->pph == "0")
+              <option value="4" selected>4%</option>
+              @else
+              <<option value="4">4%</option>
+            @endif
+            </select>
+          </div>
         <button type="submit" class="btn btn-primary">Update</button>
       </form>
   </div>

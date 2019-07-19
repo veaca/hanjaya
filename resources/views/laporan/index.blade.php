@@ -16,7 +16,7 @@
   @endif
   <a href="{{route('laporan.create')}}" type="button" class="btn btn-success">Create Laporan</a>
   <td><a href="{{ URL::to('periodeLaporan')}}" type="button" class="btn btn-info">View Receipt</a></td>
-  <table id="tabledata" class="table table-striped table-bordered">
+  <table id="laporan" class="table table-striped table-bordered">
     <thead>
         <tr>
           <th>No</th>

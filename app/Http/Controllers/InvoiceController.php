@@ -18,32 +18,20 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::select('invoices.*', 'invoice_customers.customer_id as customer_id', 'customers.name as customer_name')
-        ->leftjoin('invoice_customers', function($join)
-        {
-            $join->on('invoices.id', '=', 'invoice_customers.invoice_id');
+        $invoices = Invoice::select('invoices.id as id', 'invoices.jumlah_ppn', 'invoices.jumlah_invoice','invoices.tanggal as tanggal', 'invoices.nomor as nomor','invoices.info as info', 'customers.name as name' ,'customers.address as address' , 'projects.nop as nop', 'projects.tarif as tarif', 'projects.qty as qty')
+        ->join('invoice_projects', function($join){
+            $join->on('invoice_projects.invoice_id', '=', 'invoices.id');
         })
-        ->leftjoin('customers', function($join)
-        {
-            $join->on('invoice_customers.customer_id', '=', 'customers.id');
+        ->join('projects', function($join){
+            $join->on('projects.id', '=', 'invoice_projects.project_id');
         })
-        ->orderBy('nomor','ASC')
-        ->get();
-
-        $projects = Invoice::select('invoice_projects.invoice_id','projects.name as project_name', 'projects.info as project_info', 'projects.tarif as project_tarif', 'invoice_projects.quantity')
-
-        ->join('invoice_projects', function($join)
-        {
-            $join->on('invoices.id', '=', 'invoice_projects.invoice_id');
-        })
-        ->join('projects', function($join)
-        {
-            $join->on('invoice_projects.project_id', '=', 'projects.id');
+        ->join('customers', function($join){
+            $join->on('customers.id', '=', 'projects.customer_id');
         })
         ->get();
         // echo $invoices;
         // echo $projects;
-        return view('invoice.index', compact('invoices', 'projects'));
+        return view('invoice.index', compact('invoices'));
     }
 
     /**
@@ -55,7 +43,7 @@ class InvoiceController extends Controller
     {
         $customers = Customer::all();
         $projects = Project::all();
-        return view('invoice.create', compact('customers', 'projects'));
+        return view('invoice.create', compact( 'projects'));
     }
 
     public function getProjects($invoice){
@@ -77,10 +65,8 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'customer_id'=>'required',
-            'jenis_pajak'=>'required|numeric|max:100',
-            'project_id.*'=>'required',
-            'quantity.*'=>'required|numeric|max:10000000000'
+            'project_id' => 'required',
+            'info' => 'required'
         ]);
         $month = date('m');
         if ($month == '01') $noMonth = 'E';
@@ -121,80 +107,29 @@ class InvoiceController extends Controller
             }
             $nomor = $noMonthYear.'-'.$noLastNomor;
         }
-        
-        $iterateProject = 0;
-        $iterateQuantity =0;
-        
-        $jumlah = 0;
-        foreach ($request->get('project_id') as $project_id) 
-        {
-            $iterateQuantity =0;
-            foreach ($request->get('quantity') as $quantity) 
-           {
-                if ($project_id != NULL && $quantity!=NULL)
-                {
-                    if ($iterateProject == $iterateQuantity)
-                    {
-                        $harga = Project::select('tarif')
-                        ->where('id', $project_id)
-                        ->first();
-                        $jumlah = $jumlah + ( $harga->tarif * $quantity);
 
-                    }
-                $iterateQuantity++;
-                }
-            }
-            $iterateProject++;
-        }
-        
-        $pajak = $request->get('jenis_pajak') * $jumlah /100;
-        $jumlah_total = $jumlah + $pajak;
+        $ppn = Project::select('projects.*', 'customers.ppn as ppn')
+        ->join('customers', function($join){
+            $join->on('customers.id', '=', 'projects.customer_id');
+        })
+        ->first();
+        $jumlahPpn = ($ppn->nilai_project * $ppn->ppn) / 100;
+        $jumlahInvoice = $ppn->nilai_project + $jumlahPpn;
+
         $invoice = new Invoice([
             'tanggal' => date("Y-m-d"),
             'nomor' => $nomor,
-            'jumlah'=> $jumlah,
-            'jenis_pajak' => $request->get('jenis_pajak'),
-            'pajak'=> $pajak,
-            'jumlah_total'=> $jumlah_total
+            'info' => $request->get('info'),
+            'jumlah_ppn' => $jumlahPpn,
+            'jumlah_invoice' => $jumlahInvoice
         ]);
         $invoice->save();
-        
-        $invoiceCustomer = new InvoiceCustomer([
-            'customer_id' => $request->get('customer_id'),
-            'invoice_id' => $invoice->id
+        $invoiceProject = new InvoiceProject([
+            'invoice_id' => $invoice->id,
+            'project_id' => $request->get('project_id')
         ]);
-        $invoiceCustomer->save();
         
-        $iterateProject = 0;
-        $iterateQuantity =0;
-        foreach ($request->get('project_id') as $project_id) 
-        {
-            $iterateQuantity =0;
-            foreach ($request->get('quantity') as $quantity) 
-           {
-                if ($project_id != NULL && $quantity!=NULL)
-                {
-                    if ($iterateProject == $iterateQuantity)
-                    {
-                        $invoiceProject = new InvoiceProject([
-                            'project_id' => $project_id,
-                            'quantity' => $quantity,
-                            'invoice_id' => $invoice->id
-                        ]);
-                        $invoiceProject->save();
-                    }
-                $iterateQuantity++;
-                }
-            }
-            $iterateProject++;
-        }
-        // $projects = $this->getProjects($invoice);
-        
-        
-        
-
- 
-        // $updateJumlah = $this->updateJumlah($invoice);
+        $invoiceProject->save();
         return redirect('/invoice')->with('success', 'Invoice has been added');
     }
 
@@ -234,41 +169,9 @@ class InvoiceController extends Controller
      */
     public function edit($id)
     {
-        $invoice = Invoice::select('invoices.*', 'invoice_customers.customer_id as customer_id', 'customers.name as customer_name')
-        ->join('invoice_customers', function($join)
-        {
-            $join->on('invoices.id', '=', 'invoice_customers.invoice_id');
-        })
-        ->join('customers', function($join)
-        {
-            $join->on('invoice_customers.customer_id', '=', 'customers.id');
-        })
-        ->where('invoices.id', $id)
-        ->first();
-
-        $projects = Invoice::select('invoice_projects.invoice_id','projects.id as project_id','projects.name as project_name', 'projects.info as project_info', 'projects.tarif as project_tarif', 'invoice_projects.quantity')
-        ->join('invoice_customers', function($join)
-        {
-            $join->on('invoices.id', '=', 'invoice_customers.invoice_id');
-        })
-        ->join('invoice_projects', function($join)
-        {
-            $join->on('invoices.id', '=', 'invoice_projects.invoice_id');
-        })
-        ->join('projects', function($join)
-        {
-            $join->on('invoice_projects.project_id', '=', 'projects.id');
-        })
-        ->where('invoices.id', $id)
-        ->get();
-        
-        $customers = Customer::all();
-        $allProjects = Project::all();
-        // echo $invoice;
-        // echo $projects;
-        // echo $allProjects;
-        // echo $customers;
-        return view('invoice.edit', compact('invoice', 'projects', 'allProjects', 'customers'));
+        $invoice = Invoice::find($id);
+        $projects = Project::all();
+        return view('invoice.edit', compact('invoice', "projects"));
     }
 
     /**
@@ -280,84 +183,28 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'customer_id'=>'required',
-            'jenis_pajak'=>'required|integer|max:100',
-            'project_id.*'=>'required',
-            'quantity.*'=>'required|integer|max:10000000000'
-        ]);
+        // $request->validate([
+        //     'customer_id'=>'required',
+        //     'jenis_pajak'=>'required|integer|max:100',
+        //     'project_id.*'=>'required',
+        //     'quantity.*'=>'required|integer|max:10000000000'
+        // ]);
 
         $invoice = Invoice::find($id);
-        
-
-        $iterateProject = 0;
-        $iterateQuantity =0;
-        
-        $jumlah = 0;
-        foreach ($request->get('project_id') as $project_id) 
-        {
-            $iterateQuantity =0;
-            foreach ($request->get('quantity') as $quantity) 
-           {
-                if ($project_id != NULL && $quantity!=NULL)
-                {
-                    if ($iterateProject == $iterateQuantity)
-                    {
-                        $harga = Project::select('tarif')
-                        ->where('id', $project_id)
-                        ->first();
-                        $jumlah = $jumlah + ( $harga->tarif * $quantity);
-
-                    }
-                $iterateQuantity++;
-                }
-            }
-            $iterateProject++;
-        }
-        $pajak = $request->get('jenis_pajak') * $jumlah /100;
-        $jumlah_total = $jumlah + $pajak;
-
-        $invoice->jumlah = $jumlah;
-        $invoice->jenis_pajak = $request->get('jenis_pajak');
-        $invoice->pajak = $pajak;
-        $invoice->jumlah_total = $jumlah_total;
-        $invoice->save();
-        
-        $invoiceCustomerId =  InvoiceCustomer::select('id')
-        ->where('invoice_id', $invoice->id)
-        ->first();
-        $invoiceCustomerId->customer_id = $request->get('customer_id');
-        $invoiceCustomerId->save();
-
-        $invoiceProjects = InvoiceProject::select('id')
+        $invoiceProject = InvoiceProject::select('*')
         ->where('invoice_id', $id)
-        ->get();
-
-        $iterateProject = 0;
-        $iterateQuantity =0;
-        $iterateId=0;
-        foreach ($invoiceProjects as $invoiceProjectId) {
-            $iterateProject = 0;
-            foreach ($request->get('project_id') as $project_id) 
-            {
-                $iterateQuantity =0;
-                foreach ($request->get('quantity') as $quantity)
-                {
-                    if ($iterateProject == $iterateQuantity && $iterateProject==$iterateId )
-                    {
-                        $invoiceProject = InvoiceProject::find($invoiceProjectId->id);
-                        $invoiceProject->project_id = $project_id;
-                        $invoiceProject->quantity = $quantity;
-                        $invoiceProject->save();
-                    }
-                    $iterateQuantity++;
-                }
-                $iterateProject++;
-            }
-            $iterateId++;
-        }
-        $updateJumlah = $this->updateJumlah($invoice);
-
+        ->first();
+        $invoiceProject->project_id = $request->get('project_id');
+        $project = Project::find($request->get('project_id'));
+        $customer = Customer::find($project->customer_id);
+        $jumlahPpn = ($project->nilai_project * $customer->ppn) /100;
+        $jumlahInvoice = $project->nilai_project + $jumlahPpn;
+        
+        $invoice->info = $request->get('info');
+        $invoice->jumlah_ppn = $jumlahPpn;
+        $invoice->jumlah_invoice = $jumlahInvoice;
+        $invoiceProject->save();
+        $invoice->save();
         return redirect('invoice')->with('success', 'Invoice has been updated');
     }
 
@@ -369,6 +216,7 @@ class InvoiceController extends Controller
      */
     public function destroy($id)
     {
+        // echo $id;
         $invoice = Invoice::find($id);
         $invoice->delete();
 

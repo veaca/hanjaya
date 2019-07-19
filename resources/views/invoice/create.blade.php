@@ -23,38 +23,23 @@
       <label for="price">Invoice Customer :</label>    
         <div class="form-group">
               @csrf
-                <label for="customer">Pilih Customer</label>
-                <select class="form-control" name='customer_id' >
-                @foreach ($customers as $customer)
-                  <option class="dropdown-item" value="{{$customer->id}}" >{{$customer->name}}</option>
-                @endforeach
-                </select>
-          </div>
-          <div class="form-group">
-            <label for="jenis_pajak">Persen Pajak</label>
-            <input type="text" class="form-control" name="jenis_pajak">
-          </div>
           <label for="quantity">Invoice Projects :</label><br>
               <div class="form-group" name="project_info" id="isi">
                 <div class="row">
                   <div class="col-sm-4">
-                    <select class="form-control" id="projectId" name='project_id[0]'>
+                    <select class="form-control" id="projectId" name='project_id'>
                       @foreach ($projects as $project)
-                        <option class="dropdown-item" value="{{$project->id}}" >{{$project->name}}</option>
+                        <option class="dropdown-item" value="{{$project->id}}" >{{$project->nop}}</option>
                       @endforeach
                     </select>
                   </div>
-                  <div class="col-sm-4">
-                  <input class="form-control" id="kuantitas" type="text" placeholder="Kuantitas Proyek" name="quantity[0]"/>
-                  </div>
                 </div>
               </div>
-              <button type="button" class="btn btn-default" id="btnAddForm" onclick="CloneForm('isi')">+</button>
-       <br>
-       <br>
-             <button type="submit" class="btn btn-primary">Add</button>
-             <br>
-          
+            <div>
+              <label for="info">Info :</label>
+              <input type="text" class="form-control" name="info">
+            </div>
+          <button type="submit" class="btn btn-primary">Add</button>
       </form>
        
       

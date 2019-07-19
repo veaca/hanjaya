@@ -16,14 +16,20 @@
   @endif
 <a href="{{route('invoice.create')}}" type="button" class="btn btn-success">Add Invoice</a>
 <br>
-  <table id="tabledata" class="table table-bordered">
+  <table id="invoice" class="table table-bordered">
     <thead>
         <tr>
           <th>No</th>
           <th>Tanggal</th>
           <th>Nomor</th>
           <th>Customer</th>
-          <th>Jumlah Total</th>
+          <th>Address</th>
+          <th>NOP</th>
+          <th>Tarif</th>
+          <th>Kuantitas</th>
+          <th>Nilai PPN</th>
+          <th>Nilai Akhir</th>
+          <th>Info</th>
           <th>View</th>
           <th>Edit</th>
           <th>Delete</th>
@@ -38,11 +44,17 @@
         @foreach($invoices as $invoice)
         <tr>
         @php $i[$j++] = $invoice->id @endphp
-            <td name="invoice_id" value="{{$invoice->id}}">{{$no++}}</td>
+            <td name="invoice_id" value="{{$invoice->id}}">{{$invoice->id}}</td>
             <td>{{$invoice->tanggal}}</td>
             <td>{{$invoice->nomor}}</td>
-            <td>{{$invoice->customer_name}}</td>
-            <td>{{$invoice->jumlah_total}}</td>
+            <td>{{$invoice->name}}</td>
+            <td>{{$invoice->address}}</td>
+            <td>{{$invoice->nop}}</td>
+            <td>{{$invoice->tarif}}</td>
+            <td>{{$invoice->qty}}</td>
+            <td>{{$invoice->jumlah_ppn}}</td>
+            <td>{{$invoice->jumlah_invoice}}</td>
+            <td>{{$invoice->info}}</td>
             <td><a href="{{ URL::to('viewInvoice', $invoice->id)}}" type="button" class="btn btn-warning">View</a></td>
             <td> 
               <a href="{{ route('invoice.edit',$invoice->id)}}" class="btn btn-primary">Edit</a></td>

@@ -17,10 +17,9 @@ class CreateInvoicesTable extends Migration
             $table->bigIncrements('id');
             $table->date('tanggal');
             $table->string('nomor');
-            $table->bigInteger('jumlah')->nullable();
-            $table->bigInteger('jenis_pajak');
-            $table->bigInteger('pajak')->nullable();
-            $table->bigInteger('jumlah_total')->nullable();
+            $table->string('info');
+            $table->bigInteger('jumlah_ppn');
+            $table->bigInteger('jumlah_invoice');
             $table->timestamps();
         });
     }

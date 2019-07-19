@@ -30,7 +30,6 @@ Route::resource('biaya', 'BiayaLainController');
 Route::resource('laporan', 'LaporanController');
 Route::resource('printinvoice', 'PrintInvoiceController');
 Route::resource('printnota', 'PrintNotaController');
-Route::resource('invoicenota', 'InvoiceNotaController');
 Route::resource('management', 'ManagementController');
 Route::get('/exportInvoice/{id}', 'ExportController@exportInvoice');
 Route::get('/exportNota/{id}', 'ExportController@exportNota');

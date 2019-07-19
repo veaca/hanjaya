@@ -7,7 +7,7 @@
     <div>
     @csrf
     <label for="periode">Pilih Periode Laporan:</label>
-    <select name="awal">
+    <select name="awal" id="bulanAwal" onclick="set();">
         <option value="01">Januari</option>
         <option value="02">Februari</option>
         <option value="03">Maret</option>
@@ -22,7 +22,7 @@
         <option value="12">Desember</option>
     </select>
     -
-    <select name="akhir">
+    <select name="akhir" id="bulanAkhir">
         <option value="01">Januari</option>
         <option value="02">Februari</option>
         <option value="03">Maret</option>
@@ -54,5 +54,19 @@
     </div>
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
+<script>
 
+function set(){
+    var bulanAwal = document.getElementById('bulanAwal').value;
+    var bulanAkhir = document.getElementById('bulanAkhir').getElementsByTagName("option");
+    for (i=0 ; i<12 ;i++){
+        bulanAkhir[i].disabled = false;
+    }
+    
+    for (i = bulanAwal-2 ; i>=0 ; i--){
+        bulanAkhir[i].disabled=true;
+    }
+}
+
+</script>
 @endsection

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Customer;
+use App\Invoice;
+use App\Project;
 
 class CustomerController extends Controller
 {
@@ -40,12 +42,16 @@ class CustomerController extends Controller
         $request->validate([
             'name'=>'required|max:100',
             'address'=>'required|max:150',
-            'phone'=>'required|max:18'
+            'phone'=>'required|max:18',
+            'npwp'=>'required',
+            'ppn'=>'required|integer|max:10'
         ]);
         $customer = new Customer([
             'name' => $request->get('name'),
             'address' => $request->get('address'),
-            'phone' => $request->get('phone')
+            'phone' => $request->get('phone'),
+            'npwp' => $request->get('npwp'),
+            'ppn' => $request->get('ppn')
         ]);
         $customer->save();
         return redirect('/customer')->with('success', 'Customer has been added');
@@ -87,14 +93,52 @@ class CustomerController extends Controller
         $request->validate([
             'name'=>'required|max:100',
             'address'=>'required|max:150',
-            'phone'=>'required|max:18'
+            'phone'=>'required|max:18',
+            'npwp'=>'required',
+            'ppn'=>'required|integer|max:10'
         ]);
 
         $customer = Customer::find($id);
         $customer->name = $request->get('name');
         $customer->address = $request->get('address');
         $customer->phone = $request->get('phone');
+        $customer->npwp = $request->get('npwp');
+        $customer->ppn = $request->get('ppn');
         $customer->save();
+
+        $invoices = Invoice::select("invoices.id as id")
+        ->join('invoice_projects', function($join){
+            $join->on('invoice_projects.invoice_id', '=', 'invoices.id');
+        })
+        ->join('projects', function($join){
+            $join->on('projects.id', '=', 'invoice_projects.project_id');
+        })
+        ->join('customers', function($join){
+            $join->on('customers.id', '=', 'projects.customer_id');
+        })
+        ->where('customers.id', $id)
+        ->get();
+
+        foreach ($invoices as $invoice) {
+            $update = Invoice::find($invoice->id);
+
+            $project = Project::select()
+            ->join('invoice_projects', function($join){
+                $join->on('projects.id', '=', 'invoice_projects.project_id');
+            })
+            ->join('invoices', function($join){
+                $join->on('invoices.id', '=', 'invoice_projects.invoice_id');
+            })
+            ->where('invoice_id', $invoice->id)
+            ->first();
+            
+
+            $jumlahPpn = ($project->nilai_project * $request->get("ppn"))/100;
+            $jumlahInvoice = $project->nilai_project + $jumlahPpn;
+            $invoice->jumlah_ppn = $jumlahPpn;
+            $invoice->jumlah_invoice = $jumlahInvoice;
+            $invoice->save();
+        };
 
         return redirect('/customer')->with('success', 'Customer has been updated');
     }

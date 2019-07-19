@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Project;
+use App\Customer;
 use App\Invoice;
 use App\InvoiceProject;
+use App\Nota;
+use App\Vendor;
 
 class ProjectController extends Controller
 {
@@ -16,7 +19,11 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::all();
+        $projects = Project::select('projects.*', 'customers.name as name')
+        ->join('customers', function($join){
+            $join->on('customers.id', '=', 'projects.customer_id');
+        })
+        ->get();
 
         return view('project.index', compact('projects'));
     }
@@ -28,7 +35,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('project.create');
+        $customers = Customer::all();
+        return view('project.create', compact('customers'));
     }
 
     /**
@@ -40,14 +48,26 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'=>'required|max:100',
-            'info'=>'required|max:150',
-            'tarif'=>'required|integer|max:100000000000000'
+            'nop'=>'required',
+            'customer_id'=>'required',
+            'spk' => 'required',
+            'asal' => 'required',
+            'tujuan' => 'required',
+            'tarif'=>'required|integer|max:100000000000000',
+            'qty' => 'required',
+            'tarif_vendor' => 'required'
         ]);
+        //CUSTOMER ID MASUKIN DI TABEL GABUNGAN
         $project = new Project([
-            'name' => $request->get('name'),
-            'info' => $request->get('info'),
-            'tarif' => $request->get('tarif')
+            'nop' => $request->get('nop'),
+            'customer_id' => $request->get('customer_id'),
+            'spk' => $request->get('spk'),
+            'asal' => $request->get('asal'),
+            'tujuan' => $request->get('tujuan'),
+            'tarif' => $request->get('tarif'),
+            'qty' => $request->get('qty'),
+            'tarif_vendor' => $request->get('tarif_vendor'),
+            'nilai_project' => $request->get('tarif') * $request->get('qty')
         ]);
         $project->save();
         return redirect('/project')->with('success', 'Project has been added');
@@ -73,8 +93,8 @@ class ProjectController extends Controller
     public function edit($id)
     {
         $project = Project::find($id);
-
-        return view('project.edit', compact('project'));
+        $customers = Customer::all();
+        return view('project.edit', compact('project', 'customers'));
     }
 
     public function getProjects($invoiceId){
@@ -96,45 +116,70 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name'=>'required|max:100',
-            'info'=>'required|max:150',
-            'tarif'=>'required|integer|max:100000000000000'
-        ]);
+        // $request->validate([
+        //     'nop'=>'required',
+        //     'customer_id'=>'required',
+        //     'spk' => 'required',
+        //     'asal' => 'required',
+        //     'tujuan' => 'required',
+        //     'tarif'=>'required|integer|max:100000000000000',
+        //     'qty' => 'required',
+        //     'tarif_vendor' => 'required'
+        // ]);
         $project = Project::find($id);
-        $project->name = $request->get('name');
-        $project->info = $request->get('info');
+        $project->nop = $request->get('nop');
+        $project->spk = $request->get('spk');
+        $project->asal = $request->get('asal');
+        $project->tujuan = $request->get('tujuan');
         $project->tarif = $request->get('tarif');
+        $project->qty = $request->get('qty');
+        $project->tarif_vendor = $request->get('tarif_vendor');
+        $project->nilai_project = $request->get('tarif') * $request->get('qty');
+        
         $project->save();
 
-        $invoiceIds = Project::select('invoice_projects.invoice_id as invoice_id')
+        $invoiceIds = Invoice::select('invoices.id as id', 'invoice_projects.project_id', 'customers.ppn')
         ->join('invoice_projects', function($join){
-            $join->on('invoice_projects.project_id', '=', 'projects.id');
+            $join->on('invoices.id', '=', 'invoice_projects.invoice_id');
         })
+        ->join('projects', function($join){
+            $join->on('projects.id', '=', 'invoice_projects.project_id');
+        })
+        ->join('customers', function($join){
+            $join->on('customers.id', '=', 'projects.customer_id');
+        })
+        ->where('invoice_projects.project_id', $id)
         ->get();
         
         foreach ($invoiceIds as $invoiceId) {
-            // echo $invoiceId;
-            $invoice = Invoice::select('*')
-            ->where('id', $invoiceId->invoice_id)
-            ->first();
-            $projects = $this->getProjects($invoice->id);
-            $jumlah = 0;
-            foreach ($projects as $project) {
-                $jumlah = $jumlah + ( $project->tarif * $project->quantity);
-            }
-            $pajak = $jumlah / 10;
-            $jumlah_total = $jumlah + $pajak;
-
-            $updateInvoice = Invoice::select('*')
-            ->where('id', $invoiceId->invoice_id)
-            ->first();
-            $updateInvoice->jumlah = $jumlah;
-            $updateInvoice->pajak = $pajak;
-            $updateInvoice->jumlah_total = $jumlah_total;
-            $updateInvoice->save();
+            $invoice = Invoice::find($invoiceId->id);
+            $project = Project::find($invoiceId->project_id);
+            $jumlahPpn = ($project->nilai_project * $invoiceId->ppn) / 100;
+            $jumlahInvoice = $project->nilai_project + $jumlahPpn;
+            $invoice->jumlah_ppn = $jumlahPpn;
+            $invoice->jumlah_invoice = $jumlahInvoice;
+            $invoice->save();
         }
 
+        $notaIds = Nota::select('id', 'vendor_id')
+        ->where('project_id', $id)
+        ->get();
+
+        foreach ($notaIds as $notaId) {
+            $nota = Nota::find($notaId->id);
+            $vendor = Vendor::find($notaId->vendor_id);
+            $project = Project::find($id);
+
+            $ongkos = $request->get('tarif_vendor') * $nota->kg;
+            // echo $ongkos;
+            $jumlahPph = ($ongkos * $vendor->pph) /100;
+            // echo $jumlahPph;
+            $ongkosNota = $ongkos+$jumlahPph;
+            // echo $ongkosNota;
+            $nota->jumlah_pph = $jumlahPph;
+            $nota->ongkos_nota = $ongkosNota;
+            $nota->save();
+        }
         return redirect('/project')->with('success', 'Project has been updated');
     }
 

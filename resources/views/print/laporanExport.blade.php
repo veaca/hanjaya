@@ -40,12 +40,11 @@
                 </tr>
             </thead>
             <tbody>
-                @php $i=1 $totCollies=0 $totKg=0 $totOngkos=0 @endphp
-            @foreach ($notaDetails as $notaDetail)
-            @php $j=1 
-            $totCollies = $totCollies + $notaDetail->collies
-            $totKg = $totKg + $notaDetail->kg
-                
+                @php $i=1 @endphp
+                @php $total=0 @endphp
+                @foreach ($laporans as $laporan)
+                @php
+                 
                 $total = $total+$laporan->laporan_total 
                 @endphp
                <tr>

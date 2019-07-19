@@ -22,16 +22,15 @@ class Nota extends Model
     }
 
     protected $fillable = [
-        'customer_id',
+        'id',
         'vendor_id',
+        'project_id',
         'tanggal',
-        'asal',
-        'tujuan',
-        'NOP',
-        'jumlah_ongkos',
         'jenis_tambahan',
         'jumlah_tambahan',
-        'potongan_pph',
-        'jumlah_dibayar'
+        'nopol',
+        'kg',
+        'jumlah_pph',
+        'ongkos_nota'
     ];
 }

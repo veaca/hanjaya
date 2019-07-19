@@ -16,6 +16,7 @@ class BiayaLain extends Model
         'bank',
         'listrik',
         'pdam',
+        'atk',
         'biaya_lain'
     ];
 

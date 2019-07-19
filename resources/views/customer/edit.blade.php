@@ -34,6 +34,14 @@
           <label for="quantity">Customer Phone:</label>
           <input type="text" class="form-control" name="phone" value="{{ $customer->phone }}" /> 
         </div>
+        <div class="form-group">
+            <label for="npwp">NPWP :</label>
+            <input type="text" class="form-control" name="npwp" value="{{$customer->npwp}}">
+          </div>
+          <div class="form-group">
+            <label for="PPN">PPN :</label>
+            <input type="text" class="form-control" name="ppn" value="{{$customer->ppn}}">
+          </div>
         <button type="submit" class="btn btn-primary">Update</button>
       </form>
   </div>

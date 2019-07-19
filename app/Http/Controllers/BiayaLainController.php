@@ -45,6 +45,7 @@ class BiayaLainController extends Controller
             'bank'=>'required|integer|max:1000000000000',
             'listrik'=>'required|integer|max:1000000000000',
             'pdam'=>'required|integer|max:1000000000000',
+            'atk'=>'required|integer|max:1000000000000',
             'biaya_lain'=>'required|integer|max:1000000000000'
         ]);
         $biaya = new BiayaLain([
@@ -55,6 +56,7 @@ class BiayaLainController extends Controller
             'bank'=>$request->get('bank'),
             'listrik'=>$request->get('listrik'),
             'pdam'=>$request->get('pdam'),
+            'atk'=>$request->get('atk'),
             'biaya_lain'=>$request->get('biaya_lain')
         ]);
         $biaya->save();
@@ -102,6 +104,7 @@ class BiayaLainController extends Controller
             'bank'=>'required|integer|max:1000000000000',
             'listrik'=>'required|integer|max:1000000000000',
             'pdam'=>'required|integer|max:1000000000000',
+            'atk'=>'required|integer|max:1000000000000',
             'biaya_lain'=>'required|integer|max:1000000000000'
         ]);
 
@@ -113,6 +116,7 @@ class BiayaLainController extends Controller
         $biaya->bank=$request->get('bank');
         $biaya->listrik=$request->get('listrik');
         $biaya->pdam=$request->get('pdam');
+        $biaya->atk=$request->get('atk');
         $biaya->biaya_lain=$request->get('biaya_lain');
         $biaya->save();
 

@@ -15,9 +15,15 @@ class CreateProjectsTable extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('info');
+            $table->bigInteger('nop');
+            $table->unsignedInteger('customer_id');
+            $table->string('spk');
+            $table->string('asal');
+            $table->string('tujuan');
             $table->bigInteger('tarif');
+            $table->bigInteger('qty');
+            $table->bigInteger('tarif_vendor');
+            $table->bigInteger('nilai_project');
             $table->timestamps();
         });
     }

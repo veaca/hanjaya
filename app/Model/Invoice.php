@@ -22,13 +22,11 @@ class Invoice extends Model
     }
 
     protected $fillable = [
-        'customer_id',
-        'vendor_id',
         'tanggal',
         'nomor',
-        'jumlah',
-        'jenis_pajak',
-        'pajak',
-        'jumlah_total'
+        'info',
+        'project_id',
+        'jumlah_ppn',
+        'jumlah_invoice'
     ];
 }
