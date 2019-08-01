@@ -14,8 +14,12 @@
       {{ session()->get('success') }}  
     </div><br />
   @endif
-  <a href="{{route('biaya.create')}}" type="button" class="btn btn-success">Add Biaya</a>
-  <table id="biaya" class="table table-striped table-bordered">
+  <div>
+    <a href="{{route('biaya.create')}}" type="button" class="btn btn-success">Add Biaya</a>
+  </div>
+  <br>
+  <div>
+    <table id="biaya" class="table table-striped table-bordered">
     <thead>
         <tr>
           <th>No</th>
@@ -39,13 +43,13 @@
             <td>{{$i++}}</td>
             <td>{{$biaya->bulan}}</td>
             <td>{{$biaya->tahun}}</td>
-            <td>{{$biaya->gaji}}</td>
-            <td>{{$biaya->bpjs}}</td>
-            <td>{{$biaya->bank}}</td>
-            <td>{{$biaya->listrik}}</td>
-            <td>{{$biaya->pdam}}</td>
-            <td>{{$biaya->atk}}</td>
-            <td>{{$biaya->biaya_lain}}</td>
+            <td>Rp. {{number_format($biaya->gaji,2,",",".")}}</td>
+            <td>Rp. {{number_format($biaya->bpjs,2,",",".")}}</td>
+            <td>Rp. {{number_format($biaya->bank,2,",",".")}}</td>
+            <td>Rp. {{number_format($biaya->listrik,2,",",".")}}</td>
+            <td>Rp. {{number_format($biaya->pdam,2,",",".")}}</td>
+            <td>Rp. {{number_format($biaya->atk,2,",",".")}}</td>
+            <td>Rp. {{number_format($biaya->biaya_lain,2,",",".")}}</td>
             <td><a href="{{ route('biaya.edit',$biaya->id)}}" class="btn btn-primary">Edit</a></td>
             <td>
             
@@ -59,7 +63,8 @@
         @endforeach
     </tbody>
   </table>
-<div>
+  </div>
+  
 <script>
 
 </script>

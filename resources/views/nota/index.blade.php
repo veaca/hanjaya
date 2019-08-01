@@ -14,10 +14,24 @@
       {{ session()->get('success') }}  
     </div><br />
   @endif
+  @if ($message = Session::get('error'))
+
+<div class="alert alert-danger alert-block">
+
+	<button type="button" class="close" data-dismiss="alert">×</button>	
+
+        <strong>{{ $message }}</strong>
+
+</div>
+
+@endif
+  <div>
+    <a href="{{route('nota.create')}}" type="button" class="btn btn-success">Add nota</a>
+  </div>
   
-  <a href="{{route('nota.create')}}" type="button" class="btn btn-success">Add nota</a>
   <br>
-  <table id="nota" class="table table-striped table-bordered">
+  <div>
+    <table id="nota" class="table table-striped table-bordered">
     <thead>
         <tr>
           <th>No</th>
@@ -27,7 +41,6 @@
           <th>Asal</th>
           <th>Tujuan</th>
           <th>Tarif Vendor</th>
-          <th>Kg</th>
           <th>Potongan PPh</th>
           <th>Ongkos Nota</th>
           <th>View</th>
@@ -45,10 +58,9 @@
             <td>{{$nota->vendor_name}}</td>
             <td>{{$nota->asal}}</td>
             <td>{{$nota->tujuan}}</td>
-            <td>{{$nota->tarif_vendor}}</td>
-            <td>{{$nota->kg}}</td>
-            <td>{{$nota->jumlah_pph}}</td>
-            <td>{{$nota->ongkos_nota}}</td>
+            <td>Rp. {{number_format($nota->tarif_vendor,2,",",".")}}</td>
+            <td>Rp. {{number_format($nota->jumlah_pph,2,",",".")}}</td>
+            <td>Rp. {{number_format($nota->ongkos_nota,2,",",".")}}</td>
             <td><a href="{{ URL::to('viewNota', $nota->id)}}" type="button" class="btn btn-warning">View</a></td>
             <td><a href="{{ route('nota.edit', $nota->id)}}" type="button" class="btn btn-primary">Edit</a></td>
             <td>
@@ -63,6 +75,8 @@
         @endforeach
     </tbody>
   </table>
+  </div>
+  
  
   </div>
 @endsection

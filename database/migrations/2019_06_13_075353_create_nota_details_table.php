@@ -15,12 +15,10 @@ class CreateNotaDetailsTable extends Migration
     {
         Schema::create('nota_details', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->date('date');
+            $table->unsignedInteger('nota_id');
             $table->string('nopol');
-            $table->bigInteger('collies');
             $table->bigInteger('kg');
             $table->bigInteger('ongkos');
-            $table->bigInteger('jumlah_ongkos');
             $table->timestamps();
         });
     }

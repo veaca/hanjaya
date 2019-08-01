@@ -173,6 +173,10 @@
           <input type="text" class="form-control" name="pdam" value="{{ $biaya->pdam }}" />
         </div>
         <div class="form-group">
+              <label for="quantity">Biaya ATK :</label>
+              <input type="text" class="form-control" name="atk" value="{{$biaya->atk}}"/>
+          </div>
+        <div class="form-group">
           <label for="quantity">Biaya Lain:</label>
           <input type="text" class="form-control" name="biaya_lain" value="{{ $biaya->biaya_lain }}" />
         </div>

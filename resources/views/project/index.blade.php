@@ -14,7 +14,22 @@
       {{ session()->get('success') }}  
     </div><br />
   @endif
-  <a href="{{route('project.create')}}" type="button" class="btn btn-success">Add project</a>
+  @if ($message = Session::get('error'))
+
+<div class="alert alert-danger alert-block">
+
+	<button type="button" class="close" data-dismiss="alert">×</button>	
+
+        <strong>{{ $message }}</strong>
+
+</div>
+
+@endif
+  <div >
+    <a href="{{route('project.create')}}" type="button" class="btn btn-success">Add Project</a>
+  </div>
+  <br>
+  <div >
   <table id="project" class="table table-striped table-bordered">
     <thead>
         <tr>
@@ -27,7 +42,9 @@
           <th>Tarif Project</th>
           <th>Kuantitas</th>
           <th>Tarif Vendor</th>
+          <th>Ongkos Nota</th>
           <th>Nilai Project</th>
+          <th>Biaya Lain</th>
           <th>Edit</th>
           <th>Delete</th>
         </tr>
@@ -42,10 +59,12 @@
             <td>{{$project->spk}}</td>
             <td>{{$project->asal}}</td>
             <td>{{$project->tujuan}}</td>
-            <td>{{$project->tarif}}</td>
-            <td>{{$project->qty}}</td>
-            <td>{{$project->tarif_vendor}}</td>
-            <td>{{$project->nilai_project}}</td>
+            <td>Rp. {{number_format($project->tarif,2,",",".")}}</td>
+            <td>{{number_format($project->qty,0,".",".")}}</td>
+            <td>Rp. {{number_format($project->tarif_vendor,2,",",".")}}</td>
+            <td>Rp. {{number_format($project->ongkos_nota,2,",",".")}}</td>
+            <td>Rp. {{number_format($project->nilai_project,2,",",".")}}</td>
+            <td>Rp. {{number_format($project->biaya_lain,2,",",".")}}</td>
             <td><a href="{{ route('project.edit',$project->id)}}" class="btn btn-primary">Edit</a></td>
             <td>
               <form action="{{ route('project.destroy', $project->id)}}" method="post">
@@ -59,5 +78,7 @@
         @endforeach
     </tbody>
   </table>
+  </div>
+  
 <div>
 @endsection

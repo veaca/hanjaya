@@ -28,10 +28,10 @@
               <div class="form-group" name="project_info" id="isi">
                 <div class="row">
                   <div class="col-sm-4">
-                    <select class="form-control" id="projectId" name='project_id'>
+                    <select class="form-control" id="projectId" name='project_id' onclick=update()>
                       @foreach ($projects as $project)
                         @if ($project->id == $invoice->project_id)
-                        <option class="dropdown-item" value="{{$project->id}} selected" >{{$project->nop}}</option>
+                        <option class="dropdown-item" value="{{$project->id}}" selected >{{$project->nop}}</option>
                         @else
                         <option class="dropdown-item" value="{{$project->id}}" >{{$project->nop}}</option>
                         @endif
@@ -40,6 +40,39 @@
                   </div>
                 </div>
               </div>
+              <div class="form-group">
+            <label for="nama">Customer : </label>
+              <div class="row">
+              
+                <div class="col-sm-4">
+                  <input class="form-control" type="text" id="customer_name" value="{{$invoice->name}}" disabled>
+                </div>
+                <div class="col-sm-4">
+                  <input class="form-control" type="text" id="address" value="{{$invoice->address}}" disabled>
+                </div>
+              </div>
+              <label for="tarif">Tarif : </label>
+              <div class="row">
+              
+                <div class="col-sm-4">
+                  <input class="form-control" type="text" id="tarif" value="{{$invoice->tarif}}" disabled>
+                </div>
+              </div>
+              <label for="qty">Kuantitas : </label>
+              <div class="row">
+              
+                <div class="col-sm-4">
+                  <input class="form-control" type="text" id="qty" value="{{$invoice->qty}}" disabled>
+                </div>
+              </div>
+              <label for="ppn">PPn</label>
+              <div class="row">
+              
+                <div class="col-sm-4">
+                  <input class="form-control" type="text" id="ppn" value="{{$invoice->ppn}}" disabled>
+                </div>
+              </div>
+            </div>
             <div>
               <label for="info">Info :</label>
               <input type="text" class="form-control" name="info" value="{{$invoice->info}}">
@@ -49,4 +82,22 @@
   </div>
 </div>
 
+<script>
+var nama = document.getElementById('customer_name');
+var tarif = document.getElementById('tarif');
+var qty = document.getElementById('qty');
+var ppn = document.getElementById('ppn');
+var address = document.getElementById('address');
+function update()
+{
+  var idx = document.getElementById('projectId').selectedIndex;
+  // console.log(idx);
+  var project = <?php echo $projects ?>;
+  nama.value = project[idx].name ;
+  address.value = project[idx].address;
+  tarif.value = project[idx].tarif;
+  qty.value = project[idx].qty;
+  ppn.value = project[idx].ppn +"%";
+}
+</script>
 @endsection

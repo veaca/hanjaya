@@ -8,6 +8,7 @@ use App\BiayaLain;
 use App\InvoiceNota;
 use App\Invoice;
 use App\Nota;
+use Illuminate\Support\Facades\Redirect;
 
 class LaporanController extends Controller
 {
@@ -48,6 +49,14 @@ class LaporanController extends Controller
             'tahun'=>'required',
         ]);
 
+        $cek = Laporan::select('*')
+        ->where('bulan', $request->get('bulan'))
+        ->where('tahun', $request->get('tahun'))
+        ->first();
+        if($cek != NULL){
+            return redirect('laporan/create')->with('warning', 'Laporan Bulan '.$request->get('bulan').'-'.$request->get('tahun').' Telah Dibuat Sebelumnya');
+        }
+
 
         $biayaLain = BiayaLain::select('*')
         ->where('bulan', $request->get('bulan'))
@@ -59,11 +68,14 @@ class LaporanController extends Controller
             $totalBiayaLain = $biayaLain->gaji + $biayaLain->bpjs + $biayaLain->bank + $biayaLain->listrik + $biayaLain->pdam + $biayaLain->atk + $biayaLain->biaya_lain;
         // echo $totalBiayaLain;
         }
-        $invoices = Invoice::select('invoices.jumlah_total')
+        // echo $totalBiayaLain;
+        $invoices = Invoice::select('invoices.jumlah_invoice as jumlah_total')
         ->whereMonth('invoices.created_at', $request->get('bulan'))
         ->whereYear('invoices.created_at', $request->get('tahun'))
         ->get();
+        // echo $invoices;
         $totalInvoice =0;
+        // echo $totalInvoice;
         if ($invoices==NULL) {
             $totalInvoice =0;
         }
@@ -72,10 +84,10 @@ class LaporanController extends Controller
                 $totalInvoice = $totalInvoice + $invoice->jumlah_total;
             }
         }
-        
+        // echo $totalInvoice;
         // echo $invoice;
 
-        $notas = Nota::select('notas.jumlah_dibayar as jumlah_dibayar')
+        $notas = Nota::select('notas.ongkos_nota as jumlah_dibayar')
         ->whereMonth('notas.created_at', $request->get('bulan'))
         ->whereYear('notas.created_at', $request->get('tahun'))
         ->get();
@@ -92,10 +104,6 @@ class LaporanController extends Controller
         {
             $laporanTotal=0;
         }
-        
-
-
-        // echo $invoice;
         
         $laporan = new Laporan([
             'bulan' => $request->get('bulan'),
@@ -139,7 +147,7 @@ class LaporanController extends Controller
         $totalBiayaLain = $biayaLain->gaji + $biayaLain->bpjs + $biayaLain->bank + $biayaLain->listrik + $biayaLain->pdam + $biayaLain->biaya_lain;
         // echo $totalBiayaLain;
         }
-        $invoices = Invoice::select('invoices.jumlah_total')
+        $invoices = Invoice::select('invoices.jumlah_invoice as jumlah_total')
         ->whereMonth('invoices.created_at', $laporan->bulan)
         ->whereYear('invoices.created_at', $laporan->tahun)
         ->get();
@@ -153,7 +161,7 @@ class LaporanController extends Controller
         
         // echo $invoice;
 
-        $notas = Nota::select('notas.jumlah_dibayar as jumlah_dibayar')
+        $notas = Nota::select('notas.ongkos_nota as jumlah_dibayar')
         ->whereMonth('notas.created_at', $laporan->bulan)
         ->whereYear('notas.created_at', $laporan->tahun)
         ->get();
@@ -185,39 +193,7 @@ class LaporanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $laporan = Laporan::find($id);
-        $biayaLain = BiayaLain::select('*')
-        ->where('bulan', $laporan->bulan)
-        ->where('tahun', $laporan->tahun)
-        ->first();
-        $totalBiayaLain = $biayaLain->gaji + $biayaLain->bpjs + $biayaLain->bank + $biayaLain->listrik + $biayaLain->pdam;
-        // echo $totalBiayaLain;
-
-        $invoices = Invoice::select('invoices.jumlah_total')
-        ->whereMonth('invoices.created_at', $laporan->bulan)
-        ->whereYear('invoices.created_at', $laporan->tahun)
-        ->get();
         
-        $totalInvoice =0;
-        foreach ($invoices as $invoice) {
-            $totalInvoice = $totalInvoice + $invoice->jumlah_total;
-        }
-        // echo $invoice;
-
-        $notas = Nota::select('notas.jumlah_ongkos as jumlah_ongkos')
-        ->whereMonth('notas.created_at', $laporan->bulan)
-        ->whereYear('notas.created_at', $laporan->tahun)
-        ->get();
-
-        $totalNota = 0;
-        foreach ($notas as $nota) {
-            $totalNota = $totalNota + $nota->jumlah_ongkos;
-        }
-        $laporanTotal = $totalInvoice - $totalNota - $totalBiayaLain;
-        
-        echo $laporan;
-        $laporan->save();
-        return redirect('laporan')->with('success', 'Laporan has been updated');
     }
 
     /**

@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Customer;
 use App\Invoice;
 use App\Project;
+use App\InvoiceProject;
+use App\Nota;
+use App\NotaDetail;
 
 class CustomerController extends Controller
 {
@@ -43,7 +46,7 @@ class CustomerController extends Controller
             'name'=>'required|max:100',
             'address'=>'required|max:150',
             'phone'=>'required|max:18',
-            'npwp'=>'required',
+            'npwp'=>'required|max:20',
             'ppn'=>'required|integer|max:10'
         ]);
         $customer = new Customer([
@@ -94,7 +97,7 @@ class CustomerController extends Controller
             'name'=>'required|max:100',
             'address'=>'required|max:150',
             'phone'=>'required|max:18',
-            'npwp'=>'required',
+            'npwp'=>'required|max:20',
             'ppn'=>'required|integer|max:10'
         ]);
 
@@ -152,6 +155,34 @@ class CustomerController extends Controller
     public function destroy($id)
     {
         $customer = Customer::find($id);
+        $projects = Project::select('*')
+        ->where('customer_id', $id)
+        ->get();
+        
+        foreach ($projects as $project) {
+            $invoices = InvoiceProject::select('*')
+            ->where('project_id', $project->id)
+            ->get();
+            $notas = Nota::select('*')
+            ->where('project_id', $project->id)
+            ->get();
+            foreach ($invoices as $invoice) {
+                $delInvoice = Invoice::find($invoice->invoice_id);
+                $delInvoice->delete();
+                $invoice->delete();
+            }
+            foreach ($notas as $nota) {
+                $notaDetails = NotaDetail::select('*')
+                ->where('nota_id', $nota->id)
+                ->get();
+                foreach ($notaDetails as $notaDetail) {
+                    $delNotaDetail = NotaDetail::find($notaDetail->id);
+                    $delNotaDetail->delete();
+                }
+                $nota->delete();
+            }
+            $project->delete();
+        }
         $customer->delete();
 
         return redirect('customer')->with('success', 'Customer has been deleted successfully');

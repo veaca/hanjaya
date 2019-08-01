@@ -28,8 +28,6 @@ class Nota extends Model
         'tanggal',
         'jenis_tambahan',
         'jumlah_tambahan',
-        'nopol',
-        'kg',
         'jumlah_pph',
         'ongkos_nota'
     ];

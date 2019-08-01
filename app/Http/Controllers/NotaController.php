@@ -20,10 +20,10 @@ class NotaController extends Controller
     public function index()
     {
         $notas = Nota::select('notas.*','vendors.name as vendor_name', 'projects.nop',  'projects.asal', 'projects.tujuan', 'projects.tarif_vendor')
-        ->join('vendors', function($join){
+        ->leftjoin('vendors', function($join){
             $join->on('notas.vendor_id', '=', 'vendors.id');
         })
-        ->join('projects', function($join){
+        ->leftjoin('projects', function($join){
             $join->on('notas.project_id', '=', 'projects.id');
         })
         ->get();
@@ -39,9 +39,27 @@ class NotaController extends Controller
      */
     public function create()
     {
+        $selectedProjects = Nota::select('project_id')
+        ->distinct('project_id')
+        ->get();
+        $arr = [];
+        $x =0 ;
+        foreach ($selectedProjects as $selectedProject) {
+            $arr[$x] = $selectedProject->project_id;
+            $x++;
+        }
         $vendors = Vendor::all();
-        $projects = Project::all();
-
+        $projects = Project::select('*')
+        ->whereNotIn('id', $arr)
+        ->get();
+        if ($projects->isEmpty())
+        {
+            return redirect('nota')->with('error', 'Belum Ada Project Yang Dapat Di Assign');
+        }
+        if ($vendors->isEmpty())
+        {
+            return redirect('nota')->with('error', 'Belum Ada Vendor Yang Dapat Di Assign');
+        }
         return view('nota.create', compact('vendors', 'projects'));
     }
 
@@ -58,14 +76,18 @@ class NotaController extends Controller
             'project_id'=>'required',
             'jenis_tambahan'=>'required|max:50',
             'jumlah_tambahan'=>'required|numeric|max:1000000000',
-            'nopol'=>'required|max:10',
-            'kg'=>'required|numeric|max:10000'
+            'nopol.*'=>'required|max:10',
+            'kg.*'=>'required|numeric|max:10000'
         ]);
+        $ongkosNota =0 ;
         $project = Project::find($request->project_id);
         $pph = Vendor::select('pph')
         ->where('id', $request->vendor_id)
         ->first();
-        $ongkosNota = $project->tarif_vendor * $request->get('kg');
+        foreach ($request->get('kg') as $kg) {
+            $ongkosNota = $ongkosNota + $project->tarif_vendor * $kg;
+        }
+        // $ongkosNota = $project->tarif_vendor * $request->get('kg');
         // echo $ongkosNota;
         if ($request->get('jenis_tambahan') == 'Penambahan')
             {
@@ -86,13 +108,31 @@ class NotaController extends Controller
             'project_id' => $request->get('project_id'),
             'jenis_tambahan' => $request->get('jenis_tambahan'),
             'jumlah_tambahan' => $request->get('jumlah_tambahan'),
-            'nopol' => $request->get('nopol'),
-            'kg' => $request->get('kg'),
             'jumlah_pph' => $jumlahPph,
             'ongkos_nota' => $jumlahOngkosNota
         ]);
         $nota->save();
-        
+        $idxNopol = 0;
+        $idxKg =0;
+        foreach ($request->get('nopol') as $nopol) 
+        {
+            $idxKg=0;
+            foreach ($request->get('kg') as $kg) {
+                if($idxNopol == $idxKg)
+                {
+                    $notaDetail = new NotaDetail([
+                        'nota_id' => $nota->id,
+                        'nopol' => $nopol,
+                        'kg' => $kg,
+                        'ongkos' => $project->tarif_vendor * $kg
+                    ]);
+                    $notaDetail->save();
+                    
+                }
+                $idxKg++;
+            }
+            $idxNopol++;
+        }
         return redirect('/nota')->with('success', 'Nota has been added');
     }
 
@@ -115,10 +155,22 @@ class NotaController extends Controller
      */
     public function edit($id)
     {
-        $nota = Nota::find($id);
+        $nota = Nota::select('notas.*', 'projects.asal as asal', 'projects.tujuan as tujuan', 'projects.tarif_vendor as tarif_vendor', 'vendors.pph as pph')
+        ->join('vendors', function($join){
+            $join->on('notas.vendor_id', '=', 'vendors.id');
+        })
+        ->join('projects', function($join){
+            $join->on('notas.project_id', '=', 'projects.id');
+        })
+        ->where('notas.id', $id)
+        ->first();
+        $notaDetails = NotaDetail::select('*')
+        ->where('nota_id', $id)
+        ->get();
         $vendors = Vendor::all();
         $projects = Project::all();
-        return view('nota.edit', compact('nota', 'projects', 'vendors' ));
+        // echo $notaDetails;
+        return view('nota.edit', compact('nota', 'projects', 'vendors', 'notaDetails' ));
     }
 
     /**
@@ -130,31 +182,92 @@ class NotaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $request->validate([
-        //     'vendor'=>'required',
-        //     'asal'=>'required|max:50',
-        //     'tujuan'=>'required|max:50',
-        //     'NOP'=>'required|max:50',
-        //     'jenis_tambahan'=>'required|max:50',
-        //     'jumlah_tambahan'=>'required|numeric|max:1000000000',
-        //     'nopol.*'=>'required|max:10',
-        //     'collies.*'=>'required|numeric|max:10000',
-        //     'kg.*'=>'required|numeric|max:10000',
-        //     'ongkos.*'=>'required|numeric|max:10000000000'
-        // ]);
-
+       $request->validate([
+            'vendor_id'=>'required',
+            'project_id'=>'required',
+            'jenis_tambahan'=>'required|max:50',
+            'jumlah_tambahan'=>'required|numeric|max:1000000000',
+            'nopol.*'=>'required|max:10',
+            'kg.*'=>'required|numeric|max:10000'
+        ]);
+            $idxNopol = 0;
+            $idxKg =0;
+            
             $nota = Nota::find($id);
             $nota->project_id = $request->get('project_id');
             $nota->vendor_id = $request->get('vendor_id');
             $nota->jenis_tambahan = $request->get('jenis_tambahan');
             $nota->jumlah_tambahan = $request->get('jumlah_tambahan');
-            $nota->nopol = $request->get('nopol');
-            $nota->kg = $request->get('kg');
-
             $vendor = Vendor::find($request->get('vendor_id'));
             $project = Project::find($request->get('project_id'));
+            $notaDetails = NotaDetail::select('*')
+            ->where('nota_id', $id)
+            ->get();
+            $notaDetailsCount = NotaDetail::select('*')
+            ->where('nota_id', $id)
+            ->get()
+            ->count();
+            // echo $notaDetailsCount;
+            $idx =0;
+            $ongkos=0;
+            $size = sizeOf($request->get('kg'));
+           echo $size;
+           $batas;
+            if ($size <= $notaDetailsCount) 
+            {
+                $batas = $size;
+            }
+            else 
+            {
+                $batas = $notaDetailsCount;
+            }
+            // echo $notaDetails[0];
+            if ($size <= $notaDetailsCount){
+                for ($idx ; $idx<$batas ; $idx++)
+                {
+                    $notaDetails[$idx]->nopol = $request->get('nopol')[$idx];
+                    $notaDetails[$idx]->kg = $request->get('kg')[$idx];
+                    $notaDetails[$idx]->ongkos = $project->tarif_vendor * $request->get('kg')[$idx];
+                    $ongkos = $ongkos + $notaDetails[$idx]->ongkos;
+                    $notaDetails[$idx]->save();
+                }
+            }
             
-            $ongkos = ($project->tarif_vendor*$request->get('kg')) ;
+            if ($size < $notaDetailsCount)
+            {
+                echo 'masuk sini';
+                for ($idx ; $idx < $notaDetailsCount ; $idx++)
+                {
+                    $notaDetails[$idx]->delete();
+                }
+            }
+            echo $idx;
+            if ($size > $notaDetailsCount)
+            {
+                echo 'aaa';
+                for ($idx ; $idx<$notaDetailsCount ; $idx++)
+                {
+                    $notaDetails[$idx]->nopol = $request->get('nopol')[$idx];
+                    $notaDetails[$idx]->kg = $request->get('kg')[$idx];
+                    $notaDetails[$idx]->ongkos = $project->tarif_vendor * $request->get('kg')[$idx];
+                    $ongkos = $ongkos + $notaDetails[$idx]->ongkos;
+                    $notaDetails[$idx]->save();
+                }
+                for ($i=$idx ; $i<$size ; $i++)
+                {
+                    // echo 'sini';
+                    $notaDetail = new NotaDetail([
+                        'nota_id' => $id,
+                        'nopol' => $request->get('nopol')[$i],
+                        'kg' => $request->get('kg')[$i],
+                        'ongkos' => $project->tarif_vendor * $request->get('kg')[$i]
+                    ]);
+                    $notaDetail->save();
+                    $ongkos = $ongkos +$project->tarif_vendor * $request->get('kg')[$i];
+                }
+            }
+            // $ongkos = ($project->tarif_vendor*$request->get('kg')) ;
+            
             if ($request->get('jenis_tambahan') == 'Penambahan')
             {
                 $ongkos = $ongkos + $request->get('jumlah_tambahan');

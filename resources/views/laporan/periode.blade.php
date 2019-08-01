@@ -21,6 +21,21 @@
         <option value="11">Nopember</option>
         <option value="12">Desember</option>
     </select>
+    <select name="tahun_awal">
+        <option value="2019">2019</option>
+        <option value="2020">2020</option>
+        <option value="2021">2021</option>
+        <option value="2022">2022</option>
+        <option value="2023">2023</option>
+        <option value="2024">2024</option>
+        <option value="2025">2025</option>
+        <option value="2026">2026</option>
+        <option value="2027">2027</option>
+        <option value="2028">2028</option>
+        <option value="2029">2029</option>
+        <option value="2030">2030</option>
+        <option value="2031">2031</option>
+    </select>
     -
     <select name="akhir" id="bulanAkhir">
         <option value="01">Januari</option>
@@ -36,7 +51,7 @@
         <option value="11">Nopember</option>
         <option value="12">Desember</option>
     </select>
-    <select name="tahun">
+    <select name="tahun_akhir">
         <option value="2019">2019</option>
         <option value="2020">2020</option>
         <option value="2021">2021</option>
@@ -52,7 +67,7 @@
         <option value="2031">2031</option>
     </select>
     </div>
-    <button type="submit" class="btn btn-primary">Create</button>
+    <button type="submit" class="btn btn-primary">View</button>
 </form>
 <script>
 

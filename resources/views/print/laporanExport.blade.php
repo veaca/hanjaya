@@ -33,6 +33,7 @@
                 <tr>
                     <th>No.</th>
                     <th>Bulan</th>
+                    <th>Tahun</th>
                     <th>Piutang</th>
                     <th>Hutang</th>
                     <th>Pengeluaran (Biaya Operasional)</th>
@@ -50,6 +51,7 @@
                <tr>
                     <td>{{$i++}}</td>
                     <td>{{$laporan->bulan}}</td>
+                    <td>{{$laporan->tahun}}</td>
                     <td>Rp. {{number_format($laporan->laporan_invoice,2,",",".")}}</td>
                     <td>Rp. {{number_format($laporan->laporan_nota,2,",",".")}}</td>
                     <td>Rp. {{number_format($laporan->laporan_biaya_bulanan,2,",",".")}}</td>

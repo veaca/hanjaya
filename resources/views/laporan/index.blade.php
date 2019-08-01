@@ -14,8 +14,12 @@
       {{ session()->get('success') }}  
     </div><br />
   @endif
-  <a href="{{route('laporan.create')}}" type="button" class="btn btn-success">Create Laporan</a>
-  <td><a href="{{ URL::to('periodeLaporan')}}" type="button" class="btn btn-info">View Receipt</a></td>
+  <div>
+    <a href="{{route('laporan.create')}}" type="button" class="btn btn-success">Create Laporan</a>
+    <td><a href="{{ URL::to('periodeLaporan')}}" type="button" class="btn btn-info">View Receipt</a></td>
+  </div>
+  <br>
+  
   <table id="laporan" class="table table-striped table-bordered">
     <thead>
         <tr>
@@ -37,10 +41,10 @@
             <td>{{$i++}}</td>
             <td>{{$laporan->bulan}}</td>
             <td>{{$laporan->tahun}}</td>
-            <td>{{$laporan->laporan_biaya_bulanan}}</td>
-            <td>{{$laporan->laporan_invoice}}</td>
-            <td>{{$laporan->laporan_nota}}</td>
-            <td>{{$laporan->laporan_total}}</td>
+            <td>Rp. {{number_format($laporan->laporan_biaya_bulanan,2,",",".")}}</td>
+            <td>Rp. {{number_format($laporan->laporan_invoice,2,",",".")}}</td>
+            <td>Rp. {{number_format($laporan->laporan_nota,2,",",".")}}</td>
+            <td>Rp. {{number_format($laporan->laporan_total,2,",",".")}}</td>
             <td><a href="{{ route('laporan.edit',$laporan->id)}}" class="btn btn-primary">Update</a></td>
             <td>
                 <form action="{{ route('laporan.destroy', $laporan->id)}}" method="post">

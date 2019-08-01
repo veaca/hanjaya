@@ -14,7 +14,11 @@
       {{ session()->get('success') }}  
     </div><br />
   @endif
-  <a href="{{route('customer.create')}}" type="button" class="btn btn-success m-5">Add Customer</a>
+  <div>
+    <a href="{{route('customer.create')}}" type="button" class="btn btn-success m-5">Add Customer</a>
+  </div>
+  <br>
+  
   <table id="customer" class="table table-striped table-bordered">
     <thead>
         <tr>

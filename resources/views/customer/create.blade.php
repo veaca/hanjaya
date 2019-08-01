@@ -26,11 +26,11 @@
               <input type="text" class="form-control" name="name"/>
           </div>
           <div class="form-group">
-              <label for="price">Customer Address :</label>
+              <label for="address">Customer Address :</label>
               <input type="text" class="form-control" name="address"/>
           </div>
           <div class="form-group">
-              <label for="quantity">Customer Phone :</label>
+              <label for="phone">Customer Phone :</label>
               <input type="text" class="form-control" name="phone"/>
           </div>
           <div class="form-group">
@@ -38,7 +38,7 @@
             <input type="text" class="form-control" name="npwp">
           </div>
           <div class="form-group">
-            <label for="PPN">PPN :</label>
+            <label for="ppn">PPN :</label>
             <input type="text" class="form-control" name="ppn">
           </div>
           <button type="submit" class="btn btn-primary">Add</button>

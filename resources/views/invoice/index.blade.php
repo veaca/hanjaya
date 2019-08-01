@@ -14,7 +14,21 @@
       {{ session()->get('success') }}  
     </div><br />
   @endif
-<a href="{{route('invoice.create')}}" type="button" class="btn btn-success">Add Invoice</a>
+   @if ($message = Session::get('error'))
+
+<div class="alert alert-danger alert-block">
+
+	<button type="button" class="close" data-dismiss="alert">×</button>	
+
+        <strong>{{ $message }}</strong>
+
+</div>
+
+@endif
+<div>
+  <a href="{{route('invoice.create')}}" type="button" class="btn btn-success">Add Invoice</a>
+</div>
+
 <br>
   <table id="invoice" class="table table-bordered">
     <thead>
@@ -50,10 +64,10 @@
             <td>{{$invoice->name}}</td>
             <td>{{$invoice->address}}</td>
             <td>{{$invoice->nop}}</td>
-            <td>{{$invoice->tarif}}</td>
-            <td>{{$invoice->qty}}</td>
-            <td>{{$invoice->jumlah_ppn}}</td>
-            <td>{{$invoice->jumlah_invoice}}</td>
+            <td>Rp. {{number_format($invoice->tarif,2,",",".")}}</td>
+            <td>{{number_format($invoice->qty,0,".",".")}}</td>
+            <td>Rp. {{number_format($invoice->jumlah_ppn,2,",",".")}}</td>
+            <td>Rp. {{number_format($invoice->jumlah_invoice,2,",",".")}}</td>
             <td>{{$invoice->info}}</td>
             <td><a href="{{ URL::to('viewInvoice', $invoice->id)}}" type="button" class="btn btn-warning">View</a></td>
             <td> 
@@ -74,6 +88,5 @@
 
 
  
-<div>
 
 @endsection

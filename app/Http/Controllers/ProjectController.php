@@ -9,6 +9,7 @@ use App\Invoice;
 use App\InvoiceProject;
 use App\Nota;
 use App\Vendor;
+use App\NotaDetail;
 
 class ProjectController extends Controller
 {
@@ -19,9 +20,12 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::select('projects.*', 'customers.name as name')
-        ->join('customers', function($join){
+        $projects = Project::select('projects.*', 'customers.name as name', 'notas.ongkos_nota')
+        ->leftjoin('customers', function($join){
             $join->on('customers.id', '=', 'projects.customer_id');
+        })
+        ->leftjoin('notas', function($join){
+            $join->on('notas.project_id', '=', 'projects.id');
         })
         ->get();
 
@@ -36,6 +40,10 @@ class ProjectController extends Controller
     public function create()
     {
         $customers = Customer::all();
+        if ($customers->isEmpty())
+        {
+            return redirect('project')->with('error', 'Belum Ada Customer Yang Dapat Di Assign');
+        }
         return view('project.create', compact('customers'));
     }
 
@@ -48,14 +56,15 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nop'=>'required',
+            'nop'=>'required|max:20|unique:projects,nop',
             'customer_id'=>'required',
-            'spk' => 'required',
-            'asal' => 'required',
-            'tujuan' => 'required',
-            'tarif'=>'required|integer|max:100000000000000',
-            'qty' => 'required',
-            'tarif_vendor' => 'required'
+            'spk' => 'required|max:20|unique:projects,spk',
+            'asal' => 'required|max:20',
+            'tujuan' => 'required|max:20',
+            'tarif'=>'required|numeric|max:100000000000000',
+            'qty' => 'required|numeric|max:1000000000',
+            'tarif_vendor' => 'required|numeric|max:100000000000000',
+            'biaya_lain' => 'nullable|numeric|max:100000000000000'
         ]);
         //CUSTOMER ID MASUKIN DI TABEL GABUNGAN
         $project = new Project([
@@ -67,7 +76,8 @@ class ProjectController extends Controller
             'tarif' => $request->get('tarif'),
             'qty' => $request->get('qty'),
             'tarif_vendor' => $request->get('tarif_vendor'),
-            'nilai_project' => $request->get('tarif') * $request->get('qty')
+            'nilai_project' => $request->get('tarif') * $request->get('qty'),
+            'biaya_lain' => $request->get('biaya_lain')
         ]);
         $project->save();
         return redirect('/project')->with('success', 'Project has been added');
@@ -92,7 +102,12 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        $project = Project::find($id);
+        $project = Project::select('projects.*', 'customers.address as address')
+        ->join('customers', function($join){
+            $join->on('customers.id', '=', 'projects.customer_id');
+        })
+        ->where('projects.id', $id)
+        ->first();
         $customers = Customer::all();
         return view('project.edit', compact('project', 'customers'));
     }
@@ -116,26 +131,47 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $request->validate([
-        //     'nop'=>'required',
-        //     'customer_id'=>'required',
-        //     'spk' => 'required',
-        //     'asal' => 'required',
-        //     'tujuan' => 'required',
-        //     'tarif'=>'required|integer|max:100000000000000',
-        //     'qty' => 'required',
-        //     'tarif_vendor' => 'required'
-        // ]);
+        $request->validate([
+            'nop'=>'required|max:20',
+            'customer_id'=>'required',
+            'spk' => 'required|max:20',
+            'asal' => 'required|max:20',
+            'tujuan' => 'required|max:20',
+            'tarif'=>'required|numeric|max:100000000000000',
+            'qty' => 'required|numeric|max:1000000000',
+            'tarif_vendor' => 'required|numeric|max:100000000000000',
+            'biaya_lain' => 'nullable|numeric|max:100000000000000'
+        ]);
         $project = Project::find($id);
         $project->nop = $request->get('nop');
+        $project->customer_id = $request->get('customer_id');
         $project->spk = $request->get('spk');
         $project->asal = $request->get('asal');
         $project->tujuan = $request->get('tujuan');
         $project->tarif = $request->get('tarif');
         $project->qty = $request->get('qty');
         $project->tarif_vendor = $request->get('tarif_vendor');
+        $project->biaya_lain = $request->get('biaya_lain');
         $project->nilai_project = $request->get('tarif') * $request->get('qty');
-        
+
+        $cekNop = Project::select('nop')
+        ->where('id', '!=', $id)
+        ->get();
+        foreach ($cekNop as $cek) {
+            if ($cek->nop == $request->get('nop'))
+            {
+                return back()->with('error', 'NOP sudah ada');
+            }
+        }
+        $cekSpk = Project::select('spk')
+        ->where('id', '!=', $id)
+        ->get();
+        foreach ($cekSpk as $cek) {
+            if ($cek->spk == $request->get('spk'))
+            {
+                return back()->with('error', 'SPK sudah ada');
+            }
+        }
         $project->save();
 
         $invoiceIds = Invoice::select('invoices.id as id', 'invoice_projects.project_id', 'customers.ppn')
@@ -169,8 +205,24 @@ class ProjectController extends Controller
             $nota = Nota::find($notaId->id);
             $vendor = Vendor::find($notaId->vendor_id);
             $project = Project::find($id);
-
-            $ongkos = $request->get('tarif_vendor') * $nota->kg;
+            $ongkos=0;
+            $notaDetails = NotaDetail::select('*')
+            ->where('nota_id', $nota->id)
+            ->get();
+            foreach ($notaDetails as $notaDetail) {
+                $notaDetail->ongkos = $notaDetail->kg * $request->get('tarif_vendor');
+                $notaDetail->save();
+                $ongkos = $ongkos + $notaDetail->ongkos;
+            }
+             if ($nota->jenis_tambahan == 'Penambahan')
+            {
+                $ongkos = $ongkos + $nota->jumlah_tambahan;
+            }
+            else 
+            {
+                $ongkos = $ongkos - $nota->jumlah_tambahan;
+            }
+            // $ongkos = $request->get('tarif_vendor') * $nota->kg;
             // echo $ongkos;
             $jumlahPph = ($ongkos * $vendor->pph) /100;
             // echo $jumlahPph;
@@ -192,7 +244,33 @@ class ProjectController extends Controller
     public function destroy($id)
     {
         $project = Project::find($id);
+
+        $invoices = Invoice::select('invoices.id as invoice_id', 'invoice_projects.id as invoice_projects_id')
+        ->join('invoice_projects', function($join){
+            $join->on('invoices.id', '=', 'invoice_projects.invoice_id');
+        })
+        ->join('projects', function($join){
+            $join->on('projects.id', '=', 'invoice_projects.project_id');
+        })
+        ->where('projects.id', $id)
+        ->get();
+
+        $notas = Nota::select("id")
+        ->where('project_id', $id)
+        ->get();
+
         $project->delete();
+        foreach ($invoices as $invoice) {
+            $deleteInvoice = Invoice::find($invoice->invoice_id);
+            $deleteInvoice->delete();
+            $deleteInvoiceProject = InvoiceProject::find($invoice->invoice_projects_id);
+            $deleteInvoiceProject->delete();
+        }
+
+        foreach ($notas as $nota) {
+            $deleteNota = Nota::find($nota->id);
+            $deleteNota->delete();
+        }
 
         return redirect('project')->with('success', 'Project has been removed successfully');
     }

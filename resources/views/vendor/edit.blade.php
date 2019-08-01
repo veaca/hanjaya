@@ -49,22 +49,22 @@
             @if ($vendor->pph == "0.5")
               <option value="0.5" selected>0,5%</option>
               @else
-              <option value="0.5">0.5%</option>
+              <option value="0.5">0,5%</option>
             @endif
-            @if ($vendor->pph == "0")
+            @if ($vendor->pph == "1")
               <option value="1" selected>1%</option>
               @else
               <option value="1">1%</option>
             @endif
-            @if ($vendor->pph == "0")
+            @if ($vendor->pph == "2")
               <option value="2" selected>2%</option>
               @else
               <option value="2">2%</option>
             @endif
-            @if ($vendor->pph == "0")
+            @if ($vendor->pph == "4")
               <option value="4" selected>4%</option>
               @else
-              <<option value="4">4%</option>
+              <option value="4">4%</option>
             @endif
             </select>
           </div>

@@ -15,6 +15,7 @@ class Project extends Model
         'tarif',
         'qty',
         'tarif_vendor',
-        'nilai_project'
+        'nilai_project',
+        'biaya_lain'
     ];
 }

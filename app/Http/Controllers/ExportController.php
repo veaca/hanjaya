@@ -20,23 +20,14 @@ class ExportController extends Controller
 {
     public function exportInvoice($id)
     {
-        $invoice = Invoice::find($id);
-        $customer = InvoiceCustomer::select('customers.name', 'customers.address', 'customers.phone')
-        ->join('customers', function($join){
-            $join->on('invoice_customers.customer_id', '=', 'customers.id');
-        })
-        ->where('invoice_customers.invoice_id', $invoice->id)
-        ->first();
-        $projects = InvoiceProject::select('*')
-        ->join('projects', function($join)
-        {
+       $invoice = Invoice::find($id);
+        $projects = Project::select('projects.*')
+        ->join('invoice_projects', function($join){
             $join->on('invoice_projects.project_id', '=', 'projects.id');
         })
-        ->where('invoice_projects.invoice_id', $invoice->id)
-        ->get();
-        // echo $invoice;
-        // echo $customer;
-        // echo $projects;
+        ->where('invoice_projects.invoice_id', $id)
+        ->first();
+        $customer = Customer::find($projects->customer_id);
         $pdf = PDF::loadview('print.invoiceExport', compact('projects', 'customer', 'invoice'));
         // echo $pdf;
         $name = "invoice_".$invoice->nomor.".pdf";
@@ -48,23 +39,14 @@ class ExportController extends Controller
     public function exportNota($id)
     {
         $nota = Nota::find($id);
-        
-        $vendor = NotaVendor::select()
-        ->join('vendors', function($join){
-            $join->on('nota_vendors.vendor_id', '=', 'vendors.id');
-        })
-        ->where('nota_id', $nota->id)
-        ->first();
-
-        $notaDetails = NotaNotaDetail::select()
-        ->join('nota_details', function($join){
-            $join->on('nota_nota_details.nota_detail_id', '=', 'nota_details.id');
-        })
-        ->where('nota_nota_details.nota_id', $nota->id)
+        $notaDetails = NotaDetail::select('*')
+        ->where('nota_id', $id)
         ->get();
+        $vendor = Vendor::find($nota->vendor_id);
+        $projects = Project::find($nota->project_id);
 
-        $pdf = PDF::loadview('print.notaExport', compact('nota', 'vendor', 'notaDetails'));
-        $name = "nota_".$nota->NOP.".pdf";
+        $pdf = PDF::loadview('print.notaExport', compact('nota', 'vendor', 'projects', 'notaDetails'));
+        $name = "nota_".$projects->nop.".pdf";
         return $pdf->download($name);
     }
 
@@ -75,47 +57,51 @@ class ExportController extends Controller
 
     public function exportLaporan(Request $request)
     {
-        $tanggalAwal = "01";
-        $tanggalAkhir = "31";
-        $awalPeriode = $request->get('tahun')."-".$request->get('awal')."-".$tanggalAwal;
-        $akhirPeriode = $request->get('tahun')."-".$request->get('akhir')."-".$tanggalAkhir;
-        // echo $awalPeriode;
-        // echo $akhirPeriode;
         $awalBulan = $request->get('awal');
         $akhirBulan = $request->get('akhir');
-        $tahun = $request->get('tahun');
-        $laporans = Laporan::select('*')
-        ->whereBetween('created_at', [$awalPeriode , $akhirPeriode])
-        ->get();
-        // echo $laporans;
-        // $pdf = PDF::loadview('print.laporanExport', compact('laporans', 'awalBulan', 'akhirBulan', 'tahun'));
-        // $name = "laporan_bulanan.pdf";
-        // return $pdf->download($name);
+        $awalTahun = $request->get('tahun_awal');
+        $akhirTahun = $request->get('tahun_akhir');
+
+        if ($awalTahun == $akhirTahun)
+        {
+            $laporans = Laporan::select('*')
+            ->where('bulan', '>=', $awalBulan) 
+            ->where('bulan', '<=', $akhirBulan)
+            ->get();
+        }
+        else {
+            $laporans = Laporan::select('*')
+            ->where('bulan', '>=', $awalBulan)
+            ->where('tahun', $awalTahun)
+            ->orWhere('bulan', '<=', $akhirBulan)
+            ->where('tahun', $akhirTahun)
+            ->get();
+        }
+        
         if ($laporans == NULL )
         {
             return view('laporan.periode')->with('failed', 'Belum ada data bulan tersebut');
         }
-        return view('laporan.periodeView', compact('laporans', 'awalBulan', 'akhirBulan', 'tahun'));
+        return view('laporan.periodeView', compact('laporans', 'awalBulan', 'akhirBulan', 'awalTahun', 'akhirTahun'));
     }
 
-    public function downloadLaporan($awal, $akhir, $tahun)
+    public function downloadLaporan($awal, $akhir, $awalTahun, $akhirTahun)
     {
-        // echo $awal;
-        // echo $akhir;
-        // echo $tahun;
-        $tanggalAwal = "01";
-        $tanggalAkhir = "31";
-        $awalPeriode = $tahun."-".$awal."-".$tanggalAwal;
-        $akhirPeriode = $tahun."-".$akhir."-".$tanggalAkhir;
-        // echo $awalPeriode;
-        // echo $akhirPeriode;
-        $awalBulan = $awal;
-        $akhirBulan = $akhir;
-        $tahun = $tahun;
-        $laporans = Laporan::select('*')
-        ->whereBetween('created_at', [$awalPeriode , $akhirPeriode])
-        ->get();
-        // echo $laporans;
+        if ($awalTahun == $akhirTahun)
+        {
+            $laporans = Laporan::select('*')
+            ->where('bulan', '>=', $awalBulan) 
+            ->where('bulan', '<=', $akhirBulan)
+            ->get();
+        }
+        else {
+             $laporans = Laporan::select('*')
+            ->where('bulan', '>=', $awalBulan)
+            ->where('tahun', $awalTahun)
+            ->orWhere('bulan', '<=', $akhirBulan)
+            ->where('tahun', $akhirTahun)
+            ->get();
+        }
         $pdf = PDF::loadview('print.laporanExport', compact('laporans', 'awalBulan', 'akhirBulan', 'tahun'));
         $name = "laporan_bulanan.pdf";
         return $pdf->download($name);
@@ -124,23 +110,13 @@ class ExportController extends Controller
     public function viewInvoice($id)
     {
         $invoice = Invoice::find($id);
-        $customer = InvoiceCustomer::select('customers.name', 'customers.address', 'customers.phone')
-        ->join('customers', function($join){
-            $join->on('invoice_customers.customer_id', '=', 'customers.id');
-        })
-        ->where('invoice_customers.invoice_id', $invoice->id)
-        ->first();
-        $projects = InvoiceProject::select('*')
-        ->join('projects', function($join)
-        {
+        $projects = Project::select('projects.*')
+        ->join('invoice_projects', function($join){
             $join->on('invoice_projects.project_id', '=', 'projects.id');
         })
-        ->where('invoice_projects.invoice_id', $invoice->id)
-        ->get();
-        // $invoice->created_at = $invoice->created_at->toFormattedDateString();
-        // echo $projects;
-        // echo $customer;
-        // echo $invoice;
+        ->where('invoice_projects.invoice_id', $id)
+        ->first();
+        $customer = Customer::find($projects->customer_id);
 
         return view('print.invoice', compact('projects', 'customer', 'invoice'));
     }
@@ -148,21 +124,12 @@ class ExportController extends Controller
     public function viewNota($id)
     {
         $nota = Nota::find($id);
-        
-        $vendor = NotaVendor::select()
-        ->join('vendors', function($join){
-            $join->on('nota_vendors.vendor_id', '=', 'vendors.id');
-        })
-        ->where('nota_id', $nota->id)
-        ->first();
-
-        $notaDetails = NotaNotaDetail::select()
-        ->join('nota_details', function($join){
-            $join->on('nota_nota_details.nota_detail_id', '=', 'nota_details.id');
-        })
-        ->where('nota_nota_details.nota_id', $nota->id)
+        $notaDetails = NotaDetail::select('*')
+        ->where('nota_id', $id)
         ->get();
+        $vendor = Vendor::find($nota->vendor_id);
+        $projects = Project::find($nota->project_id);
 
-        return view('print.nota', compact('nota', 'vendor', 'notaDetails'));
+        return view('print.nota', compact('nota', 'vendor', 'projects', 'notaDetails'));
     }
 }

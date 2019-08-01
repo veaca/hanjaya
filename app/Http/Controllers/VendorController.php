@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Vendor;
 use App\Nota;
 use App\Project;
+use App\NotaDetail;
 
 class VendorController extends Controller
 {
@@ -43,7 +44,7 @@ class VendorController extends Controller
             'name'=>'required|max:100',
             'address'=>'required|max:150',
             'phone'=>'required|max:18',
-            'npwp' => 'required',
+            'npwp' => 'required|max:20',
             'pph' => 'required'
         ]);
         $vendor = new Vendor([
@@ -94,7 +95,7 @@ class VendorController extends Controller
             'name'=>'required|max:100',
             'address'=>'required|max:150',
             'phone'=>'required|max:18',
-            'npwp' => 'required',
+            'npwp' => 'required|max:20',
             'pph' => 'required'
         ]);
 
@@ -136,6 +137,19 @@ class VendorController extends Controller
     public function destroy($id)
     {
         $vendor = Vendor::find($id);
+        $notas = Nota::select('*')
+        ->where('vendor_id', $id)
+        ->get();
+        foreach ($notas as $nota) {
+            $notaDetails = NotaDetail::select("*")
+            ->where('nota_id', $nota->id)
+            ->get();
+            foreach ($notaDetails as $notaDetail) {
+                $delNotaDetail = NotaDetail::find($notaDetail->id);
+                $delNotaDetail->delete();
+            }
+            $nota->delete();
+        }
         $vendor->delete();
 
         return redirect('vendor')->with('success', 'Vendor has been deleted successfully');

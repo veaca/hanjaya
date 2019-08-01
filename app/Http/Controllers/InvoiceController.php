@@ -19,16 +19,17 @@ class InvoiceController extends Controller
     public function index()
     {
         $invoices = Invoice::select('invoices.id as id', 'invoices.jumlah_ppn', 'invoices.jumlah_invoice','invoices.tanggal as tanggal', 'invoices.nomor as nomor','invoices.info as info', 'customers.name as name' ,'customers.address as address' , 'projects.nop as nop', 'projects.tarif as tarif', 'projects.qty as qty')
-        ->join('invoice_projects', function($join){
+        ->leftjoin('invoice_projects', function($join){
             $join->on('invoice_projects.invoice_id', '=', 'invoices.id');
         })
-        ->join('projects', function($join){
+        ->leftjoin('projects', function($join){
             $join->on('projects.id', '=', 'invoice_projects.project_id');
         })
-        ->join('customers', function($join){
+        ->leftjoin('customers', function($join){
             $join->on('customers.id', '=', 'projects.customer_id');
         })
         ->get();
+        
         // echo $invoices;
         // echo $projects;
         return view('invoice.index', compact('invoices'));
@@ -41,8 +42,32 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        $customers = Customer::all();
-        $projects = Project::all();
+        // $customers = Customer::all();
+        // $projects = Project::all();
+        $selectedProjects = InvoiceProject::select('project_id')
+        ->distinct('project_id')
+        ->get();
+        $arr =[];
+        $x = 0;
+        foreach ($selectedProjects as $selectedProject) {
+            $arr[$x] = $selectedProject->project_id;
+            // echo $selectedProject->project_id;
+            $x++;
+        }
+         
+        $projects = Project::select('projects.*', 'customers.name as name', 'customers.ppn as ppn', 'customers.address as address')
+        ->join('customers', function($join){
+            $join->on('projects.customer_id', '=', 'customers.id');
+        })
+        ->whereNotIn('projects.id', $arr)
+        ->get();
+        
+        if($projects->isEmpty())
+        {
+            // echo 'masuk';
+            return redirect('invoice')->with('error', 'Belum Ada Project Yang Dapat Di Assign');
+        }
+        // echo $projects;
         return view('invoice.create', compact( 'projects'));
     }
 
@@ -112,6 +137,7 @@ class InvoiceController extends Controller
         ->join('customers', function($join){
             $join->on('customers.id', '=', 'projects.customer_id');
         })
+        ->where('projects.id', $request->get('project_id'))
         ->first();
         $jumlahPpn = ($ppn->nilai_project * $ppn->ppn) / 100;
         $jumlahInvoice = $ppn->nilai_project + $jumlahPpn;
@@ -169,8 +195,23 @@ class InvoiceController extends Controller
      */
     public function edit($id)
     {
-        $invoice = Invoice::find($id);
-        $projects = Project::all();
+        $invoice = Invoice::select('invoices.*', 'projects.tarif as tarif', 'customers.name as name', 'customers.address as address', 'customers.ppn as ppn', 'projects.qty as qty', 'projects.id as project_id')
+        ->join('invoice_projects', function($join){
+            $join->on('invoice_projects.invoice_id', '=', 'invoices.id');
+        })
+        ->join('projects', function($join){
+            $join->on('projects.id', '=', 'invoice_projects.project_id');
+        })
+        ->join('customers', function($join){
+            $join->on('projects.customer_id', '=', 'customers.id');
+        })
+        ->where('invoices.id', $id)
+        ->first();
+        $projects = Project::select('projects.*', 'customers.name as name', 'customers.ppn as ppn', 'customers.address as address')
+        ->join('customers', function($join){
+            $join->on('projects.customer_id', '=', 'customers.id');
+        })
+        ->get();
         return view('invoice.edit', compact('invoice', "projects"));
     }
 

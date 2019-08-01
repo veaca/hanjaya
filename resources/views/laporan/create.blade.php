@@ -10,15 +10,17 @@
 </style>
 <div class="card ">
   <div class="card-body">
-    @if ($errors->any())
-      <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-              <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-      </div><br />
-    @endif
+    @if ($message = Session::get('warning'))
+
+<div class="alert alert-warning alert-block">
+
+	<button type="button" class="close" data-dismiss="alert">×</button>	
+
+	<strong>{{ $message }}</strong>
+
+</div>
+
+@endif
     <label for="name">Pilih Bulan:</label>
       <form method="post" action="{{ route('laporan.store') }}">
           <div class="form-group">
@@ -28,7 +30,7 @@
                   <option value="01">Januari</option>
                   <option value="02">Februari</option>
                   <option value="03">Maret</option>
-                  <option value="04">april</option>
+                  <option value="04">April</option>
                   <option value="05">Mei</option>
                   <option value="06">Juni</option>
                   <option value="07">Juli</option>

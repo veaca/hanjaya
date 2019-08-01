@@ -10,15 +10,17 @@
 </style>
 <div class="card">
   <div class="card-body">
-    @if ($errors->any())
-      <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-              <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-      </div><br />
-    @endif
+  @if ($message = Session::get('error'))
+
+<div class="alert alert-danger alert-block">
+
+	<button type="button" class="close" data-dismiss="alert">×</button>	
+
+        <strong>{{ $message }}</strong>
+
+</div>
+
+@endif
       <form method="post" action="{{ route('project.update', $project->id) }}">
         @method('PATCH')
         @csrf
@@ -28,15 +30,20 @@
           </div>
           <div class="form-group">
               <label for="price">Pilih Customer :</label>
-              <select name="customer_id" class="form-control">
+              <select name="customer_id" class="form-control" onclick=update() id="customer_id">
                 @foreach ($customers as $customer)
                 @if ($customer->id == $project->customer_id)
                 <option value="{{$customer->id}}" selected>{{$customer->name}}</option>
                 @else 
-                <option value="{{$customer->id}}" selected>{{$customer->name}}</option>
+                <option value="{{$customer->id}}" >{{$customer->name}}</option>
                 @endif
                 @endforeach 
               </select>
+          </div>
+          
+          <div class="form-group">
+              <label for="price">Alamat :</label>
+              <input type="text" class="form-control" id="address" value="{{$project->address}}" disabled/>
           </div>
           <div class="form-group">
               <label for="price">SPK / DO :</label>
@@ -62,8 +69,23 @@
             <label for="quantity">Tarif Vendor :</label>
             <input type="text" class="form-control" name="tarif_vendor" value="{{$project->tarif_vendor}}">
           </div>
+          <div class="form-group">
+            <label for="quantity">Biaya Lain :</label>
+            <input type="text" class="form-control" name="biaya_lain" value="{{$project->biaya_lain}}">
+          </div>
         <button type="submit" class="btn btn-primary">Update</button>
       </form>
   </div>
 </div>
+
+
+<script>
+var address = document.getElementById('address');
+function update()
+{
+  var idx = document.getElementById('customer_id').selectedIndex;
+  var customer = <?php echo $customers ?>;
+  address.value = customer[idx].address;
+}
+</script>
 @endsection

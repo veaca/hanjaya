@@ -20,8 +20,6 @@ class CreateNotasTable extends Migration
             $table->unsignedInteger('project_id');
             $table->string('jenis_tambahan');
             $table->bigInteger('jumlah_tambahan');
-            $table->string('nopol');
-            $table->bigInteger('kg');
             $table->bigInteger('jumlah_pph');
             $table->bigInteger('ongkos_nota');
             $table->timestamps();

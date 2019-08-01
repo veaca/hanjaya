@@ -15,7 +15,7 @@ class CreateProjectsTable extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('nop');
+            $table->string('nop')->unique();
             $table->unsignedInteger('customer_id');
             $table->string('spk');
             $table->string('asal');
@@ -24,6 +24,7 @@ class CreateProjectsTable extends Migration
             $table->bigInteger('qty');
             $table->bigInteger('tarif_vendor');
             $table->bigInteger('nilai_project');
+            $table->bigInteger('biaya_lain')->nullable();
             $table->timestamps();
         });
     }

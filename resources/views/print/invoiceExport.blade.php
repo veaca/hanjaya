@@ -98,26 +98,20 @@
             </thead>
             <tbody>
                 @php $i=1 @endphp
-                @foreach($projects as $project)
                 <tr class="bord">
                     <td class="bord">{{ $i++ }}</td>
-                    <td class="bord" style="word-break:break-all; word-wrap:break-word;">{{$project->name}}. {{$project->info}}</td>
-                    <td class="bord">Rp. {{number_format($project->tarif,2,",",".")}}</td>
-                    <td class="bord">{{number_format($project->quantity,0,".",".")}}</td>
-                    <td class="bord" align="center">Rp. {{number_format($project->tarif * $project->quantity,2,",",".")}}</td>
-                </tr>
-                @endforeach
-                <tr class="bord">
-                    <td class="bord" colspan="4" align="center"><strong>Jumlah</strong></td>
-                    <td class="bord">Rp. {{number_format($invoice->jumlah,2,",",".")}}</td>
+                    <td class="bord" style="word-break:break-all; word-wrap:break-word;">{{$projects->nop}}. {{$invoice->info}}</td>
+                    <td class="bord">Rp. {{number_format($projects->tarif,2,",",".")}}</td>
+                    <td class="bord">{{number_format($projects->qty,0,".",".")}}</td>
+                    <td class="bord" align="center">Rp. {{number_format($projects->nilai_project,2,",",".")}}</td>
                 </tr>
                 <tr class="bord">
-                    <td class="bord" colspan="4" align="center"><strong>Pajak </strong>{{$invoice->jenis_pajak}}%</td>
-                    <td class="bord" >Rp. {{number_format($invoice->pajak,2,",",".")}}</td>
+                    <td class="bord" colspan="4" align="center"><strong>Pajak </strong>{{$customer->ppn}}%</td>
+                    <td class="bord" >Rp. {{number_format($invoice->jumlah_ppn,2,",",".")}}</td>
                 </tr>
                 <tr class="bord">
                     <td class="bord" colspan="4" align="center"><strong>Total</strong></td>
-                    <td class="bord" >Rp. {{number_format($invoice->jumlah_total,2,",",".")}}</td>
+                    <td class="bord" >Rp. {{number_format($invoice->jumlah_invoice,2,",",".")}}</td>
                 </tr>
             </tbody>
         </table>
